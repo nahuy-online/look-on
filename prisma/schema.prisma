@@ -1,0 +1,80 @@
+// Prisma schema for PureTuber VPN
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model History {
+  id         String   @id @default(cuid())
+  youtubeId  String
+  title      String
+  channel    String
+  thumbnail  String
+  duration   Int      @default(0)
+  category   String   @default("All")
+  progress   Int      @default(0) // seconds watched
+  watchedAt  DateTime @default(now())
+
+  @@index([youtubeId])
+}
+
+model Download {
+  id         String   @id @default(cuid())
+  youtubeId  String
+  title      String
+  channel    String
+  thumbnail  String
+  duration   Int      @default(0)
+  quality    String   @default("1080p")
+  sizeMb     Int      @default(0)
+  progress   Int      @default(0) // 0..100
+  status     String   @default("queued") // queued | downloading | paused | completed | failed
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([youtubeId])
+}
+
+model LikedVideo {
+  id         String   @id @default(cuid())
+  youtubeId  String   @unique
+  title      String
+  channel    String
+  thumbnail  String
+  duration   Int      @default(0)
+  category   String   @default("All")
+  likedAt    DateTime @default(now())
+}
+
+model Playlist {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  items       PlaylistItem[]
+}
+
+model PlaylistItem {
+  id         String   @id @default(cuid())
+  playlistId String
+  playlist   Playlist @relation(fields: [playlistId], references: [id], onDelete: Cascade)
+  youtubeId  String
+  title      String
+  channel    String
+  thumbnail  String
+  duration   Int      @default(0)
+  addedAt    DateTime @default(now())
+
+  @@index([playlistId])
+}
+
+model Setting {
+  id    String @id
+  value String
+}
