@@ -9,17 +9,18 @@ import {
 import { useAppStore } from "@/store/use-app-store";
 import { useVpnStore } from "@/store/use-vpn-store";
 import { useLibraryStore } from "@/store/use-library-store";
+import { useT } from "@/store/use-i18n-store";
 import { CATEGORIES, type Category } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { id: "home", label: "Home", icon: Home },
-  { id: "vpn", label: "VPN", icon: Shield },
-  { id: "downloads", label: "Downloads", icon: Download },
-  { id: "history", label: "History", icon: Clock },
-  { id: "liked", label: "Liked", icon: ThumbsUp },
-  { id: "playlists", label: "Playlists", icon: ListVideo },
-  { id: "settings", label: "Settings", icon: Settings },
+  { id: "home", key: "nav.home", icon: Home },
+  { id: "vpn", key: "nav.vpn", icon: Shield },
+  { id: "downloads", key: "nav.downloads", icon: Download },
+  { id: "history", key: "nav.history", icon: Clock },
+  { id: "liked", key: "nav.liked", icon: ThumbsUp },
+  { id: "playlists", key: "nav.playlists", icon: ListVideo },
+  { id: "settings", key: "nav.settings", icon: Settings },
 ] as const;
 
 const CATEGORY_ICONS: Record<Category, any> = {
@@ -29,6 +30,7 @@ const CATEGORY_ICONS: Record<Category, any> = {
 };
 
 export function Sidebar() {
+  const t = useT();
   const view = useAppStore((s) => s.view);
   const setView = useAppStore((s) => s.setView);
   const activeCategory = useAppStore((s) => s.activeCategory);
@@ -81,7 +83,7 @@ export function Sidebar() {
               )}
             >
               <Icon className="h-[18px] w-[18px] shrink-0" />
-              <span className="flex-1 text-left">{item.label}</span>
+              <span className="flex-1 text-left">{t(item.key)}</span>
               {item.id === "vpn" && vpnStatus === "connected" && (
                 <ShieldCheck className="h-4 w-4 text-emerald-500" />
               )}
@@ -95,7 +97,7 @@ export function Sidebar() {
         })}
 
         <div className="pt-4 pb-1 px-3 text-[11px] uppercase tracking-wider text-muted-foreground/70 font-semibold">
-          Categories
+          {t("nav.categories")}
         </div>
         {CATEGORIES.map((c) => {
           const Icon = CATEGORY_ICONS[c];
@@ -112,7 +114,7 @@ export function Sidebar() {
               )}
             >
               <Icon className="h-[18px] w-[18px] shrink-0" />
-              <span className="flex-1 text-left">{c}</span>
+              <span className="flex-1 text-left">{t("cat." + c)}</span>
             </button>
           );
         })}
@@ -123,10 +125,10 @@ export function Sidebar() {
             className="w-full rounded-xl p-3 bg-gradient-to-br from-emerald-500 to-teal-600 text-white text-left shadow-lg shadow-emerald-500/20 hover:opacity-95 transition"
           >
             <div className="flex items-center gap-2 font-semibold text-sm">
-              <Zap className="h-4 w-4" /> Quick Connect
+              <Zap className="h-4 w-4" /> {t("nav.quickConnect")}
             </div>
             <p className="text-[11px] text-white/80 mt-1">
-              {vpnStatus === "connected" ? "Protected & streaming" : "Unblock & stay private"}
+              {vpnStatus === "connected" ? t("nav.quickConnectProtected") : t("nav.quickConnectDesc")}
             </p>
           </button>
         </div>

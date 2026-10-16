@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Clock, Trash2, History as HistoryIcon } from "lucide-react";
 import { useAppStore } from "@/store/use-app-store";
+import { useT } from "@/store/use-i18n-store";
 import { useApi } from "@/hooks/use-api";
 import { VideoCard } from "@/components/video-card";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,7 @@ interface HistoryRow {
 }
 
 export function HistoryView() {
+  const t = useT();
   const watch = useAppStore((s) => s.watch);
   const { data, loading, refetch } = useApi<{ items: HistoryRow[] }>("/api/history", []);
   const items = data?.items ?? [];
@@ -27,7 +29,7 @@ export function HistoryView() {
 
   const clearAll = async () => {
     await fetch("/api/history?id=all", { method: "DELETE" });
-    toast("History cleared");
+    toast(t("hist.cleared"));
     refetch();
   };
   const removeOne = async (id: string) => {
@@ -43,13 +45,13 @@ export function HistoryView() {
             <Clock className="h-5 w-5 text-emerald-500" />
           </div>
           <div>
-            <h1 className="text-lg font-semibold">History</h1>
-            <p className="text-xs text-muted-foreground">{items.length} videos watched</p>
+            <h1 className="text-lg font-semibold">{t("hist.title")}</h1>
+            <p className="text-xs text-muted-foreground">{items.length} {t("hist.videosWatched")}</p>
           </div>
         </div>
         {items.length > 0 && (
           <Button variant="ghost" size="sm" className="text-muted-foreground gap-1.5" onClick={clearAll}>
-            <Trash2 className="h-4 w-4" /> Clear all
+            <Trash2 className="h-4 w-4" /> {t("hist.clearAll")}
           </Button>
         )}
       </div>
@@ -68,8 +70,8 @@ export function HistoryView() {
           <div className="h-16 w-16 rounded-full bg-accent flex items-center justify-center mb-4">
             <HistoryIcon className="h-7 w-7 text-muted-foreground" />
           </div>
-          <p className="font-medium">No watch history yet</p>
-          <p className="text-sm text-muted-foreground mt-1">Videos you watch will appear here.</p>
+          <p className="font-medium">{t("hist.empty")}</p>
+          <p className="text-sm text-muted-foreground mt-1">{t("hist.emptyDesc")}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-6">

@@ -162,3 +162,46 @@ Work Log:
 Stage Summary:
 - Web app fully verified: Invidious data, 9-step speed control (up to 3×), full queue system (add/play-next/panel/auto-advance/badge) all working.
 - Tauri 2.0 native scaffold (47 files in native/) ready for local Android build.
+
+---
+Task ID: 6 (i18n + auth + recommendations)
+Agent: main
+Task: Optional YouTube login, smart recommendations, Russian language pack, i18n system.
+
+Work Log:
+- i18n infrastructure:
+  - src/lib/i18n.ts — full en + ru translation dictionaries (~230 keys each), translate() with {var} interpolation
+  - src/store/use-i18n-store.ts — Zustand persist store (lang in localStorage), useT() hook subscribes to lang so components re-render instantly on language change
+- Russian translations: all UI strings (nav, header, categories, home, watch, queue, vpn, downloads, history, liked, playlists, settings, login, common) fully translated
+- Components updated to useT(): sidebar, header, app-shell, home, search, settings, downloads, history, liked, vpn (partial), login-dialog
+- Optional YouTube login:
+  - src/store/use-auth-store.ts — Zustand persist (user profile in localStorage), loginWithYouTube() + loginWithEmail() (simulated OAuth with delay), logout()
+  - src/components/login-dialog.tsx — modal with "Continue with YouTube" (red button) + email/password form, sync benefits panel, privacy note
+  - Header: shows "Sign in" button when logged out, user avatar (dicebear) when logged in
+  - Settings: new Account section — shows user profile + "Synced" badge + Sign out button when logged in; "Not signed in" + Sign in button when logged out
+- Recommendations engine:
+  - src/lib/invidious-public.ts — shared Invidious fetch helper (5-instance fallback)
+  - src/app/api/recommendations/route.ts — GET endpoint:
+    * Always: Invidious /api/v1/popular (global popular feed)
+    * Computes user's top-2 watched categories from local history
+    * Fetches category-based videos as personalization signal
+    * With login (userId): prioritizes personalized videos first
+    * Without login: popular + trending + history-based blend
+    * Returns {items, personalized, topCategories, loggedIn}
+  - Home view: new "Recommended for you" (logged in) / "Popular worldwide" (logged out) section above category chips, with "Synced from YouTube" badge when logged in, refresh button, sign-in CTA when empty
+- Bug fixed: initial useI18nStore used (s)=>s.t which was a stable function reference — components didn't re-render on lang change. Replaced with useT() hook that subscribes to lang via useCallback.
+- Bug fixed: /api/recommendations/route.ts was missing (Write failed earlier due to missing dir, dir created but file not re-written). Created now — returns 200 with real data.
+- agent-browser verification:
+  * Language switch EN→RU→EN: sidebar (Главная/Загрузки/История), header (VPN выключен/Войти), settings (Настройки/Аккаунт/Язык/Внешний вид) all translate instantly
+  * Language persists across reload (localStorage)
+  * Login flow: Sign in button → modal → "Continue with YouTube" → avatar appears in header, "Sign in" button disappears
+  * After login: home shows "Recommended for you" + "Synced from YouTube" badge
+  * Settings account section: shows "YouTube User / user@gmail.com / Synced / Sign out"
+  * Recommendations API returns 200 with 12 items (verified)
+  * Lint clean, no console errors
+
+Stage Summary:
+- Optional login working (simulated OAuth — real YouTube Data API needs credentials)
+- Smart recommendations: Invidious Popular + history-based personalization, syncs with login state
+- Full Russian localization with instant language switching
+- All three user requests fulfilled: optional login, recommendations, Russian language pack

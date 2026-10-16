@@ -2,21 +2,21 @@
 
 import * as React from "react";
 import { useTheme } from "next-themes";
-import { useRouter } from "next/navigation";
-import { Search, Menu, Sun, Moon, Shield, ShieldCheck, X, Mic, ListVideo } from "lucide-react";
+import { Search, Menu, Sun, Moon, Shield, ShieldCheck, X, Mic, ListVideo, LogIn, User } from "lucide-react";
 import { useAppStore } from "@/store/use-app-store";
 import { useVpnStore } from "@/store/use-vpn-store";
 import { useQueueStore } from "@/store/use-queue-store";
+import { useT } from "@/store/use-i18n-store";
+import { useAuthStore } from "@/store/use-auth-store";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
-export function Header() {
+export function Header({ onOpenLogin }: { onOpenLogin?: () => void }) {
+  const t = useT();
   const setMobileOpen = useAppStore((s) => s.setMobileSidebarOpen);
   const setSearch = useAppStore((s) => s.setSearch);
-  const setView = useAppStore((s) => s.setView);
   const searchQuery = useAppStore((s) => s.searchQuery);
-  const vpnStatus = useVpnStore((s) => s.status);
-  const vpnServer = useVpnStore((s) => s.server);
+  const user = useAuthStore((s) => s.user);
   const [q, setQ] = React.useState(searchQuery);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
@@ -43,7 +43,7 @@ export function Header() {
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Search videos, channels…"
+            placeholder={t("header.search")}
             className="flex-1 bg-transparent outline-none px-3 text-sm placeholder:text-muted-foreground"
           />
           {q && (
@@ -55,8 +55,8 @@ export function Header() {
         <button
           type="button"
           className="ml-2 hidden sm:flex h-10 w-10 rounded-full bg-muted/60 items-center justify-center hover:bg-accent"
-          aria-label="Voice search"
-          onClick={() => toast.info("Voice search", { description: "Microphone access coming soon." })}
+          aria-label={t("header.voiceSearch")}
+          onClick={() => toast.info(t("header.voiceSearch"), { description: t("header.voiceSearchDesc") })}
         >
           <Mic className="h-4 w-4" />
         </button>
@@ -68,19 +68,31 @@ export function Header() {
         <button
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
           className="h-10 w-10 rounded-full flex items-center justify-center hover:bg-accent"
-          aria-label="Toggle theme"
+          aria-label={t("header.toggleTheme")}
         >
           {mounted && theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
         </button>
-        <div className="h-9 w-9 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white font-semibold text-sm shrink-0">
-          Z
-        </div>
+        {user ? (
+          <div className="h-9 w-9 rounded-full overflow-hidden border-2 border-emerald-500/40 shrink-0" title={user.name}>
+            <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
+          </div>
+        ) : (
+          <button
+            onClick={() => onOpenLogin?.()}
+            className="h-9 px-3 rounded-full flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shrink-0"
+            aria-label={t("header.signIn")}
+          >
+            <LogIn className="h-4 w-4" />
+            <span className="hidden sm:inline">{t("header.signIn")}</span>
+          </button>
+        )}
       </div>
     </header>
   );
 }
 
 function VpnPill() {
+  const t = useT();
   const vpnStatus = useVpnStore((s) => s.status);
   const vpnServer = useVpnStore((s) => s.server);
   const setView = useAppStore((s) => s.setView);
@@ -99,7 +111,7 @@ function VpnPill() {
           ? "border-amber-500/40 bg-amber-500/10 text-amber-600 dark:text-amber-400"
           : "border-border bg-muted/60 text-muted-foreground hover:bg-accent"
       )}
-      title="VPN status"
+      title={t("nav.vpn")}
     >
       {connecting ? (
         <span className="relative inline-flex">
@@ -111,7 +123,7 @@ function VpnPill() {
         <Shield className="h-4 w-4" />
       )}
       <span className="hidden sm:inline">
-        {connecting ? "Connecting…" : connected ? `${vpnServer.flag} ${vpnServer.city}` : "VPN Off"}
+        {connecting ? t("header.connecting") : connected ? `${vpnServer.flag} ${vpnServer.city}` : t("header.vpnOff")}
       </span>
       {connecting && (
         <span className="hidden sm:inline h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
@@ -122,13 +134,14 @@ function VpnPill() {
 }
 
 function QueueButton() {
+  const t = useT();
   const toggleOpen = useQueueStore((s) => s.toggleOpen);
   const queueSize = useQueueStore((s) => s.queue.length);
   return (
     <button
       onClick={() => toggleOpen()}
       className="relative h-10 w-10 rounded-full flex items-center justify-center hover:bg-accent"
-      aria-label="Open queue"
+      aria-label={t("header.openQueue")}
     >
       <ListVideo className="h-5 w-5" />
       {queueSize > 0 && (

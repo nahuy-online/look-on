@@ -3,11 +3,13 @@
 import * as React from "react";
 import { Search, X } from "lucide-react";
 import { useAppStore } from "@/store/use-app-store";
+import { useT } from "@/store/use-i18n-store";
 import { useApi } from "@/hooks/use-api";
 import { VideoGrid } from "@/components/video-grid";
 import type { VideoItem } from "@/lib/types";
 
 export function SearchView() {
+  const t = useT();
   const query = useAppStore((s) => s.searchQuery);
   const setSearch = useAppStore((s) => s.setSearch);
   const [q, setQ] = React.useState(query);
@@ -25,9 +27,9 @@ export function SearchView() {
         </div>
         <div className="flex-1">
           <h1 className="text-lg font-semibold">
-            {query ? <>Results for <span className="text-emerald-600 dark:text-emerald-400">“{query}”</span></> : "Search"}
+            {query ? <>{t("common.resultsFor")} <span className="text-emerald-600 dark:text-emerald-400">“{query}”</span></> : t("common.searchTitle")}
           </h1>
-          <p className="text-xs text-muted-foreground">{data?.items?.length ?? 0} videos found</p>
+          <p className="text-xs text-muted-foreground">{data?.items?.length ?? 0} {t("common.videosFound")}</p>
         </div>
       </div>
 
@@ -39,7 +41,7 @@ export function SearchView() {
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="Search again…"
+          placeholder={t("common.searchAgain")}
           className="flex-1 bg-transparent outline-none px-3 text-sm"
         />
         {q && (
@@ -49,7 +51,7 @@ export function SearchView() {
         )}
       </form>
 
-      <VideoGrid items={data?.items ?? []} loading={loading} emptyMessage={`No results for “${query}”`} />
+      <VideoGrid items={data?.items ?? []} loading={loading} emptyMessage={`${t("common.noResults")} “${query}”`} />
     </div>
   );
 }

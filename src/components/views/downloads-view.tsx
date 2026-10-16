@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { useLibraryStore } from "@/store/use-library-store";
 import { useAppStore } from "@/store/use-app-store";
+import { useT } from "@/store/use-i18n-store";
 import { formatDuration } from "@/lib/format";
 import type { DownloadItem, VideoItem } from "@/lib/types";
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
 export function DownloadsView() {
+  const t = useT();
   const downloads = useLibraryStore((s) => s.downloads);
   const updateDownload = useLibraryStore((s) => s.updateDownload);
   const removeDownload = useLibraryStore((s) => s.removeDownload);
@@ -27,7 +29,7 @@ export function DownloadsView() {
   React.useEffect(() => {
     const active = downloads.filter((d) => d.status === "queued" || d.status === "downloading");
     if (active.length === 0) return;
-    const t = setInterval(() => {
+    const timer = setInterval(() => {
       active.forEach((d) => {
         const next = Math.min(100, d.progress + Math.floor(3 + Math.random() * 9));
         if (next >= 100) {
@@ -37,7 +39,7 @@ export function DownloadsView() {
         }
       });
     }, 700);
-    return () => clearInterval(t);
+    return () => clearInterval(timer);
   }, [downloads, updateDownload]);
 
   const active = downloads.filter((d) => d.status !== "completed" && d.status !== "failed");
@@ -61,16 +63,16 @@ export function DownloadsView() {
             <Download className="h-5 w-5 text-emerald-500" />
           </div>
           <div>
-            <h1 className="text-lg font-semibold">Downloads</h1>
+            <h1 className="text-lg font-semibold">{t("dl.title")}</h1>
             <p className="text-xs text-muted-foreground flex items-center gap-3">
-              <span className="flex items-center gap-1"><HardDrive className="h-3 w-3" /> {downloads.length} videos</span>
+              <span className="flex items-center gap-1"><HardDrive className="h-3 w-3" /> {downloads.length} {t("dl.videos")}</span>
               <span>~{(totalSize / 1024).toFixed(2)} GB</span>
             </p>
           </div>
         </div>
         {downloads.length > 0 && (
-          <Button variant="ghost" size="sm" className="text-muted-foreground gap-1.5" onClick={() => { clearDownloads(); toast("Cleared all downloads"); }}>
-            <Trash2 className="h-4 w-4" /> Clear all
+          <Button variant="ghost" size="sm" className="text-muted-foreground gap-1.5" onClick={() => { clearDownloads(); toast(t("dl.cleared")); }}>
+            <Trash2 className="h-4 w-4" /> {t("dl.clearAll")}
           </Button>
         )}
       </div>
@@ -80,17 +82,15 @@ export function DownloadsView() {
           <div className="h-16 w-16 rounded-full bg-accent flex items-center justify-center mb-4">
             <Download className="h-7 w-7 text-muted-foreground" />
           </div>
-          <p className="font-medium">No downloads yet</p>
-          <p className="text-sm text-muted-foreground mt-1 max-w-sm">
-            Tap the Download button on any video to save it for offline viewing — ad-free.
-          </p>
+          <p className="font-medium">{t("dl.empty")}</p>
+          <p className="text-sm text-muted-foreground mt-1 max-w-sm">{t("dl.emptyDesc")}</p>
         </div>
       ) : (
         <div className="space-y-6">
           {active.length > 0 && (
             <section>
               <h2 className="text-sm font-semibold mb-3 flex items-center gap-2">
-                <Loader2 className="h-4 w-4 animate-spin text-emerald-500" /> Downloading ({active.length})
+                <Loader2 className="h-4 w-4 animate-spin text-emerald-500" /> {t("dl.downloading")} ({active.length})
               </h2>
               <div className="space-y-2">
                 {active.map((d) => <DownloadRow key={d.id} d={d} onPlay={() => playDownloaded(d)} onPause={() => updateDownload(d.id, { status: d.status === "paused" ? "downloading" : "paused" })} onRemove={() => removeDownload(d.id)} />)}
@@ -100,7 +100,7 @@ export function DownloadsView() {
           {completed.length > 0 && (
             <section>
               <h2 className="text-sm font-semibold mb-3 flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-emerald-500" /> Completed ({completed.length})
+                <CheckCircle2 className="h-4 w-4 text-emerald-500" /> {t("dl.completed")} ({completed.length})
               </h2>
               <div className="space-y-2">
                 {completed.map((d) => <DownloadRow key={d.id} d={d} onPlay={() => playDownloaded(d)} onPause={() => {}} onRemove={() => removeDownload(d.id)} />)}
@@ -116,6 +116,7 @@ export function DownloadsView() {
 function DownloadRow({ d, onPlay, onPause, onRemove }: {
   d: DownloadItem; onPlay: () => void; onPause: () => void; onRemove: () => void;
 }) {
+  const t = useT();
   const done = d.status === "completed";
   const paused = d.status === "paused";
   return (
@@ -143,11 +144,11 @@ function DownloadRow({ d, onPlay, onPause, onRemove }: {
       </div>
       <div className="flex items-center gap-1 shrink-0">
         {done ? (
-          <Button size="sm" variant="ghost" className="h-9 w-9 p-0 rounded-full" onClick={onPlay} title="Play">
+          <Button size="sm" variant="ghost" className="h-9 w-9 p-0 rounded-full" onClick={onPlay} title={t("dl.play")}>
             <Play className="h-4 w-4 text-emerald-500" />
           </Button>
         ) : (
-          <Button size="sm" variant="ghost" className="h-9 w-9 p-0 rounded-full" onClick={onPause} title={paused ? "Resume" : "Pause"}>
+          <Button size="sm" variant="ghost" className="h-9 w-9 p-0 rounded-full" onClick={onPause} title={paused ? t("dl.resume") : t("dl.pause")}>
             {paused ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
           </Button>
         )}
@@ -157,7 +158,7 @@ function DownloadRow({ d, onPlay, onPause, onRemove }: {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem onClick={onRemove} className="text-red-500 focus:text-red-500">
-              <Trash2 className="h-4 w-4 mr-2" /> Remove download
+              <Trash2 className="h-4 w-4 mr-2" /> {t("dl.remove")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

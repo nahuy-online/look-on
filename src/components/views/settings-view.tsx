@@ -4,12 +4,15 @@ import * as React from "react";
 import { useTheme } from "next-themes";
 import {
   Settings, Sun, Moon, Monitor, Gauge, Film, Volume2, Shield, Database,
-  Trash2, Info, Github, Heart,
+  Trash2, Info, Github, Heart, Globe, User, LogOut, LogIn, RefreshCw,
 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { useLibraryStore } from "@/store/use-library-store";
+import { useI18nStore, useT } from "@/store/use-i18n-store";
+import { useAuthStore } from "@/store/use-auth-store";
+import { LANGS } from "@/lib/i18n";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -49,20 +52,29 @@ function usePrefs() {
   return { prefs, update };
 }
 
-export function SettingsView() {
+export function SettingsView({ onOpenLogin }: { onOpenLogin?: () => void }) {
+  const t = useT();
+  const lang = useI18nStore((s) => s.lang);
+  const setLang = useI18nStore((s) => s.setLang);
   const { theme, setTheme } = useTheme();
   const { prefs, update } = usePrefs();
   const clearDownloads = useLibraryStore((s) => s.clearDownloads);
+  const user = useAuthStore((s) => s.user);
+  const logout = useAuthStore((s) => s.logout);
   const [mounted, setMounted] = React.useState(false);
   React.useEffect(() => setMounted(true), []);
 
   const clearHistory = async () => {
     await fetch("/api/history?id=all", { method: "DELETE" });
-    toast("Watch history cleared");
+    toast(t("hist.cleared"));
   };
   const handleClearDownloads = async () => {
     await clearDownloads();
-    toast("Downloads cleared");
+    toast(t("dl.cleared"));
+  };
+  const handleLogout = () => {
+    logout();
+    toast(t("login.signedOut"));
   };
 
   return (
@@ -72,26 +84,89 @@ export function SettingsView() {
           <Settings className="h-5 w-5 text-emerald-500" />
         </div>
         <div>
-          <h1 className="text-lg font-semibold">Settings</h1>
-          <p className="text-xs text-muted-foreground">Customize your PureTuber experience</p>
+          <h1 className="text-lg font-semibold">{t("set.title")}</h1>
+          <p className="text-xs text-muted-foreground">{t("set.subtitle")}</p>
         </div>
       </div>
 
-      <Section icon={<Sun className="h-4 w-4" />} title="Appearance">
-        <Row title="Theme" desc="Light, dark, or system">
+      {/* Account section */}
+      <Section icon={<User className="h-4 w-4" />} title={t("set.account")}>
+        {user ? (
+          <div className="space-y-4">
+            <div className="flex items-center gap-3">
+              <img src={user.avatar} alt={user.name} className="h-12 w-12 rounded-full border-2 border-emerald-500/40" />
+              <div className="flex-1 min-w-0">
+                <div className="text-sm font-medium">{user.name}</div>
+                <div className="text-xs text-muted-foreground truncate">{user.email}</div>
+              </div>
+              <span className="flex items-center gap-1 text-[10px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 px-2 py-1 rounded-full">
+                <RefreshCw className="h-3 w-3" /> {t("set.synced")}
+              </span>
+            </div>
+            <div className="flex items-center justify-between gap-3 py-1">
+              <div>
+                <div className="text-sm font-medium">{t("set.syncStatus")}</div>
+                <div className="text-xs text-muted-foreground">{t("set.signInDesc")}</div>
+              </div>
+              <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">{t("set.synced")}</span>
+            </div>
+            <Button variant="outline" size="sm" className="gap-1.5 w-full" onClick={handleLogout}>
+              <LogOut className="h-4 w-4" /> {t("set.signOut")}
+            </Button>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            <div className="flex items-center justify-between gap-3">
+              <div className="min-w-0">
+                <div className="text-sm font-medium">{t("set.notSignedIn")}</div>
+                <div className="text-xs text-muted-foreground">{t("set.signInDesc")}</div>
+              </div>
+              <span className="text-xs font-semibold text-muted-foreground">{t("set.local")}</span>
+            </div>
+            <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white gap-1.5 w-full" onClick={() => onOpenLogin?.()}>
+              <LogIn className="h-4 w-4" /> {t("header.signIn")}
+            </Button>
+          </div>
+        )}
+      </Section>
+
+      {/* Language */}
+      <Section icon={<Globe className="h-4 w-4" />} title={t("set.language")}>
+        <div className="flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <div className="text-sm font-medium">{t("set.language")}</div>
+            <div className="text-xs text-muted-foreground">{t("set.languageDesc")}</div>
+          </div>
+          <Select value={lang} onValueChange={(v) => setLang(v as any)}>
+            <SelectTrigger className="w-40 h-9">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {LANGS.map((l) => (
+                <SelectItem key={l.code} value={l.code}>
+                  <span className="flex items-center gap-2">{l.flag} {l.label}</span>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </Section>
+
+      <Section icon={<Sun className="h-4 w-4" />} title={t("set.appearance")}>
+        <Row title={t("set.theme")} desc={t("set.themeDesc")}>
           <Select value={mounted ? theme : "system"} onValueChange={(v) => setTheme(v)}>
             <SelectTrigger className="w-36 h-9"><SelectValue /></SelectTrigger>
             <SelectContent>
-              <SelectItem value="light"><span className="flex items-center gap-2"><Sun className="h-4 w-4" /> Light</span></SelectItem>
-              <SelectItem value="dark"><span className="flex items-center gap-2"><Moon className="h-4 w-4" /> Dark</span></SelectItem>
-              <SelectItem value="system"><span className="flex items-center gap-2"><Monitor className="h-4 w-4" /> System</span></SelectItem>
+              <SelectItem value="light"><span className="flex items-center gap-2"><Sun className="h-4 w-4" /> {t("set.light")}</span></SelectItem>
+              <SelectItem value="dark"><span className="flex items-center gap-2"><Moon className="h-4 w-4" /> {t("set.dark")}</span></SelectItem>
+              <SelectItem value="system"><span className="flex items-center gap-2"><Monitor className="h-4 w-4" /> {t("set.system")}</span></SelectItem>
             </SelectContent>
           </Select>
         </Row>
       </Section>
 
-      <Section icon={<Film className="h-4 w-4" />} title="Playback">
-        <Row title="Default quality" desc="Preferred video resolution">
+      <Section icon={<Film className="h-4 w-4" />} title={t("set.playback")}>
+        <Row title={t("set.defaultQuality")} desc={t("set.defaultQualityDesc")}>
           <Select value={prefs.defaultQuality} onValueChange={(v) => update({ defaultQuality: v })}>
             <SelectTrigger className="w-32 h-9"><SelectValue /></SelectTrigger>
             <SelectContent>
@@ -103,7 +178,7 @@ export function SettingsView() {
             </SelectContent>
           </Select>
         </Row>
-        <Row title="Playback speed" desc="Default speed for videos">
+        <Row title={t("set.playbackSpeed")} desc={t("set.playbackSpeedDesc")}>
           <Select value={prefs.playbackSpeed} onValueChange={(v) => update({ playbackSpeed: v })}>
             <SelectTrigger className="w-28 h-9"><SelectValue /></SelectTrigger>
             <SelectContent>
@@ -112,49 +187,50 @@ export function SettingsView() {
               <SelectItem value="1.25">1.25×</SelectItem>
               <SelectItem value="1.5">1.5×</SelectItem>
               <SelectItem value="2">2×</SelectItem>
+              <SelectItem value="3">3×</SelectItem>
             </SelectContent>
           </Select>
         </Row>
-        <ToggleRow icon={<Gauge className="h-4 w-4" />} title="Autoplay" desc="Play next video automatically" checked={prefs.autoplay} onChange={(v) => update({ autoplay: v })} />
-        <ToggleRow icon={<Volume2 className="h-4 w-4" />} title="Mini player" desc="Keep playing in a small window" checked={prefs.miniPlayer} onChange={(v) => update({ miniPlayer: v })} />
-        <ToggleRow icon={<Film className="h-4 w-4" />} title="Captions" desc="Show subtitles when available" checked={prefs.captions} onChange={(v) => update({ captions: v })} />
-        <ToggleRow icon={<Database className="h-4 w-4" />} title="Data saver" desc="Lower quality on mobile data" checked={prefs.dataSaver} onChange={(v) => update({ dataSaver: v })} />
+        <ToggleRow icon={<Gauge className="h-4 w-4" />} title={t("set.autoplay")} desc={t("set.autoplayDesc")} checked={prefs.autoplay} onChange={(v) => update({ autoplay: v })} />
+        <ToggleRow icon={<Volume2 className="h-4 w-4" />} title={t("set.miniPlayer")} desc={t("set.miniPlayerDesc")} checked={prefs.miniPlayer} onChange={(v) => update({ miniPlayer: v })} />
+        <ToggleRow icon={<Film className="h-4 w-4" />} title={t("set.captions")} desc={t("set.captionsDesc")} checked={prefs.captions} onChange={(v) => update({ captions: v })} />
+        <ToggleRow icon={<Database className="h-4 w-4" />} title={t("set.dataSaver")} desc={t("set.dataSaverDesc")} checked={prefs.dataSaver} onChange={(v) => update({ dataSaver: v })} />
       </Section>
 
-      <Section icon={<Shield className="h-4 w-4" />} title="Privacy & data">
+      <Section icon={<Shield className="h-4 w-4" />} title={t("set.privacy")}>
         <div className="flex items-center justify-between gap-3 py-1">
           <div>
-            <div className="text-sm font-medium">Clear watch history</div>
-            <div className="text-xs text-muted-foreground">Remove all watched videos</div>
+            <div className="text-sm font-medium">{t("set.clearHistory")}</div>
+            <div className="text-xs text-muted-foreground">{t("set.clearHistoryDesc")}</div>
           </div>
           <Button variant="outline" size="sm" className="gap-1.5" onClick={clearHistory}>
-            <Trash2 className="h-4 w-4" /> Clear
+            <Trash2 className="h-4 w-4" /> {t("set.clear")}
           </Button>
         </div>
         <div className="flex items-center justify-between gap-3 py-1">
           <div>
-            <div className="text-sm font-medium">Clear downloads</div>
-            <div className="text-xs text-muted-foreground">Remove all offline videos</div>
+            <div className="text-sm font-medium">{t("set.clearDownloads")}</div>
+            <div className="text-xs text-muted-foreground">{t("set.clearDownloadsDesc")}</div>
           </div>
           <Button variant="outline" size="sm" className="gap-1.5" onClick={handleClearDownloads}>
-            <Trash2 className="h-4 w-4" /> Clear
+            <Trash2 className="h-4 w-4" /> {t("set.clear")}
           </Button>
         </div>
       </Section>
 
-      <Section icon={<Info className="h-4 w-4" />} title="About">
+      <Section icon={<Info className="h-4 w-4" />} title={t("set.about")}>
         <div className="space-y-2 text-sm">
-          <div className="flex justify-between"><span className="text-muted-foreground">Version</span><span className="font-medium">2.4.1 (PureTuber VPN)</span></div>
-          <div className="flex justify-between"><span className="text-muted-foreground">Build</span><span className="font-medium">#{Math.floor(100000 + Math.random() * 899999)}</span></div>
-          <div className="flex justify-between"><span className="text-muted-foreground">VPN servers</span><span className="font-medium">20 locations · 60+ countries</span></div>
-          <div className="flex justify-between"><span className="text-muted-foreground">Engine</span><span className="font-medium">Next.js 16 · WireGuard</span></div>
+          <div className="flex justify-between"><span className="text-muted-foreground">{t("set.version")}</span><span className="font-medium">2.5.0 (PureTuber VPN)</span></div>
+          <div className="flex justify-between"><span className="text-muted-foreground">{t("set.build")}</span><span className="font-medium">#{Math.floor(100000 + Math.random() * 899999)}</span></div>
+          <div className="flex justify-between"><span className="text-muted-foreground">{t("set.vpnServers")}</span><span className="font-medium">20 locations · 60+ countries</span></div>
+          <div className="flex justify-between"><span className="text-muted-foreground">{t("set.engine")}</span><span className="font-medium">Next.js 16 · WireGuard</span></div>
         </div>
         <div className="flex items-center gap-2 mt-4 pt-4 border-t border-border">
-          <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground"><Github className="h-4 w-4" /> Source</Button>
-          <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground"><Heart className="h-4 w-4 text-red-500" /> Rate us</Button>
+          <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground"><Github className="h-4 w-4" /> {t("set.source")}</Button>
+          <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground"><Heart className="h-4 w-4 text-red-500" /> {t("set.rateUs")}</Button>
         </div>
         <p className="text-[11px] text-muted-foreground/70 mt-3">
-          PureTuber VPN is a demo app inspired by Pure Tuber and GreenTuber. Videos are streamed via YouTube embeds; the VPN, ad-block, and download features are simulated for demonstration.
+          © {new Date().getFullYear()} PureTuber VPN. {t("common.youTubeEmbedNote")}
         </p>
       </Section>
     </div>
