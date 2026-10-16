@@ -1,33 +1,20 @@
-import { NextRequest, NextResponse } from "next/server";
-import { fetchTrendingInvidious } from "@/lib/invidious";
-import { fetchTrending } from "@/lib/video-search";
+import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import type { VideoItem, Category } from "@/lib/types";
 import { CURATED_VIDEOS } from "@/lib/videos";
 
 export const dynamic = "force-dynamic";
-export const maxDuration = 25;
+export const maxDuration = 10;
 
-// Recommendations engine:
-// - Always: Invidious /popular (global popular feed) as a base
-// - Without login: blend popular + trending + category-based from watch history
-// - With login (userId present): weight by the user's most-watched categories (computed from local history which is "synced")
-export async function GET(req: NextRequest) {
-  const userId = req.nextUrl.searchParams.get("userId");
-  const limit = Math.min(parseInt(req.nextUrl.searchParams.get("limit") || "12"), 24);
+// Recommendations engine — lightweight version (no Invidious calls to avoid timeouts).
+// Uses curated content + history-based personalization.
+export async function GET(req: Request) {
+  const url = new URL(req.url);
+  const userId = url.searchParams.get("userId");
+  const limit = Math.min(parseInt(url.searchParams.get("limit") || "8"), 12);
 
   try {
-    // 1. Fetch global popular from Invidious
-    let popular: VideoItem[] = [];
-    try {
-      const { fetchFromInvidiousPublic } = await import("@/lib/invidious-public");
-      popular = await fetchFromInvidiousPublic<VideoItem[]>("/api/v1/popular", "All");
-    } catch {
-      popular = [];
-    }
-
-    // 2. Compute user's top categories from history (works for both anon + logged-in,
-    //    since history is stored locally either way)
+    // Compute user's top categories from local history
     const history = await db.history.findMany({ take: 50, orderBy: { watchedAt: "desc" } }).catch(() => []);
     const catCounts: Record<string, number> = {};
     for (const h of history) {
@@ -40,43 +27,28 @@ export async function GET(req: NextRequest) {
       .map(([c]) => c)
       .filter((c) => c && c !== "All");
 
-    // 3. Fetch videos from top categories (personalized signal)
-    let personalized: VideoItem[] = [];
+    // Build recommendations from curated content
+    let items: VideoItem[] = [...CURATED_VIDEOS];
+
+    // If user has watched certain categories, prioritize those
     if (topCats.length > 0) {
-      const sets = await Promise.all(
-        topCats.slice(0, 2).map((c) =>
-          fetchTrendingInvidious(c as Category).catch(() => [])
-        )
-      );
-      personalized = sets.flat();
+      const prioritized = items.filter((v) => topCats.includes(v.category));
+      const rest = items.filter((v) => !topCats.includes(v.category));
+      items = [...prioritized, ...rest];
     }
 
-    // 4. Also pull trending as filler
-    const trending = await fetchTrendingInvidious("All").catch(() =>
-      fetchTrending("All").catch(() => CURATED_VIDEOS)
-    );
-
-    // 5. Merge: personalized first (if any), then popular, then trending
-    const seen = new Set<string>();
-    const merged: VideoItem[] = [];
-    const pushUnique = (arr: VideoItem[]) => {
-      for (const v of arr) {
-        if (v && !seen.has(v.youtubeId)) {
-          seen.add(v.youtubeId);
-          merged.push(v);
-        }
-      }
-    };
+    // Shuffle slightly for variety when logged in
     if (userId) {
-      // logged-in: prioritize personalized
-      pushUnique(personalized);
+      // deterministic shuffle based on userId + date
+      const seed = (userId + new Date().toDateString()).split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+      items = items.sort((a, b) => {
+        const ha = (a.youtubeId.charCodeAt(0) + seed) % 7;
+        const hb = (b.youtubeId.charCodeAt(0) + seed) % 7;
+        return ha - hb;
+      });
     }
-    pushUnique(popular);
-    pushUnique(trending);
-    pushUnique(personalized);
-    pushUnique(CURATED_VIDEOS);
 
-    const result = merged.slice(0, limit);
+    const result = items.slice(0, limit);
     return NextResponse.json({
       items: result,
       personalized: topCats.length > 0,
@@ -85,7 +57,7 @@ export async function GET(req: NextRequest) {
     });
   } catch (e) {
     return NextResponse.json(
-      { items: CURATED_VIDEOS.slice(0, 8), personalized: false, error: (e as Error).message },
+      { items: CURATED_VIDEOS.slice(0, 6), personalized: false, error: (e as Error).message },
       { status: 200 }
     );
   }

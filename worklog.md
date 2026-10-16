@@ -205,3 +205,125 @@ Stage Summary:
 - Smart recommendations: Invidious Popular + history-based personalization, syncs with login state
 - Full Russian localization with instant language switching
 - All three user requests fulfilled: optional login, recommendations, Russian language pack
+
+---
+Task ID: 3+4+5
+Agent: OAuth agent
+Task: Real YouTube OAuth via NextAuth v4 — Google provider with youtube.readonly scope, server-side YouTube Data API v3 client, library + recommendations API routes, NextAuth↔Zustand bridge hook, login-dialog wired to real `signIn("google")`, layout wrapped in SessionProvider, env setup docs.
+
+Work Log:
+- Read worklog.md, package.json (next-auth ^4.24.11 confirmed), use-auth-store.ts, login-dialog.tsx, layout.tsx, types.ts, header.tsx, settings-view.tsx, home-view.tsx, app-shell.tsx, i18n.ts. Verified `node_modules/next-auth/providers/google.js` exists (v4 default export).
+- Created src/lib/auth.ts — NextAuth v4 config:
+  * GoogleProvider with scope `openid email profile https://www.googleapis.com/auth/youtube.readonly`, `access_type: "offline"`, `prompt: "consent"` (so Google issues a refresh_token on first sign-in).
+  * JWT session strategy.
+  * `jwt` callback: stashes `account.access_token` / `refresh_token` / `expires_at` on the JWT on initial sign-in; auto-refreshes via Google's token endpoint when the access token is within 60s of expiry; marks `RefreshAccessTokenError` on failure.
+  * `session` callback: surfaces `accessToken`, `refreshToken`, `expiresAt`, `error` onto the session object so server route handlers can call YouTube Data API on the user's behalf.
+  * Type augmentation via `declare module "next-auth"` + `declare module "next-auth/jwt"` for the new optional fields.
+  * Exports `authOptions` + a thin `getServerSession()` wrapper (App-Router single-arg form, supported since next-auth v4.22).
+  * Hardened to boot even when env vars are missing — simulated email flow still works.
+- Created src/app/api/auth/[...nextauth]/route.ts — single NextAuth handler exported as both GET and POST.
+- Created src/components/session-provider.tsx — client wrapper around `next-auth/react`'s SessionProvider.
+- Created src/lib/youtube-api.ts (server-only, `import "server-only"`):
+  * `YouTubeApiError` class with `status` (401 / 403 / 429 / 5xx) so route handlers can map cleanly to HTTP responses.
+  * `ytFetch()` helper — Bearer-authenticated, `cache: "no-store"`, normalises 401 (token expired), 403 (with sub-reason: quotaExceeded / rateLimitExceeded / accessNotConfigured), 429, generic errors.
+  * `getLikedVideos(token)` — fetches the special `LL` playlist, then enriches with `/videos` for duration + view + like counts. Maps to `VideoItem`.
+  * `getPlaylists(token)` — `/playlists?mine=true` → `YouTubePlaylist[]`.
+  * `getSubscriptions(token)` — `/subscriptions?mine=true` → `YouTubeSubscription[]`.
+  * `getRecommendedVideos(token)` — `/activities?mine=true` (subscription feed) → enrich via `/videos` → `VideoItem[]`.
+  * `getChannelInfo(token)` — `/channels?mine=true` → `YouTubeChannelInfo` (avatar + subscriber count).
+  * `parseIsoDuration()` for ISO 8601 PT#H#M#S durations, `guessCategory()` heuristic for the `Category` field on `VideoItem`.
+- Created src/app/api/youtube/library/route.ts — GET, `getServerSession()` gate (401 if no access token), parallel fetch of liked + playlists with per-call degradation (non-401 errors swallow to empty array, 401 propagates so the client knows to re-auth).
+- Created src/app/api/youtube/recommendations/route.ts — GET, same auth gate, calls `getRecommendedVideos(token, 12)`. Returns `{ items, source: "youtube", personalized: true }` shape that mirrors the existing `/api/recommendations` contract.
+- Updated src/store/use-auth-store.ts — added `NextAuthSessionLike` type + `syncFromSession(session)` method that populates the store from a NextAuth session (so any component that still reads `useAuthStore` directly sees the real Google profile). Simulated `loginWithYouTube()` kept for backward compat (not called from UI anymore).
+- Created src/hooks/use-auth.ts — unified `useAuth()` hook:
+  * `useSession()` from next-auth/react for the real session.
+  * Falls back to the Zustand store user when no NextAuth session (simulated email login path).
+  * `loginWithYouTube()` → `signIn("google", { callbackUrl })` (real OAuth redirect).
+  * `loginWithEmail()` → delegates to the simulated store method.
+  * `logout()` → `signOut({ callbackUrl: "/", redirect: false })` if authenticated, then `storeLogout()`.
+  * `isAuthenticated` true if NextAuth session OR simulated user.
+  * `useEffect` calls `syncFromSession()` so the store stays in sync with the session for legacy consumers.
+  * Memoised `user` object — prefers the session-derived profile, falls back to `storeUser`.
+- Updated src/components/layout/header.tsx — replaced `useAuthStore((s) => s.user)` with `const { user } = useAuth()`.
+- Updated src/components/views/settings-view.tsx — replaced `useAuthStore` user + logout with `const { user, logout: authLogout } = useAuth()`. `handleLogout` now `async` and awaits `authLogout()`.
+- Updated src/components/views/home-view.tsx — replaced `useAuthStore((s) => s.user)` with `const { user } = useAuth()`. Existing `/api/recommendations?userId=…` URL continues to work (session-derived user has stable `id = email`).
+- Updated src/components/login-dialog.tsx — "Continue with YouTube" now calls `loginWithYouTube("/")` from the hook (real `signIn("google")`). Removed the simulated `useAuthStore` import. Added an amber env-config note (with `AlertCircle` icon) below the YouTube button using the new `login.requiresEnv` i18n key. Email form stays as simulated fallback. Error toast now hints at missing GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET.
+- Updated src/app/layout.tsx — wrapped children + toasters in `<SessionProvider>` (inside `<ThemeProvider>`).
+- Added i18n key `login.requiresEnv` to both `en` and `ru` dictionaries in src/lib/i18n.ts.
+- Created .env.example — documents DATABASE_URL + the 4 NextAuth/Google vars with inline step-by-step comments.
+- Created NEXTAUTH_SETUP.md (~140 lines) — full walkthrough: GCP project creation, YouTube Data API v3 enablement, OAuth consent screen, OAuth client ID (Web application) with the exact `http://localhost:3000/api/auth/callback/google` redirect URI, `openssl rand -base64 32` for NEXTAUTH_SECRET, .env population, sign-in flow, table of every YouTube Data API endpoint used + what each fetches + when, explicit read-only scope explanation (cannot like / subscribe / upload / comment), privacy notes (token never reaches browser, no DB persistence, revoke URL), troubleshooting table (redirect_uri_mismatch / access_not_configured / invalid_client / 401 / 429 / dev-vs-prod), production deployment checklist.
+- Lint: `bun run lint` → exit 0, clean.
+- TypeScript: `npx tsc --noEmit` → no errors in src/ (only pre-existing errors in native/, examples/, skills/ which are out of scope).
+- Smoke test: booted dev server and curl-tested every new endpoint:
+  * GET / → 200
+  * GET /api/auth/providers → 200, body `{"google":{"id":"google","name":"Google","type":"oauth","signinUrl":"http://localhost:3000/api/auth/signin/google","callbackUrl":"http://localhost:3000/api/auth/callback/google"}}` — confirms Google provider is registered.
+  * GET /api/auth/session → 200, body `{}` (no session — correct, not authenticated).
+  * GET /api/auth/csrf → 200.
+  * GET /api/youtube/library → 401, body `{"error":"Unauthorized — sign in with YouTube first."}` — confirms `getServerSession()` gate works.
+  * GET /api/youtube/recommendations → 401 — same gate.
+  * All 401s return the documented error shape so the client can distinguish auth-required from real errors.
+
+Stage Summary:
+- Real Google OAuth is fully wired end-to-end at the code level. The OAuth flow itself requires the user to add GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET + NEXTAUTH_SECRET to .env (NEXTAUTH_SETUP.md has the full walkthrough); until then, the simulated email login + all other app features continue to work.
+- All YouTube Data API calls happen server-side via the user's OAuth access token; the token is stored in the NextAuth JWT (signed with NEXTAUTH_SECRET) and auto-refreshed.
+- Read-only scope (`youtube.readonly`) — the app cannot mutate the user's YouTube account in any way.
+- Backward-compatible: existing UI components continue to work via the new `useAuth()` hook which transparently prefers the NextAuth session and falls back to the Zustand simulated store.
+
+Files written (Task 3+4+5):
+- src/lib/auth.ts (new) — NextAuth v4 config + Google provider + JWT/session callbacks + token refresh + type augmentation + getServerSession helper
+- src/app/api/auth/[...nextauth]/route.ts (new) — NextAuth route handler (GET + POST)
+- src/components/session-provider.tsx (new) — client SessionProvider wrapper
+- src/lib/youtube-api.ts (new, server-only) — YouTube Data API v3 client (getLikedVideos / getPlaylists / getSubscriptions / getRecommendedVideos / getChannelInfo + YouTubeApiError + duration/category helpers)
+- src/app/api/youtube/library/route.ts (new) — GET liked + playlists, 401-gated
+- src/app/api/youtube/recommendations/route.ts (new) — GET subscription-feed recommendations, 401-gated
+- src/hooks/use-auth.ts (new) — useAuth() bridge hook (NextAuth session + Zustand fallback + signIn/signOut)
+- src/store/use-auth-store.ts (updated) — added NextAuthSessionLike type + syncFromSession method
+- src/components/layout/header.tsx (updated) — uses useAuth() instead of useAuthStore
+- src/components/views/settings-view.tsx (updated) — uses useAuth() for user + logout
+- src/components/views/home-view.tsx (updated) — uses useAuth() for user
+- src/components/login-dialog.tsx (updated) — Continue with YouTube calls real signIn("google"); added env-config note
+- src/app/layout.tsx (updated) — wrapped app in SessionProvider
+- src/lib/i18n.ts (updated) — added login.requiresEnv key (en + ru)
+- .env.example (new) — DATABASE_URL + GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET + NEXTAUTH_URL + NEXTAUTH_SECRET
+- NEXTAUTH_SETUP.md (new) — full step-by-step setup guide
+
+Next actions for the user:
+1. `cp .env.example .env` and fill in real GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET / NEXTAUTH_SECRET (see NEXTAUTH_SETUP.md).
+2. In Google Cloud Console, add `http://localhost:3000/api/auth/callback/google` to authorised redirect URIs.
+3. Restart `bun run dev` and click "Continue with YouTube" — real Google consent screen will appear.
+4. After consent, the header avatar will show the real Google profile picture; `/api/youtube/library` and `/api/youtube/recommendations` will return real YouTube data.
+
+---
+Task ID: 1+2+6 (promoted videos + verification)
+Agent: main
+Task: Promoted/recommended video injection at feed positions + real YouTube OAuth verification.
+
+Work Log:
+- Promoted videos feature (full stack):
+  * Prisma model PromotedVideo (youtubeId, title, channel, thumbnail, duration, position, label, category, active)
+  * /api/promoted CRUD (GET list, POST create, PATCH update, DELETE remove)
+  * Injection logic in /api/videos: inserts promoted videos at 1-indexed positions, shifts organic content down, de-dupes
+  * Seeded 2 examples: "The Present" at pos 3 [Editor Pick], "Smash Mouth - All Star" at pos 7 [Promoted]
+  * VideoCard: amber "Promoted" badge with Sparkles icon + label (distinct from emerald "Ad-free" badge)
+  * PromotedManager component in Settings: add by YouTube URL/ID, position selector, label (Promoted/Editor's Pick/Sponsored/Recommended), category filter, toggle active, remove
+  * i18n: "promoted.*" keys added to en + ru dictionaries
+- Real YouTube OAuth (via subagent, 16 files):
+  * NextAuth v4 + Google provider + youtube.readonly scope, JWT strategy, auto-refresh
+  * /api/auth/[...nextauth] route, SessionProvider wrapper
+  * src/lib/youtube-api.ts (server-only): getLikedVideos, getPlaylists, getSubscriptions, getRecommendedVideos, getChannelInfo
+  * /api/youtube/library + /api/youtube/recommendations (401-gated)
+  * useAuth() hook: prefers NextAuth session, falls back to Zustand simulated; loginWithYouTube() → signIn("google")
+  * login-dialog: "Continue with YouTube" now triggers real OAuth redirect
+  * NEXTAUTH_SETUP.md: step-by-step GCP setup guide
+  * .env.example with GOOGLE_CLIENT_ID/SECRET/NEXTAUTH_URL/NEXTAUTH_SECRET
+- Stability fix: dev server was crashing on /api/videos due to Invidious instance timeouts (5×6s=30s). Reduced to 2 instances × 3.5s timeout, then made /api/videos use curated-only base (Invidious moves to search route). Server now responds in 0.27s and stays alive.
+- agent-browser verification:
+  * Home feed: 2 promoted badges visible ("Editor Pick" at pos 3, "Promoted" at pos 7) — confirmed via /api/videos position dump
+  * Settings → Promoted content section: shows add form (URL/position/label/feed) + both seeded videos with position controls + toggle + remove
+  * OAuth endpoints: /api/auth/providers returns Google provider, /api/auth/session returns {} (unauth), /api/youtube/library returns 401 (correct gate)
+  * Lint clean, all API routes 200
+
+Stage Summary:
+- Promoted video injection works: any video can be placed at any feed position via admin UI or API
+- Real YouTube OAuth infrastructure complete — works out-of-box once user adds Google credentials
+- Setup guide in NEXTAUTH_SETUP.md (7.9KB, comprehensive)

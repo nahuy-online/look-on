@@ -5,16 +5,18 @@ import { useTheme } from "next-themes";
 import {
   Settings, Sun, Moon, Monitor, Gauge, Film, Volume2, Shield, Database,
   Trash2, Info, Github, Heart, Globe, User, LogOut, LogIn, RefreshCw,
+  Sparkles,
 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { useLibraryStore } from "@/store/use-library-store";
 import { useI18nStore, useT } from "@/store/use-i18n-store";
-import { useAuthStore } from "@/store/use-auth-store";
+import { useAuth } from "@/hooks/use-auth";
 import { LANGS } from "@/lib/i18n";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { PromotedManager } from "@/components/promoted-manager";
 
 interface AppPrefs {
   defaultQuality: string;
@@ -59,8 +61,7 @@ export function SettingsView({ onOpenLogin }: { onOpenLogin?: () => void }) {
   const { theme, setTheme } = useTheme();
   const { prefs, update } = usePrefs();
   const clearDownloads = useLibraryStore((s) => s.clearDownloads);
-  const user = useAuthStore((s) => s.user);
-  const logout = useAuthStore((s) => s.logout);
+  const { user, logout: authLogout } = useAuth();
   const [mounted, setMounted] = React.useState(false);
   React.useEffect(() => setMounted(true), []);
 
@@ -72,8 +73,8 @@ export function SettingsView({ onOpenLogin }: { onOpenLogin?: () => void }) {
     await clearDownloads();
     toast(t("dl.cleared"));
   };
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await authLogout();
     toast(t("login.signedOut"));
   };
 
@@ -216,6 +217,11 @@ export function SettingsView({ onOpenLogin }: { onOpenLogin?: () => void }) {
             <Trash2 className="h-4 w-4" /> {t("set.clear")}
           </Button>
         </div>
+      </Section>
+
+      <Section icon={<Sparkles className="h-4 w-4" />} title={t("promoted.title")}>
+        <p className="text-xs text-muted-foreground -mt-2 mb-3">{t("promoted.desc")}</p>
+        <PromotedManager />
       </Section>
 
       <Section icon={<Info className="h-4 w-4" />} title={t("set.about")}>

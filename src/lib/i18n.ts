@@ -290,6 +290,23 @@ const en: Dict = {
   "login.stayAnonymous": "Stay anonymous",
   "login.stayAnonymousDesc": "Continue without an account. Your data stays on this device only.",
   "login.continueAnonymous": "Continue without account",
+  "login.requiresEnv": "Requires GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET to be configured in .env. See NEXTAUTH_SETUP.md.",
+
+  // promoted
+  "promoted.title": "Promoted content",
+  "promoted.desc": "Inject specific videos at chosen positions in the feed",
+  "promoted.addNew": "Add promoted video",
+  "promoted.youtubeUrl": "YouTube URL or video ID",
+  "promoted.position": "Position",
+  "promoted.label": "Label",
+  "promoted.category": "Feed",
+  "promoted.allFeeds": "All feeds",
+  "promoted.addButton": "Add to feed",
+  "promoted.empty": "No promoted videos yet",
+  "promoted.labelPromoted": "Promoted",
+  "promoted.labelPick": "Editor's Pick",
+  "promoted.labelSponsored": "Sponsored",
+  "promoted.labelRecommended": "Recommended",
 
   // misc
   "common.noVideos": "No videos found",
@@ -585,6 +602,23 @@ const ru: Dict = {
   "login.stayAnonymous": "Оставаться анонимным",
   "login.stayAnonymousDesc": "Продолжить без аккаунта. Данные хранятся только на этом устройстве.",
   "login.continueAnonymous": "Продолжить без аккаунта",
+  "login.requiresEnv": "Требуется настроить GOOGLE_CLIENT_ID и GOOGLE_CLIENT_SECRET в .env. См. NEXTAUTH_SETUP.md.",
+
+  // promoted
+  "promoted.title": "Продвигаемый контент",
+  "promoted.desc": "Вставка определённых видео на заданные позиции в ленте",
+  "promoted.addNew": "Добавить продвигаемое видео",
+  "promoted.youtubeUrl": "YouTube-ссылка или ID видео",
+  "promoted.position": "Позиция",
+  "promoted.label": "Метка",
+  "promoted.category": "Лента",
+  "promoted.allFeeds": "Все ленты",
+  "promoted.addButton": "Добавить в ленту",
+  "promoted.empty": "Продвигаемых видео пока нет",
+  "promoted.labelPromoted": "Промо",
+  "promoted.labelPick": "Выбор редакции",
+  "promoted.labelSponsored": "Спонсорское",
+  "promoted.labelRecommended": "Рекомендуем",
 
   // misc
   "common.noVideos": "Видео не найдены",

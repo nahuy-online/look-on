@@ -78,3 +78,22 @@ model Setting {
   id    String @id
   value String
 }
+
+// Promoted / editorial picks injected at a specific position in the feed.
+// position is 1-indexed (position=3 → 3rd card in the grid).
+model PromotedVideo {
+  id         String   @id @default(cuid())
+  youtubeId  String
+  title      String
+  channel    String
+  thumbnail  String
+  duration   Int      @default(0)
+  position   Int      @default(3) // 1-indexed slot in the feed
+  label      String   @default("Promoted") // "Promoted" | "Editor's Pick" | "Sponsored" etc.
+  category   String   @default("All") // which category feed to inject into ("All" = every feed)
+  active     Boolean  @default(true)
+  createdAt  DateTime @default(now())
+
+  @@index([active])
+  @@index([category])
+}

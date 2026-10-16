@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import {
-  CheckCircle2, MoreVertical, Shield, ListPlus, Play, Download, Share2, ThumbsUp,
+  CheckCircle2, MoreVertical, Shield, ListPlus, Play, Download, Share2, ThumbsUp, Sparkles,
 } from "lucide-react";
 import type { VideoItem } from "@/lib/types";
 import { formatDuration, formatViews, timeAgo } from "@/lib/format";
@@ -121,9 +121,15 @@ export function VideoCard({ video, variant = "grid", className, onClick, hideMor
       <div className="relative aspect-video rounded-xl overflow-hidden bg-muted shimmer">
         <Thumb src={video.thumbnail} alt={video.title} />
         <DurationBadge seconds={video.duration} />
-        <div className="absolute top-2 left-2 flex items-center gap-1 bg-emerald-600/90 backdrop-blur text-white text-[10px] font-semibold px-1.5 py-0.5 rounded-md shadow-sm opacity-0 group-hover:opacity-100 transition-opacity">
-          <Shield className="h-3 w-3" /> Ad-free
-        </div>
+        {video.promoted ? (
+          <div className="absolute top-2 left-2 flex items-center gap-1 bg-amber-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow">
+            <Sparkles className="h-3 w-3" /> {video.promotedLabel || "Promoted"}
+          </div>
+        ) : (
+          <div className="absolute top-2 left-2 flex items-center gap-1 bg-emerald-600/90 backdrop-blur text-white text-[10px] font-semibold px-1.5 py-0.5 rounded-md shadow-sm opacity-0 group-hover:opacity-100 transition-opacity">
+            <Shield className="h-3 w-3" /> Ad-free
+          </div>
+        )}
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
       </div>
       <div className="flex gap-3 mt-3">

@@ -40,6 +40,9 @@ export interface VideoItem {
   description: string;
   /** marks curated/seed content */
   curated?: boolean;
+  /** marks a promoted/editorial pick injected into the feed */
+  promoted?: boolean;
+  promotedLabel?: string;
 }
 
 export interface Comment {

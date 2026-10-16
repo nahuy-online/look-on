@@ -1,22 +1,20 @@
 "use client";
 
 import * as React from "react";
-import { Youtube, Mail, Lock, Loader2, ShieldCheck, User, X } from "lucide-react";
+import { Youtube, Mail, Lock, Loader2, ShieldCheck, User, AlertCircle } from "lucide-react";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useAuthStore } from "@/store/use-auth-store";
+import { useAuth } from "@/hooks/use-auth";
 import { useT } from "@/store/use-i18n-store";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
 
 export function LoginDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (v: boolean) => void }) {
   const t = useT();
-  const loginWithYouTube = useAuthStore((s) => s.loginWithYouTube);
-  const loginWithEmail = useAuthStore((s) => s.loginWithEmail);
+  const { loginWithYouTube, loginWithEmail } = useAuth();
   const [mode, setMode] = React.useState<"choice" | "email">("choice");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -29,11 +27,19 @@ export function LoginDialog({ open, onOpenChange }: { open: boolean; onOpenChang
   const handleYouTube = async () => {
     setLoading("youtube");
     try {
-      await loginWithYouTube();
+      // Real Google OAuth — this redirects the browser to Google's consent
+      // screen and never resolves here on success. If env vars aren't set,
+      // next-auth will surface the error on its /api/auth/error page.
+      await loginWithYouTube("/");
+      // In the redirect case this line is never reached; in the no-redirect
+      // error case we still close the dialog and show a toast.
       toast.success(t("login.success"), { description: t("login.successDesc") });
       onOpenChange(false);
-    } catch {
-      toast.error("Sign in failed");
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : "";
+      toast.error("YouTube sign-in failed", {
+        description: msg || "Check that GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET are set.",
+      });
     } finally {
       setLoading(null);
     }
@@ -85,6 +91,12 @@ export function LoginDialog({ open, onOpenChange }: { open: boolean; onOpenChang
               {loading === "youtube" ? <Loader2 className="h-5 w-5 animate-spin" /> : <Youtube className="h-5 w-5" />}
               {t("login.signInWithYouTube")}
             </Button>
+
+            {/* env-config note */}
+            <div className="flex items-start gap-1.5 rounded-md bg-amber-500/10 border border-amber-500/20 px-2.5 py-1.5 text-[11px] text-amber-700 dark:text-amber-300">
+              <AlertCircle className="h-3.5 w-3.5 mt-px shrink-0" />
+              <span>{t("login.requiresEnv")}</span>
+            </div>
 
             <div className="flex items-center gap-3 py-1">
               <div className="flex-1 h-px bg-border" />

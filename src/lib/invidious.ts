@@ -25,7 +25,7 @@ const CACHE_TTL = 5 * 60 * 1000;
 async function tryInstance(instance: string, path: string): Promise<any | null> {
   const url = `${instance}${path}`;
   const ctrl = new AbortController();
-  const t = setTimeout(() => ctrl.abort(), 6000);
+  const t = setTimeout(() => ctrl.abort(), 3500);
   try {
     const res = await fetch(url, {
       signal: ctrl.signal,
@@ -41,7 +41,8 @@ async function tryInstance(instance: string, path: string): Promise<any | null> 
 }
 
 async function fetchFromInvidious<T>(path: string): Promise<T | null> {
-  for (const inst of INV_INSTANCES) {
+  // Try at most 2 instances to bound total latency (~7s max)
+  for (const inst of INV_INSTANCES.slice(0, 2)) {
     const data = await tryInstance(inst, path);
     if (data) return data as T;
   }

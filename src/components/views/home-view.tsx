@@ -5,7 +5,7 @@ import { Flame, Shield, Download, Zap, Tv, Sparkles, RefreshCw, LogIn } from "lu
 import { useAppStore } from "@/store/use-app-store";
 import { useVpnStore } from "@/store/use-vpn-store";
 import { useT } from "@/store/use-i18n-store";
-import { useAuthStore } from "@/store/use-auth-store";
+import { useAuth } from "@/hooks/use-auth";
 import { useApi } from "@/hooks/use-api";
 import { VideoGrid } from "@/components/video-grid";
 import { VideoCard } from "@/components/video-card";
@@ -20,7 +20,7 @@ export function HomeView({ onOpenLogin }: { onOpenLogin?: () => void }) {
   const setCategory = useAppStore((s) => s.setCategory);
   const vpnStatus = useVpnStore((s) => s.status);
   const setView = useAppStore((s) => s.setView);
-  const user = useAuthStore((s) => s.user);
+  const { user } = useAuth();
 
   const url = `/api/videos?category=${encodeURIComponent(category)}`;
   const { data, loading } = useApi<{ items: VideoItem[] }>(url, [category]);

@@ -12,10 +12,29 @@ export interface UserProfile {
   loggedInAt: string;
 }
 
+/**
+ * Minimal shape of the NextAuth session we read from in `syncFromSession`.
+ * Kept loose (no next-auth import here) so this store stays framework-agnostic.
+ */
+export interface NextAuthSessionLike {
+  user?: {
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+  };
+}
+
 interface AuthState {
   user: UserProfile | null;
+  /** Simulated OAuth flow — kept for the email-login fallback / offline demo. */
   loginWithYouTube: () => Promise<UserProfile>;
   loginWithEmail: (email: string, name?: string) => Promise<UserProfile>;
+  /**
+   * Populate the store from a real NextAuth session (Google profile). Called
+   * by app-shell after `useSession()` resolves so any component that still
+   * reads `useAuthStore` directly sees the real user.
+   */
+  syncFromSession: (session: NextAuthSessionLike | null) => void;
   logout: () => void;
 }
 
@@ -57,6 +76,20 @@ export const useAuthStore = create<AuthState>()(
         };
         set({ user: profile });
         return profile;
+      },
+      syncFromSession: (session) => {
+        if (!session?.user) return;
+        const name = session.user.name || "YouTube User";
+        const email = session.user.email || "";
+        const profile: UserProfile = {
+          id: email || "yt-session",
+          name,
+          email,
+          avatar: session.user.image || makeAvatar(name),
+          provider: "youtube",
+          loggedInAt: new Date().toISOString(),
+        };
+        set({ user: profile });
       },
       logout: () => set({ user: null }),
     }),

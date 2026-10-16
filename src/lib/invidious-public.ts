@@ -14,10 +14,11 @@ const INV_INSTANCES = [
 ];
 
 export async function fetchFromInvidiousPublic<T>(path: string, _category: Category = "All"): Promise<T> {
-  for (const inst of INV_INSTANCES) {
+  // Try at most 2 instances to bound total latency
+  for (const inst of INV_INSTANCES.slice(0, 2)) {
     const url = `${inst}${path}`;
     const ctrl = new AbortController();
-    const t = setTimeout(() => ctrl.abort(), 6000);
+    const t = setTimeout(() => ctrl.abort(), 3500);
     try {
       const res = await fetch(url, {
         signal: ctrl.signal,

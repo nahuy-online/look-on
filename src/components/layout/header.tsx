@@ -7,7 +7,7 @@ import { useAppStore } from "@/store/use-app-store";
 import { useVpnStore } from "@/store/use-vpn-store";
 import { useQueueStore } from "@/store/use-queue-store";
 import { useT } from "@/store/use-i18n-store";
-import { useAuthStore } from "@/store/use-auth-store";
+import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
@@ -16,7 +16,7 @@ export function Header({ onOpenLogin }: { onOpenLogin?: () => void }) {
   const setMobileOpen = useAppStore((s) => s.setMobileSidebarOpen);
   const setSearch = useAppStore((s) => s.setSearch);
   const searchQuery = useAppStore((s) => s.searchQuery);
-  const user = useAuthStore((s) => s.user);
+  const { user } = useAuth();
   const [q, setQ] = React.useState(searchQuery);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
