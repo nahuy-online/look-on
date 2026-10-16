@@ -1,0 +1,24 @@
+[package]
+name = "puretuber-wireguard"
+version = "0.1.0"
+description = "PureTuber VPN — Tauri 2.0 WireGuard plugin (Android VpnService bridge)"
+authors = ["PureTuber"]
+edition = "2021"
+rust-version = "1.77"
+
+[lib]
+name = "puretuber_wireguard"
+crate-type = ["lib", "staticlib", "cdylib"]
+
+[build-dependencies]
+tauri-plugin = { version = "2", features = ["build"] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+serde = "1"
+serde_json = "1"
+log = "0.4"
+once_cell = "1"
+
+[target.'cfg(target_os = "android")'.dependencies]
+jni = "0.21"

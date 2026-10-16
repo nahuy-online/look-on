@@ -1,28 +1,81 @@
 "use client";
 
 import * as React from "react";
-import { CheckCircle2, MoreVertical, Shield } from "lucide-react";
+import {
+  CheckCircle2, MoreVertical, Shield, ListPlus, Play, Download, Share2, ThumbsUp,
+} from "lucide-react";
 import type { VideoItem } from "@/lib/types";
 import { formatDuration, formatViews, timeAgo } from "@/lib/format";
 import { useAppStore } from "@/store/use-app-store";
+import { useQueueStore } from "@/store/use-queue-store";
+import { useLibraryStore } from "@/store/use-library-store";
+import {
+  DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface VideoCardProps {
   video: VideoItem;
   variant?: "grid" | "list" | "compact";
-  onMore?: (v: VideoItem) => void;
   className?: string;
+  /** Override the default click (watch) behavior */
+  onClick?: (v: VideoItem) => void;
+  /** Hide the more menu entirely */
+  hideMore?: boolean;
 }
 
-export function VideoCard({ video, variant = "grid", onMore, className }: VideoCardProps) {
+export function VideoCard({ video, variant = "grid", className, onClick, hideMore }: VideoCardProps) {
   const watch = useAppStore((s) => s.watch);
+  const addToQueue = useQueueStore((s) => s.addToQueue);
+  const playNext = useQueueStore((s) => s.playNext);
+  const toggleLike = useLibraryStore((s) => s.toggleLike);
+  const isLiked = useLibraryStore((s) => s.isLiked);
   const channelAvatar = video.channelAvatar ?? `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(video.channel)}&backgroundColor=10b981,059669,14b8a6,0d9488&textColor=ffffff`;
+
+  const handleClick = () => (onClick ? onClick(video) : watch(video));
+
+  const moreMenu = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
+
+  const MoreButton = hideMore ? null : (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          onClick={moreMenu}
+          className="h-8 w-8 rounded-full flex items-center justify-center text-muted-foreground hover:bg-accent opacity-0 group-hover:opacity-100 transition"
+          aria-label="More options"
+        >
+          <MoreVertical className="h-4 w-4" />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-52" onClick={(e) => e.stopPropagation()}>
+        <DropdownMenuItem onClick={() => { addToQueue(video); toast.success("Added to queue"); }}>
+          <ListPlus className="h-4 w-4 mr-2" /> Add to queue
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => { playNext(video); toast.success("Playing next"); }}>
+          <Play className="h-4 w-4 mr-2" /> Play next
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => { toggleLike(video); toast.success(isLiked(video.youtubeId) ? "Removed from Liked" : "Added to Liked"); }}>
+          <ThumbsUp className="h-4 w-4 mr-2" /> {isLiked(video.youtubeId) ? "Remove from Liked" : "Add to Liked"}
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => {
+          const url = `https://www.youtube.com/watch?v=${video.youtubeId}`;
+          navigator.clipboard?.writeText(url).then(() => toast.success("Link copied"));
+        }}>
+          <Share2 className="h-4 w-4 mr-2" /> Copy link
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
 
   if (variant === "list") {
     return (
       <div
         className={cn("group flex gap-3 cursor-pointer p-2 rounded-xl hover:bg-accent/60 transition-colors", className)}
-        onClick={() => watch(video)}
+        onClick={handleClick}
       >
         <div className="relative w-40 sm:w-44 shrink-0 aspect-video rounded-lg overflow-hidden bg-muted">
           <Thumb src={video.thumbnail} alt={video.title} />
@@ -38,6 +91,7 @@ export function VideoCard({ video, variant = "grid", onMore, className }: VideoC
             {formatViews(video.views)} views · {timeAgo(video.publishedAt)}
           </p>
         </div>
+        <div className="flex items-start pt-1">{MoreButton}</div>
       </div>
     );
   }
@@ -46,7 +100,7 @@ export function VideoCard({ video, variant = "grid", onMore, className }: VideoC
     return (
       <div
         className={cn("group flex gap-2 cursor-pointer p-1.5 rounded-lg hover:bg-accent/60 transition-colors", className)}
-        onClick={() => watch(video)}
+        onClick={handleClick}
       >
         <div className="relative w-36 shrink-0 aspect-video rounded-md overflow-hidden bg-muted">
           <Thumb src={video.thumbnail} alt={video.title} />
@@ -57,12 +111,13 @@ export function VideoCard({ video, variant = "grid", onMore, className }: VideoC
           <p className="text-[11px] text-muted-foreground mt-0.5">{video.channel}</p>
           <p className="text-[11px] text-muted-foreground">{formatViews(video.views)} views</p>
         </div>
+        <div className="flex items-start pt-0.5 opacity-0 group-hover:opacity-100 transition">{MoreButton}</div>
       </div>
     );
   }
 
   return (
-    <div className={cn("group cursor-pointer", className)} onClick={() => watch(video)}>
+    <div className={cn("group cursor-pointer", className)} onClick={handleClick}>
       <div className="relative aspect-video rounded-xl overflow-hidden bg-muted shimmer">
         <Thumb src={video.thumbnail} alt={video.title} />
         <DurationBadge seconds={video.duration} />
@@ -89,15 +144,7 @@ export function VideoCard({ video, variant = "grid", onMore, className }: VideoC
             {formatViews(video.views)} views · {timeAgo(video.publishedAt)}
           </p>
         </div>
-        {onMore && (
-          <button
-            onClick={(e) => { e.stopPropagation(); onMore(video); }}
-            className="h-8 w-8 rounded-full flex items-center justify-center text-muted-foreground hover:bg-accent opacity-0 group-hover:opacity-100 transition"
-            aria-label="More options"
-          >
-            <MoreVertical className="h-4 w-4" />
-          </button>
-        )}
+        <div className="flex items-start pt-0.5">{MoreButton}</div>
       </div>
     </div>
   );

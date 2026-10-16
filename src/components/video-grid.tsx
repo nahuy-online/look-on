@@ -8,11 +8,10 @@ interface VideoGridProps {
   items: VideoItem[];
   loading?: boolean;
   skeletonCount?: number;
-  onMore?: (v: VideoItem) => void;
   emptyMessage?: string;
 }
 
-export function VideoGrid({ items, loading, skeletonCount = 8, onMore, emptyMessage }: VideoGridProps) {
+export function VideoGrid({ items, loading, skeletonCount = 8, emptyMessage }: VideoGridProps) {
   if (loading && items.length === 0) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-6">
@@ -37,7 +36,7 @@ export function VideoGrid({ items, loading, skeletonCount = 8, onMore, emptyMess
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-6">
       {items.map((v) => (
-        <VideoCard key={v.youtubeId} video={v} onMore={onMore} />
+        <VideoCard key={v.youtubeId} video={v} />
       ))}
     </div>
   );

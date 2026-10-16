@@ -1,0 +1,112 @@
+// Emerald-first dark theme for the Tauri native app.
+// Mirrors the web app's globals.css but trimmed for the lighter weight
+// frontend (no shadcn primitives — Tailwind utilities + a few custom classes).
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --radius: 0.75rem;
+  --background: 16 18 18;       /* near-black, slight green */
+  --foreground: 240 247 240;
+  --card: 28 32 32;
+  --card-foreground: 240 247 240;
+  --popover: 30 36 36;
+  --popover-foreground: 240 247 240;
+  --primary: 16 185 129;        /* emerald-500 */
+  --primary-foreground: 8 14 12;
+  --secondary: 38 44 44;
+  --secondary-foreground: 240 247 240;
+  --muted: 34 40 40;
+  --muted-foreground: 148 163 158;
+  --accent: 30 60 50;
+  --accent-foreground: 240 247 240;
+  --destructive: 220 90 70;
+  --border: 255 255 255 / 0.09;
+  --input: 255 255 255 / 0.12;
+  --ring: 16 185 129;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  background: rgb(var(--background));
+  color: rgb(var(--foreground));
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  border-color: rgb(var(--border));
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+/* Scrollbar */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 158, 0.4) transparent;
+}
+.scrollbar-thin::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: rgba(148, 163, 158, 0.35);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* VPN connect pulse */
+@keyframes vpn-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.4); opacity: 0; }
+}
+.vpn-pulse::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: currentColor;
+  animation: vpn-pulse 1.8s ease-out infinite;
+}
+
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+.animate-spin-slow {
+  animation: spin-slow 2.2s linear infinite;
+}
+
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
+  animation: shimmer 1.5s infinite;
+}

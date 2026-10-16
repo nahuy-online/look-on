@@ -3,9 +3,10 @@
 import * as React from "react";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
-import { Search, Menu, Sun, Moon, Shield, ShieldCheck, X, Mic } from "lucide-react";
+import { Search, Menu, Sun, Moon, Shield, ShieldCheck, X, Mic, ListVideo } from "lucide-react";
 import { useAppStore } from "@/store/use-app-store";
 import { useVpnStore } from "@/store/use-vpn-store";
+import { useQueueStore } from "@/store/use-queue-store";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
@@ -63,6 +64,7 @@ export function Header() {
 
       <div className="flex items-center gap-1.5">
         <VpnPill />
+        <QueueButton />
         <button
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
           className="h-10 w-10 rounded-full flex items-center justify-center hover:bg-accent"
@@ -115,6 +117,25 @@ function VpnPill() {
         <span className="hidden sm:inline h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
       )}
       {connected && <span className="hidden sm:inline h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />}
+    </button>
+  );
+}
+
+function QueueButton() {
+  const toggleOpen = useQueueStore((s) => s.toggleOpen);
+  const queueSize = useQueueStore((s) => s.queue.length);
+  return (
+    <button
+      onClick={() => toggleOpen()}
+      className="relative h-10 w-10 rounded-full flex items-center justify-center hover:bg-accent"
+      aria-label="Open queue"
+    >
+      <ListVideo className="h-5 w-5" />
+      {queueSize > 0 && (
+        <span className="absolute -top-0.5 -right-0.5 h-4 min-w-4 px-1 rounded-full bg-emerald-500 text-white text-[10px] font-bold flex items-center justify-center">
+          {queueSize > 9 ? "9+" : queueSize}
+        </span>
+      )}
     </button>
   );
 }

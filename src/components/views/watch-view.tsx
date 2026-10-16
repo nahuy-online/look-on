@@ -3,10 +3,11 @@
 import * as React from "react";
 import {
   ThumbsUp, ThumbsDown, Download, Share2, ListPlus, Check, ChevronDown,
-  ShieldCheck, Eye, Clock, Hash,
+  ShieldCheck, Eye, Clock, Hash, ListVideo, Play,
 } from "lucide-react";
 import { useAppStore } from "@/store/use-app-store";
 import { useLibraryStore } from "@/store/use-library-store";
+import { useQueueStore } from "@/store/use-queue-store";
 import { useApi } from "@/hooks/use-api";
 import { VideoPlayer } from "@/components/player/video-player";
 import { VideoCard } from "@/components/video-card";
@@ -31,6 +32,11 @@ export function WatchView() {
   const playlists = useLibraryStore((s) => s.playlists);
   const createPlaylist = useLibraryStore((s) => s.createPlaylist);
   const addToPlaylist = useLibraryStore((s) => s.addToPlaylist);
+  const addToQueue = useQueueStore((s) => s.addToQueue);
+  const playNext = useQueueStore((s) => s.playNext);
+  const playNow = useQueueStore((s) => s.playNow);
+  const queueSize = useQueueStore((s) => s.queue.length);
+  const toggleQueue = useQueueStore((s) => s.toggleOpen);
   const [dlOpen, setDlOpen] = React.useState(false);
   const [descOpen, setDescOpen] = React.useState(false);
 
@@ -46,10 +52,15 @@ export function WatchView() {
     },
     [video]
   );
+
+  // record history + register current in queue
   React.useEffect(() => {
-    if (video) recordHistory(0);
+    if (video) {
+      recordHistory(0);
+      playNow(video);
+    }
     window.scrollTo({ top: 0 });
-  }, [video, recordHistory]);
+  }, [video, recordHistory, playNow]);
 
   const relatedUrl = video ? `/api/related?youtubeId=${video.youtubeId}&title=${encodeURIComponent(video.title)}&category=${video.category}` : null;
   const { data: related } = useApi<{ items: VideoItem[] }>(relatedUrl, [video?.youtubeId]);
@@ -168,6 +179,26 @@ export function WatchView() {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
+
+              <Button
+                variant="outline"
+                size="sm"
+                className="rounded-full h-9 gap-1.5 bg-muted border-0 hover:bg-accent"
+                onClick={() => { addToQueue(video); toast.success("Added to queue"); }}
+              >
+                <ListVideo className="h-4 w-4" /> <span className="hidden sm:inline">Queue</span>
+                {queueSize > 0 && <span className="ml-0.5 text-[10px] bg-emerald-500 text-white rounded-full px-1.5">{queueSize}</span>}
+              </Button>
+
+              <Button
+                variant="outline"
+                size="sm"
+                className="rounded-full h-9 gap-1.5 bg-muted border-0 hover:bg-accent"
+                onClick={() => toggleQueue(true)}
+                title="Open queue"
+              >
+                <Play className="h-4 w-4" /> <span className="hidden sm:inline">Play queue</span>
+              </Button>
 
               <Button
                 variant="outline"

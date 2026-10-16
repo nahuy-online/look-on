@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Sidebar } from "./layout/sidebar";
 import { Header } from "./layout/header";
+import { QueuePanel } from "./queue-panel";
 import { useAppStore } from "@/store/use-app-store";
 import { useLibraryStore } from "@/store/use-library-store";
 import { useVpnStore } from "@/store/use-vpn-store";
@@ -40,7 +41,7 @@ export function AppShell() {
         <Sidebar />
         <div className="flex-1 min-w-0 lg:pl-60 flex flex-col">
           <Header />
-          <main className="flex-1 w-full">
+          <main className="flex-1 w-full relative">
             {view === "home" && <HomeView />}
             {view === "watch" && <WatchView />}
             {view === "search" && <SearchView />}
@@ -50,6 +51,7 @@ export function AppShell() {
             {view === "liked" && <LikedView />}
             {view === "playlists" && <PlaylistsView />}
             {view === "settings" && <SettingsView />}
+            <QueuePanel />
           </main>
           <Footer />
         </div>

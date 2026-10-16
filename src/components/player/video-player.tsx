@@ -1,8 +1,15 @@
 "use client";
 
 import * as React from "react";
-import { Shield, ShieldOff, Volume2, PictureInPicture2, Loader2 } from "lucide-react";
+import {
+  Shield, ShieldOff, Volume2, PictureInPicture2, Loader2, Gauge, SkipForward,
+} from "lucide-react";
 import { useVpnStore } from "@/store/use-vpn-store";
+import { useQueueStore } from "@/store/use-queue-store";
+import {
+  DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem,
+  DropdownMenuLabel, DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
@@ -41,21 +48,28 @@ function loadYouTubeAPI(): Promise<void> {
   return apiPromise;
 }
 
+const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3];
+
 export function VideoPlayer({ youtubeId, title, onProgress, onEnded }: VideoPlayerProps) {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const playerRef = React.useRef<any>(null);
   const [ready, setReady] = React.useState(false);
   const [blocked, setBlocked] = React.useState(false);
+  const [speed, setSpeed] = React.useState(1);
+  const [availableRates, setAvailableRates] = React.useState<number[]>([]);
   const vpnStatus = useVpnStore((s) => s.status);
-  const adBlock = useVpnStore((s) => s.settings.adBlock);
+  const queueNext = useQueueStore((s) => s.next);
+  const queueSize = useQueueStore((s) => s.queue.length);
+  const onEndedRef = React.useRef(onEnded);
+  React.useEffect(() => { onEndedRef.current = onEnded; });
 
   React.useEffect(() => {
     let mounted = true;
     let progressTimer: ReturnType<typeof setInterval> | undefined;
     setReady(false);
+    setBlocked(false);
     loadYouTubeAPI().then(() => {
       if (!mounted || !containerRef.current) return;
-      // clear any previous player
       containerRef.current.innerHTML = "";
       const div = document.createElement("div");
       containerRef.current.appendChild(div);
@@ -73,10 +87,19 @@ export function VideoPlayer({ youtubeId, title, onProgress, onEnded }: VideoPlay
           events: {
             onReady: (e: any) => {
               setReady(true);
-              try { e.target.playVideo(); } catch {}
+              try {
+                const rates = e.target.getAvailablePlaybackRates?.();
+                if (Array.isArray(rates) && rates.length) setAvailableRates(rates);
+                e.target.setPlaybackRate(speed);
+                e.target.playVideo();
+              } catch {}
             },
             onStateChange: (e: any) => {
-              if (e.data === 0) onEnded?.();
+              if (e.data === 0) {
+                // auto-advance queue if present, else onEnded
+                if (queueSize > 0) queueNext();
+                else onEndedRef.current?.();
+              }
             },
             onError: () => {
               setBlocked(true);
@@ -102,6 +125,15 @@ export function VideoPlayer({ youtubeId, title, onProgress, onEnded }: VideoPlay
     };
   }, [youtubeId]);
 
+  // apply speed when changed
+  const applySpeed = (rate: number) => {
+    setSpeed(rate);
+    try {
+      playerRef.current?.setPlaybackRate?.(rate);
+      toast.success(`Speed: ${rate}×`, { duration: 1200 });
+    } catch {}
+  };
+
   const handlePiP = async () => {
     try {
       const iframe = containerRef.current?.querySelector("iframe");
@@ -112,7 +144,7 @@ export function VideoPlayer({ youtubeId, title, onProgress, onEnded }: VideoPlay
           return;
         }
       }
-      toast.info("Picture-in-Picture", { description: "Starting PiP via the player controls (use the ▭ button in the video)." });
+      toast.info("Picture-in-Picture", { description: "Use the ▭ button inside the video player." });
     } catch {
       toast.info("Picture-in-Picture", { description: "Use the ▭ button inside the video player." });
     }
@@ -125,6 +157,13 @@ export function VideoPlayer({ youtubeId, title, onProgress, onEnded }: VideoPlay
       if (v.getPlayerState?.() === 1) v.pauseVideo();
       else v.playVideo();
     } catch {}
+  };
+
+  const handleSkipNext = () => {
+    if (queueSize > 0) {
+      queueNext();
+      toast("Playing next from queue");
+    }
   };
 
   return (
@@ -143,10 +182,51 @@ export function VideoPlayer({ youtubeId, title, onProgress, onEnded }: VideoPlay
             <ShieldOff className="h-3 w-3" /> No VPN
           </span>
         )}
+        {speed !== 1 && (
+          <span className="flex items-center gap-1 bg-purple-600 text-white text-[11px] font-semibold px-2 py-1 rounded-md shadow">
+            <Gauge className="h-3 w-3" /> {speed}×
+          </span>
+        )}
       </div>
 
-      {/* player actions (PiP / bg-play) */}
+      {/* player actions (speed / PiP / bg-play / skip) */}
       <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+        {queueSize > 0 && (
+          <button
+            onClick={handleSkipNext}
+            className="h-8 w-8 rounded-full bg-black/60 backdrop-blur text-white flex items-center justify-center hover:bg-black/80"
+            title="Play next in queue"
+          >
+            <SkipForward className="h-4 w-4 fill-current" />
+          </button>
+        )}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button
+              className="h-8 px-2.5 min-w-[3rem] rounded-full bg-black/60 backdrop-blur text-white flex items-center justify-center gap-1 hover:bg-black/80 text-xs font-semibold"
+              title="Playback speed"
+            >
+              <Gauge className="h-4 w-4" /> {speed}×
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-32">
+            <DropdownMenuLabel className="text-xs">Playback speed</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            {SPEEDS.map((r) => (
+              <DropdownMenuItem
+                key={r}
+                onClick={() => applySpeed(r)}
+                className={cn("justify-between", r === speed && "bg-accent text-emerald-600 dark:text-emerald-400 font-semibold")}
+              >
+                <span>{r}×</span>
+                {r === speed && <span className="text-[10px]">●</span>}
+                {availableRates.length > 0 && !availableRates.includes(r) && r > 2 && (
+                  <span className="text-[9px] text-amber-500" title="Available in native app">▲</span>
+                )}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
         <button
           onClick={handleBg}
           className="h-8 w-8 rounded-full bg-black/60 backdrop-blur text-white flex items-center justify-center hover:bg-black/80"
