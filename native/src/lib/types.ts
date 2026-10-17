@@ -40,6 +40,8 @@ export interface VideoItem {
   category: Category;
   description: string;
   curated?: boolean;
+  promoted?: boolean;
+  promotedLabel?: string;
 }
 
 export interface StreamFormat {

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Toaster } from "sonner";
 import { Sidebar } from "@/components/sidebar";
 import { Header } from "@/components/header";
@@ -7,9 +7,12 @@ import { WatchView } from "@/components/watch-view";
 import { VpnView } from "@/components/vpn-view";
 import { DownloadsView } from "@/components/downloads-view";
 import { SettingsView } from "@/components/settings-view";
+import { QueuePanel } from "@/components/queue-panel";
+import { LoginDialog } from "@/components/login-dialog";
 import { useAppStore } from "@/store/use-app-store";
 import { useLibraryStore } from "@/store/use-library-store";
 import { useVpnStore } from "@/store/use-vpn-store";
+import { useAuthStore } from "@/store/use-auth-store";
 
 export default function App() {
   const view = useAppStore((s) => s.view);
@@ -17,13 +20,14 @@ export default function App() {
   const setMobileSidebarOpen = useAppStore((s) => s.setMobileSidebarOpen);
   const loadAll = useLibraryStore((s) => s.loadAll);
   const refreshStatus = useVpnStore((s) => s.refreshStatus);
+  const loadSession = useAuthStore((s) => s.loadSession);
+  const [loginOpen, setLoginOpen] = useState(false);
 
-  // Hydrate library from SQLite on first mount.
   useEffect(() => {
     void loadAll();
-    // Pull current VPN status once (in case it's already running from a previous session).
     void refreshStatus();
-  }, [loadAll, refreshStatus]);
+    void loadSession();
+  }, [loadAll, refreshStatus, loadSession]);
 
   return (
     <div className="flex h-full w-full overflow-hidden bg-background text-foreground">
@@ -47,10 +51,10 @@ export default function App() {
         </div>
       )}
 
-      <div className="flex-1 flex flex-col min-w-0">
-        <Header />
-        <main className="flex-1 overflow-y-auto scrollbar-thin">
-          {view === "home" && <HomeView />}
+      <div className="flex-1 flex flex-col min-w-0 relative">
+        <Header onOpenLogin={() => setLoginOpen(true)} />
+        <main className="flex-1 overflow-y-auto scrollbar-thin relative">
+          {view === "home" && <HomeView onOpenLogin={() => setLoginOpen(true)} />}
           {view === "watch" && <WatchView />}
           {view === "search" && <HomeView search />}
           {view === "vpn" && <VpnView />}
@@ -58,10 +62,12 @@ export default function App() {
           {view === "history" && <DownloadsView historyMode />}
           {view === "liked" && <DownloadsView likedMode />}
           {view === "playlists" && <DownloadsView playlistsMode />}
-          {view === "settings" && <SettingsView />}
+          {view === "settings" && <SettingsView onOpenLogin={() => setLoginOpen(true)} />}
+          <QueuePanel />
         </main>
       </div>
 
+      <LoginDialog open={loginOpen} onOpenChange={setLoginOpen} />
       <Toaster theme="dark" position="top-center" richColors />
     </div>
   );

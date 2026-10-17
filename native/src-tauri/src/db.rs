@@ -1,4 +1,4 @@
-// SQLite-backed persistence for PureTuber VPN.
+// SQLite-backed persistence for Look On.
 //
 // Uses `rusqlite` with the `bundled` feature so the build doesn't depend on a
 // system SQLite. The DB file is created at the Tauri app data dir on first
@@ -11,7 +11,7 @@
 //
 // Connection is wrapped in a Mutex and exposed via Tauri managed state.
 
-use crate::models::{DownloadItem, DownloadPatch, HistoryItem, PlaylistLite, VideoItem};
+use crate::models::{DownloadItem, DownloadPatch, HistoryItem, PlaylistLite, PromotedVideo, VideoItem};
 use rusqlite::{params, Connection, OptionalExtension};
 use std::path::Path;
 use std::sync::Mutex;
@@ -96,6 +96,22 @@ fn init_schema(conn: &Connection) -> anyhow::Result<()> {
             id TEXT PRIMARY KEY,
             value TEXT NOT NULL
         );
+
+        CREATE TABLE IF NOT EXISTS promoted_videos (
+            id TEXT PRIMARY KEY,
+            youtube_id TEXT NOT NULL,
+            title TEXT NOT NULL,
+            channel TEXT NOT NULL,
+            thumbnail TEXT NOT NULL,
+            duration INTEGER DEFAULT 0,
+            position INTEGER DEFAULT 3,
+            label TEXT DEFAULT 'Promoted',
+            category TEXT DEFAULT 'All',
+            active INTEGER DEFAULT 1,
+            created_at TEXT NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS idx_promoted_category ON promoted_videos(category);
+        CREATE INDEX IF NOT EXISTS idx_promoted_active ON promoted_videos(active);
         "#,
     )?;
     Ok(())
@@ -299,6 +315,8 @@ pub fn get_liked(db: &Db) -> anyhow::Result<Vec<VideoItem>> {
             category: row.get(5)?,
             description: String::new(),
             curated: Some(false),
+            promoted: Some(false),
+            promoted_label: None,
         })
     })?;
     let mut out = Vec::new();
@@ -384,6 +402,8 @@ pub fn get_playlists(db: &Db) -> anyhow::Result<Vec<PlaylistLite>> {
                     category: "All".to_string(),
                     description: String::new(),
                     curated: Some(false),
+                    promoted: Some(false),
+                    promoted_label: None,
                 })
             })?
             .filter_map(|r| r.ok())
@@ -459,5 +479,109 @@ pub fn delete_playlist(db: &Db, id: &str) -> anyhow::Result<()> {
     let conn = db.0.lock().unwrap();
     conn.execute("DELETE FROM playlists WHERE id = ?1", params![id])?;
     // playlist_items removed via ON DELETE CASCADE
+    Ok(())
+}
+
+// ---------- Promoted videos ----------
+
+/// List promoted videos for a given category. Matches rows where
+/// `category = 'All'` (visible everywhere) OR `category = <cat>`.
+/// Returns both active and inactive rows — caller filters by `active` as
+/// needed (the trending command only injects active ones; the admin UI shows
+/// all of them so they can be toggled).
+pub fn get_promoted(db: &Db, category: &str) -> anyhow::Result<Vec<PromotedVideo>> {
+    let conn = db.0.lock().unwrap();
+    let mut stmt = conn.prepare(
+        "SELECT id, youtube_id, title, channel, thumbnail, duration, position, label, category, active, created_at
+         FROM promoted_videos
+         WHERE category = 'All' OR category = ?1
+         ORDER BY position ASC, created_at DESC",
+    )?;
+    let rows = stmt.query_map(params![category], |row| {
+        let active_int: i64 = row.get(9)?;
+        Ok(PromotedVideo {
+            id: row.get(0)?,
+            youtube_id: row.get(1)?,
+            title: row.get(2)?,
+            channel: row.get(3)?,
+            thumbnail: row.get(4)?,
+            duration: row.get(5)?,
+            position: row.get(6)?,
+            label: row.get(7)?,
+            category: row.get(8)?,
+            active: active_int != 0,
+            created_at: row.get(10)?,
+        })
+    })?;
+    let mut out = Vec::new();
+    for r in rows {
+        out.push(r?);
+    }
+    Ok(out)
+}
+
+/// Insert a new promoted video. Returns the freshly-created row.
+pub fn add_promoted(
+    db: &Db,
+    youtube_id: &str,
+    title: &str,
+    channel: &str,
+    thumbnail: &str,
+    duration: i64,
+    position: i64,
+    label: &str,
+    category: &str,
+) -> anyhow::Result<PromotedVideo> {
+    let conn = db.0.lock().unwrap();
+    let id = cuid_like();
+    let now = now_iso();
+    let label = if label.is_empty() { "Promoted" } else { label };
+    let category = if category.is_empty() { "All" } else { category };
+    conn.execute(
+        "INSERT INTO promoted_videos (id, youtube_id, title, channel, thumbnail, duration, position, label, category, active, created_at)
+         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, 1, ?10)",
+        params![id, youtube_id, title, channel, thumbnail, duration, position, label, category, now],
+    )?;
+    Ok(PromotedVideo {
+        id,
+        youtube_id: youtube_id.to_string(),
+        title: title.to_string(),
+        channel: channel.to_string(),
+        thumbnail: thumbnail.to_string(),
+        duration,
+        position,
+        label: label.to_string(),
+        category: category.to_string(),
+        active: true,
+        created_at: now,
+    })
+}
+
+/// Patch an existing promoted video. Only the supplied fields are updated.
+/// `active` is converted from bool to i64 (0/1) for SQLite.
+pub fn update_promoted(
+    db: &Db,
+    id: &str,
+    position: Option<i64>,
+    label: Option<&str>,
+    active: Option<bool>,
+) -> anyhow::Result<()> {
+    let conn = db.0.lock().unwrap();
+    let active_int = active.map(|b| if b { 1i64 } else { 0i64 });
+    conn.execute(
+        "UPDATE promoted_videos SET
+            position = COALESCE(?1, position),
+            label    = COALESCE(?2, label),
+            active   = COALESCE(?3, active)
+         WHERE id = ?4",
+        params![position, label, active_int, id],
+    )?;
+    Ok(())
+}
+
+/// Delete a promoted video by id.
+pub fn delete_promoted(db: &Db, id: &str) -> anyhow::Result<()> {
+    let conn = db.0.lock().unwrap();
+    conn.execute("DELETE FROM promoted_videos WHERE id = ?1", params![id])?;
     Ok(())
 }

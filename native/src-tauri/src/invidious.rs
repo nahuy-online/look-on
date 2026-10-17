@@ -113,7 +113,7 @@ static STREAM_CACHE: Lazy<Mutex<HashMap<String, (Instant, StreamInfo)>>> =
 static HTTP: Lazy<Client> = Lazy::new(|| {
     Client::builder()
         .timeout(HTTP_TIMEOUT)
-        .user_agent("PureTuberVPN/1.0")
+        .user_agent("LookOn/1.0")
         .build()
         .expect("failed to build reqwest client")
 });
@@ -177,6 +177,8 @@ fn map_video(v: &InvVideo, category: &str) -> Option<VideoItem> {
         category: category.to_string(),
         description: v.description.clone().unwrap_or_default(),
         curated: Some(false),
+        promoted: Some(false),
+        promoted_label: None,
     })
 }
 

@@ -1,14 +1,15 @@
-// PureTuber VPN — Tauri 2.0 backend entry point.
+// Look On — Tauri 2.0 backend entry point.
 //
 // Registers:
 //   - HTTP plugin (so the frontend can `fetch` Invidious directly if needed)
 //   - SQL plugin (so the frontend can talk to SQLite directly if we ever
 //     expose it; the Rust side uses `rusqlite` directly for now)
-//   - All `#[tauri::command]` functions
+//   - All `#[tauri::command]` functions (Invidious, DB, VPN, OAuth)
 //
 // On Android, the WireGuard plugin would be registered here too once its JNI
 // bridge is implemented (see `android-plugins/wireguard/src/lib.rs`).
 
+mod auth;
 mod db;
 mod invidious;
 mod models;
@@ -17,8 +18,8 @@ mod vpn;
 use std::sync::Arc;
 
 use models::{
-    DownloadItem, DownloadPatch, HistoryItem, PlaylistLite, StreamInfo, VideoItem, VpnServer,
-    VpnStatusResponse,
+    DownloadItem, DownloadPatch, HistoryItem, PlaylistLite, PromotedVideo, StreamInfo, VideoItem,
+    VpnServer, VpnStatusResponse,
 };
 use tauri::Manager;
 use vpn::VpnHandle;
@@ -31,9 +32,63 @@ struct AppState {
 
 // ---------- Invidious commands ----------
 
+/// Fetch the Invidious trending feed for `category` and inject any active
+/// promoted videos at their 1-indexed positions. Promoted videos are marked
+/// with `promoted: true` + `promotedLabel` so the frontend can render the
+/// amber "Promoted" badge.
 #[tauri::command]
-async fn trending(category: String) -> Result<Vec<VideoItem>, String> {
-    Ok(invidious::trending(&category).await)
+async fn trending(
+    state: tauri::State<'_, Arc<AppState>>,
+    category: String,
+) -> Result<Vec<VideoItem>, String> {
+    let mut items = invidious::trending(&category).await;
+
+    // Inject promoted videos. We pull everything matching the category filter
+    // (active + inactive), then keep only the active ones, convert to
+    // VideoItem, sort by 1-indexed position ascending, and splice each into
+    // the items vector at `position - 1` (clamped to the current length).
+    let promoted = db::get_promoted(&state.db, &category).unwrap_or_default();
+    let mut promoted_items: Vec<(i64, VideoItem)> = promoted
+        .into_iter()
+        .filter(|p| p.active)
+        .map(|p| {
+            let pos = p.position;
+            let label = if p.label.is_empty() {
+                "Promoted".to_string()
+            } else {
+                p.label.clone()
+            };
+            let youtube_id = p.youtube_id.clone();
+            let item = VideoItem {
+                id: youtube_id.clone(),
+                youtube_id,
+                title: p.title,
+                channel: p.channel,
+                channel_avatar: None,
+                thumbnail: p.thumbnail,
+                duration: p.duration,
+                views: 0,
+                likes: 0,
+                published_at: p.created_at.clone(),
+                category: p.category,
+                description: String::new(),
+                curated: Some(false),
+                promoted: Some(true),
+                promoted_label: Some(label),
+            };
+            (pos, item)
+        })
+        .collect();
+    promoted_items.sort_by_key(|(p, _)| *p);
+    for (pos, item) in promoted_items {
+        // `pos` is 1-indexed; clamp into [1, items.len() + 1].
+        let idx = (pos.max(1) as usize)
+            .saturating_sub(1)
+            .min(items.len());
+        items.insert(idx, item);
+    }
+
+    Ok(items)
 }
 
 #[tauri::command]
@@ -157,6 +212,59 @@ fn db_delete_playlist(state: tauri::State<'_, Arc<AppState>>, id: String) -> Res
     db::delete_playlist(&state.db, &id).map_err(|e| e.to_string())
 }
 
+// ---------- DB: promoted videos ----------
+
+#[tauri::command]
+fn db_get_promoted(
+    state: tauri::State<'_, Arc<AppState>>,
+    category: String,
+) -> Result<Vec<PromotedVideo>, String> {
+    db::get_promoted(&state.db, &category).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+fn db_add_promoted(
+    state: tauri::State<'_, Arc<AppState>>,
+    youtube_id: String,
+    title: String,
+    channel: String,
+    thumbnail: String,
+    duration: i64,
+    position: i64,
+    label: String,
+    category: String,
+) -> Result<PromotedVideo, String> {
+    db::add_promoted(
+        &state.db,
+        &youtube_id,
+        &title,
+        &channel,
+        &thumbnail,
+        duration,
+        position,
+        &label,
+        &category,
+    )
+    .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+fn db_update_promoted(
+    state: tauri::State<'_, Arc<AppState>>,
+    id: String,
+    position: Option<i64>,
+    label: Option<String>,
+    active: Option<bool>,
+) -> Result<(), String> {
+    db::update_promoted(&state.db, &id, position, label.as_deref(), active)
+        .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+fn db_delete_promoted(state: tauri::State<'_, Arc<AppState>>, id: String) -> Result<(), String> {
+    db::delete_promoted(&state.db, &id).map_err(|e| e.to_string())
+}
+
 // ---------- VPN commands ----------
 
 #[tauri::command]
@@ -211,6 +319,11 @@ pub fn run() {
             // On Android: register the WireGuard plugin here once its JNI
             // bridge is implemented. e.g.
             //   .plugin(puretuber_wireguard::init())
+            //
+            // The AppAuth OAuth plugin (for native Google sign-in) would also
+            // be registered here when targeting mobile. Until then,
+            // `oauth_sign_in` returns a stub error and the frontend falls
+            // back to the web-app NextAuth flow or simulated login.
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
@@ -237,12 +350,23 @@ pub fn run() {
             db_create_playlist,
             db_add_to_playlist,
             db_delete_playlist,
+            // Promoted
+            db_get_promoted,
+            db_add_promoted,
+            db_update_promoted,
+            db_delete_promoted,
             // VPN
             vpn_connect,
             vpn_disconnect,
             vpn_status,
             vpn_servers,
+            // OAuth (native Google sign-in + YouTube Data API)
+            auth::oauth_sign_in,
+            auth::oauth_sign_out,
+            auth::oauth_get_session,
+            auth::oauth_get_youtube_liked,
+            auth::oauth_get_youtube_subscriptions,
         ])
         .run(tauri::generate_context!())
-        .expect("error while running PureTuber VPN");
+        .expect("error while running Look On");
 }

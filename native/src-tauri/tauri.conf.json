@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "PureTuber VPN",
+  "productName": "Look On",
   "version": "0.1.0",
-  "identifier": "com.puretuber.vpn",
+  "identifier": "com.lookon.app",
   "build": {
     "frontendDist": "../dist",
     "devUrl": "http://localhost:1420",
@@ -13,7 +13,7 @@
     "withGlobalTauri": true,
     "windows": [
       {
-        "title": "PureTuber VPN",
+        "title": "Look On",
         "width": 1280,
         "height": 800,
         "minWidth": 720,
@@ -38,8 +38,8 @@
     ],
     "category": "Entertainment",
     "shortDescription": "Ad-free YouTube viewer with built-in VPN",
-    "longDescription": "PureTuber VPN — a Pure Tuber / Green Tuber clone that streams YouTube via the Invidious API for an ad-free experience, with an optional built-in WireGuard VPN.",
-    "publisher": "PureTuber",
+    "longDescription": "Look On — a Pure Tuber / Green Tuber clone that streams YouTube via the Invidious API for an ad-free experience, with an optional built-in WireGuard VPN.",
+    "publisher": "LookOn",
     "copyright": "MIT",
     "android": {
       "minSdkVersion": 24,

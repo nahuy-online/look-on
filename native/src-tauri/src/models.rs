@@ -1,4 +1,4 @@
-// Shared serde models for the PureTuber VPN Tauri backend.
+// Shared serde models for the Look On Tauri backend.
 //
 // These mirror the TypeScript types in `native/src/lib/types.ts` so the JSON
 // payload crosses the FFI boundary with the same shape the frontend expects.
@@ -27,6 +27,33 @@ pub struct VideoItem {
     pub description: String,
     #[serde(default)]
     pub curated: Option<bool>,
+    /// True when this row was injected from the `promoted_videos` table —
+    /// frontend renders an amber "Promoted" badge instead of the emerald
+    /// ad-free badge.
+    #[serde(default)]
+    pub promoted: Option<bool>,
+    /// Custom label for the promoted badge ("Promoted", "Editor's Pick", ...).
+    #[serde(default)]
+    pub promoted_label: Option<String>,
+}
+
+/// Admin-curated promoted video. Stored in `promoted_videos`, injected into
+/// the trending feed at `position` (1-indexed).
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PromotedVideo {
+    pub id: String,
+    pub youtube_id: String,
+    pub title: String,
+    pub channel: String,
+    pub thumbnail: String,
+    #[serde(default)]
+    pub duration: i64,
+    pub position: i64,
+    pub label: String,
+    pub category: String,
+    pub active: bool,
+    pub created_at: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
