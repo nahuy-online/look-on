@@ -35,7 +35,7 @@ export function Header() {
         className="flex items-center gap-2 font-bold text-emerald-400"
       >
         <span className="text-lg">▶</span>
-        <span className="hidden sm:inline">PureTuber VPN</span>
+        <span className="hidden sm:inline">Look On</span>
       </button>
 
       <form onSubmit={submit} className="flex-1 max-w-2xl mx-auto">

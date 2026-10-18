@@ -1,4 +1,4 @@
-package com.puretuber.wireguard
+package com.lookon.wireguard
 
 import android.content.Context
 import android.content.Intent
@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 /**
- * PureTuber WireGuard Android plugin.
+ * Look On WireGuard Android plugin.
  *
  * Bridges Rust ↔ Kotlin via JNI. The Rust side calls:
  *   - [startVpn]  with a wg-quick config string,
@@ -45,7 +45,7 @@ import kotlinx.coroutines.flow.StateFlow
  * start the service after the user accepts.
  */
 object WireGuardPlugin {
-    private const val TAG = "PureTuberWG"
+    private const val TAG = "LookOnWG"
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     private val _status = MutableStateFlow(WgStatus())
@@ -101,7 +101,7 @@ object WireGuardPlugin {
             try {
                 val backend = GoBackend(context)
                 val state = backend.setState(
-                    /* tunnel = */ PureTuberTunnel,
+                    /* tunnel = */ LookOnTunnel,
                     /* state = */ Tunnel.State.UP,
                     /* config = */ parsed,
                 )
@@ -126,7 +126,7 @@ object WireGuardPlugin {
         scope.launch {
             try {
                 val backend = GoBackend(context)
-                backend.setState(PureTuberTunnel, Tunnel.State.DOWN, null)
+                backend.setState(LookOnTunnel, Tunnel.State.DOWN, null)
             } catch (t: Throwable) {
                 Log.e(TAG, "tunnel down failed", t)
             }
@@ -198,10 +198,10 @@ object WireGuardPlugin {
 }
 
 /** Minimal Tunnel handle for the WireGuard backend. */
-private object PureTuberTunnel : Tunnel {
-    override fun getName(): String = "PureTuberVPN"
+private object LookOnTunnel : Tunnel {
+    override fun getName(): String = "LookOnVPN"
     override fun onStateChange(newState: Tunnel.State) {
-        Log.i("PureTuberWG", "tunnel state → $newState")
+        Log.i("LookOnWG", "tunnel state → $newState")
     }
 }
 

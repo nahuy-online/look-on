@@ -1,4 +1,4 @@
-package com.puretuber.wireguard
+package com.lookon.wireguard
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -123,7 +123,7 @@ class WireGuardVpnService : VpnService() {
             nm.createNotificationChannel(
                 NotificationChannel(
                     CHANNEL_ID,
-                    "PureTuber VPN",
+                    "Look On",
                     NotificationManager.IMPORTANCE_LOW,
                 ).apply { description = "WireGuard tunnel active" }
             )
@@ -136,7 +136,7 @@ class WireGuardVpnService : VpnService() {
         )
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.stat_sys_vpncall)
-            .setContentTitle("PureTuber VPN")
+            .setContentTitle("Look On")
             .setContentText("Protected — WireGuard tunnel active")
             .setOngoing(true)
             .addAction(android.R.drawable.ic_menu_close_clear_cancel, "Disconnect", pendingIntent)
@@ -144,12 +144,12 @@ class WireGuardVpnService : VpnService() {
     }
 
     companion object {
-        private const val TAG = "PureTuberVpnSvc"
-        private const val SESSION_NAME = "PureTuberVPN"
-        private const val CHANNEL_ID = "puretuber_vpn"
+        private const val TAG = "LookOnVpnSvc"
+        private const val SESSION_NAME = "LookOnVPN"
+        private const val CHANNEL_ID = "look_on_vpn"
         private const val NOTIFICATION_ID = 0x7FFF
-        const val ACTION_START = "com.puretuber.wireguard.START"
-        const val ACTION_STOP = "com.puretuber.wireguard.STOP"
+        const val ACTION_START = "com.lookon.wireguard.START"
+        const val ACTION_STOP = "com.lookon.wireguard.STOP"
         const val EXTRA_CONFIG = "config"
     }
 }

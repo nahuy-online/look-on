@@ -307,7 +307,7 @@ pub fn run() {
                 .path()
                 .app_data_dir()
                 .expect("failed to resolve app_data_dir");
-            let db_path = app_data.join("puretuber.db");
+            let db_path = app_data.join("look-on.db");
             log::info!("SQLite DB at: {}", db_path.display());
             let db = db::open(&db_path).expect("failed to open SQLite DB");
 
@@ -319,7 +319,7 @@ pub fn run() {
 
             // On Android: register the WireGuard plugin here once its JNI
             // bridge is implemented. e.g.
-            //   .plugin(puretuber_wireguard::init())
+            //   .plugin(look_on_wireguard::init())
             //
             // The AppAuth OAuth plugin (for native Google sign-in) would also
             // be registered here when targeting mobile. Until then,

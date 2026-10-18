@@ -1,4 +1,4 @@
-// PureTuber VPN — i18n translations (en + ru)
+// Look On — i18n translations (en + ru)
 
 export type Lang = "en" | "ru";
 
@@ -159,7 +159,7 @@ const en: Dict = {
   "vpn.connectingTo": "Connecting to VPN…",
   "vpn.connectingToDesc": "Routing through {city}",
   "vpn.switchedTo": "Switched to {city}",
-  "vpn.premiumTitle": "PureTuber Premium",
+  "vpn.premiumTitle": "Look On Premium",
   "vpn.premiumDesc": "Unlock 4K downloads, premium VPN servers in 60+ countries, and 10 simultaneous connections.",
   "vpn.upgrade": "Upgrade — $4.99/mo",
   "vpn.ms": "ms",
@@ -225,7 +225,7 @@ const en: Dict = {
 
   // settings
   "set.title": "Settings",
-  "set.subtitle": "Customize your PureTuber experience",
+  "set.subtitle": "Customize your Look On experience",
   "set.appearance": "Appearance",
   "set.theme": "Theme",
   "set.themeDesc": "Light, dark, or system",
@@ -270,7 +270,7 @@ const en: Dict = {
   "set.local": "Local only",
 
   // login
-  "login.title": "Sign in to PureTuber",
+  "login.title": "Sign in to Look On",
   "login.subtitle": "Sync your library across devices",
   "login.optional": "Optional — you can keep using the app anonymously",
   "login.signInWithYouTube": "Continue with YouTube",
@@ -471,7 +471,7 @@ const ru: Dict = {
   "vpn.connectingTo": "Подключение к VPN…",
   "vpn.connectingToDesc": "Маршрут через {city}",
   "vpn.switchedTo": "Переключено на {city}",
-  "vpn.premiumTitle": "PureTuber Premium",
+  "vpn.premiumTitle": "Look On Premium",
   "vpn.premiumDesc": "Разблокируйте загрузки 4K, премиум-серверы VPN в 60+ странах и 10 одновременных подключений.",
   "vpn.upgrade": "Улучшить — $4.99/мес",
   "vpn.ms": "мс",
@@ -537,7 +537,7 @@ const ru: Dict = {
 
   // settings
   "set.title": "Настройки",
-  "set.subtitle": "Настройте PureTuber под себя",
+  "set.subtitle": "Настройте Look On под себя",
   "set.appearance": "Внешний вид",
   "set.theme": "Тема",
   "set.themeDesc": "Светлая, тёмная или системная",
@@ -582,7 +582,7 @@ const ru: Dict = {
   "set.local": "Только локально",
 
   // login
-  "login.title": "Вход в PureTuber",
+  "login.title": "Вход в Look On",
   "login.subtitle": "Синхронизируйте свою библиотеку между устройствами",
   "login.optional": "Необязательно — можно продолжить без аккаунта",
   "login.signInWithYouTube": "Продолжить с YouTube",

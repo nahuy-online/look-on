@@ -1,4 +1,4 @@
-// PureTuber WireGuard Tauri plugin — Android bridge.
+// Look On WireGuard Tauri plugin — Android bridge.
 //
 // This plugin exposes the Kotlin `WireGuardPlugin` (in `android/`) to Rust via
 // Tauri commands. On Android, `start_vpn` calls into the Kotlin side using
@@ -9,7 +9,7 @@
 // back to the simulated handle in `vpn/mod.rs`.
 //
 // Register from `src-tauri/src/lib.rs` with:
-//   .plugin(puretuber_wireguard::init())
+//   .plugin(look_on_wireguard::init())
 //
 // Then the frontend (or Rust backend) can call:
 //   invoke("plugin:wireguard|start_vpn", { config: "..." })
@@ -105,21 +105,21 @@ async fn invoke_android_start_vpn<R: Runtime>(
     //
     // TODO: replace the placeholder below with a real `jni` call:
     //   1. Attach the current thread to the JVM with `app.jni_env()`.
-    //   2. Find the class `com/puretuber/wireguard/WireGuardPlugin`.
-    //   3. Call its `startVpn(Ljava/lang/String;)Lcom/puretuber/wireguard/Status;`
+    //   2. Find the class `com/lookon/wireguard/WireGuardPlugin`.
+    //   3. Call its `startVpn(Ljava/lang/String;)Lcom/lookon/wireguard/Status;`
     //      static method.
     //   4. Convert the returned `Status` Kotlin data class to `WgStatus`.
     //
     // For now we log and return an error so the simulated backend takes over.
     let _ = (app, config);
-    log::warn!("puretuber-wireguard: start_vpn JNI bridge not implemented; using simulated backend");
+    log::warn!("look-on-wireguard: start_vpn JNI bridge not implemented; using simulated backend");
     Err("WireGuard JNI bridge not implemented in this scaffold".into())
 }
 
 #[cfg(target_os = "android")]
 async fn invoke_android_stop_vpn<R: Runtime>(app: &tauri::AppHandle<R>) -> Result<(), String> {
     let _ = app;
-    log::warn!("puretuber-wireguard: stop_vpn JNI bridge not implemented");
+    log::warn!("look-on-wireguard: stop_vpn JNI bridge not implemented");
     Ok(())
 }
 

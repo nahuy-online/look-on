@@ -145,7 +145,7 @@ keytool -genkey -v -keystore look-on.keystore -alias look-on \
 
 ## Название проекта
 
-Проект называется **"Look On"** (не puretuber.vpn). Это уже настроено в:
+Проект называется **"Look On"**. Это уже настроено в:
 - `tauri.conf.json` → `productName: "Look On"`, `identifier: "com.lookon.app"`
 - `Cargo.toml` → `name = "look-on"`
 - Rust → `look_on_lib`

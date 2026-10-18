@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.puretuber.wireguard"
+    namespace = "com.lookon.wireguard"
     compileSdk = 34
 
     defaultConfig {

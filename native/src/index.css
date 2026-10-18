@@ -1,6 +1,6 @@
-// Emerald-first dark theme for the Tauri native app.
-// Mirrors the web app's globals.css but trimmed for the lighter weight
-// frontend (no shadcn primitives — Tailwind utilities + a few custom classes).
+/* Emerald-first dark theme for the Tauri native app.
+   Mirrors the web app's globals.css but trimmed for the lighter weight
+   frontend (no shadcn primitives — Tailwind utilities + a few custom classes). */
 
 @tailwind base;
 @tailwind components;

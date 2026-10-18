@@ -98,7 +98,7 @@ export function SettingsView() {
       {/* About */}
       <Section title="About" icon={<Info className="h-4 w-4" />}>
         <Row label="App name">
-          <span className="text-sm">PureTuber VPN</span>
+          <span className="text-sm">Look On</span>
         </Row>
         <Row label="Version">
           <span className="text-sm">0.1.0 (Tauri 2.0)</span>

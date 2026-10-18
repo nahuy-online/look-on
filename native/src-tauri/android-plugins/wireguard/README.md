@@ -1,20 +1,20 @@
-# PureTuber WireGuard Android Plugin
+# Look On WireGuard Android Plugin
 
 This folder is a **Tauri 2.0 mobile plugin scaffold** for bridging Rust ↔
-Android `VpnService` so the PureTuber VPN app can bring up a real WireGuard
+Android `VpnService` so the Look On app can bring up a real WireGuard
 tunnel on Android.
 
 ## Layout
 
 ```
 wireguard/
-├── Cargo.toml                       # Rust crate (puretuber-wireguard)
+├── Cargo.toml                       # Rust crate (look-on-wireguard)
 ├── src/lib.rs                       # Tauri plugin: start_vpn / stop_vpn / get_status
 └── android/
     ├── build.gradle.kts             # Android library module
     └── src/main/
         ├── AndroidManifest.xml      # <service> declaration + BIND_VPN_SERVICE
-        └── java/com/puretuber/wireguard/
+        └── java/com/lookon/wireguard/
             ├── WireGuardPlugin.kt   # entry: startVpn(config), stopVpn(), getStatus()
             └── WireGuardVpnService.kt  # foreground VpnService owning the TUN FD
 ```
@@ -76,7 +76,7 @@ credentials. To actually run a tunnel:
    ```
    Add the client's public key to the server's `[Peer]` section.
 3. **Hand the credentials to the app** via env var, a config file at
-   `~/.config/puretuber/wg-creds/<server-id>.toml`, or a remote config
+   `~/.config/look-on/wg-creds/<server-id>.toml`, or a remote config
    endpoint. Then implement `vpn::wireguard::server_creds_for()` in
    `src-tauri/src/vpn/wireguard.rs` to return them.
 

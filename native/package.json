@@ -1,9 +1,9 @@
 {
-  "name": "puretuber-vpn-native",
+  "name": "look-on-native",
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "PureTuber VPN — Tauri 2.0 native app (Android, iOS, Windows)",
+  "description": "Look On — Tauri 2.0 native app (Android, iOS, Windows)",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

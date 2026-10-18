@@ -1,4 +1,4 @@
-// Shared domain types for PureTuber VPN (Tauri native client).
+// Shared domain types for Look On (Tauri native client).
 // Mirrors /home/z/my-project/src/lib/types.ts.
 
 export type Category =

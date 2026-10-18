@@ -60,8 +60,8 @@ pub fn build_wg_config(creds: &WgServerCreds) -> String {
 /// To enable real WireGuard:
 ///   1. Deploy a WireGuard server (or use a commercial one).
 ///   2. Generate a client keypair: `wg genkey | tee priv | wg pubkey > pub`.
-///   3. Store the credentials in `~/.config/puretuber/wg-creds/<server-id>.toml`
-///      or env vars like `PURETUBER_WG_<SERVER_ID>_ENDPOINT`.
+///   3. Store the credentials in `~/.config/look-on/wg-creds/<server-id>.toml`
+///      or env vars like `LOOK_ON_WG_<SERVER_ID>_ENDPOINT`.
 ///   4. Implement this lookup and call `build_wg_config` → pass to the
 ///      Android plugin (or boringtun on desktop).
 pub fn server_creds_for(_server: &VpnServer) -> Option<WgServerCreds> {
