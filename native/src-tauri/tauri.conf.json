@@ -6,8 +6,8 @@
   "build": {
     "frontendDist": "../dist",
     "devUrl": "http://localhost:1420",
-    "beforeDevCommand": "bun run dev",
-    "beforeBuildCommand": "bun run build"
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build"
   },
   "app": {
     "withGlobalTauri": true,
@@ -42,8 +42,7 @@
     "publisher": "LookOn",
     "copyright": "MIT",
     "android": {
-      "minSdkVersion": 24,
-      "targets": ["aarch64", "armv7", "i686", "x86_64"]
+      "minSdkVersion": 24
     },
     "iOS": {
       "minimumSystemVersion": "14.0"
