@@ -253,6 +253,21 @@ pub async fn trending(category: &str) -> Vec<VideoItem> {
     items.retain(|v| seen.insert(v.youtube_id.clone()));
     items.truncate(24);
 
+    // Fallback: if Invidious returned nothing, use curated content
+    if items.is_empty() {
+        items = crate::curated::curated_by_category(category);
+    } else {
+        // Merge: curated first, then Invidious (de-duped)
+        let mut merged = crate::curated::curated_by_category(category);
+        let mut merged_ids: std::collections::HashSet<String> = merged.iter().map(|v| v.youtube_id.clone()).collect();
+        for v in items.drain(..) {
+            if merged_ids.insert(v.youtube_id.clone()) {
+                merged.push(v);
+            }
+        }
+        items = merged.into_iter().take(24).collect();
+    }
+
     if let Ok(mut map) = CACHE.lock() {
         map.insert(
             key,
@@ -298,6 +313,25 @@ pub async fn search(q: &str) -> Vec<VideoItem> {
     }
 
     items.truncate(20);
+
+    // Fallback: if Invidious returned nothing, filter curated by query
+    if items.is_empty() {
+        let curated = crate::curated::curated_videos();
+        let ql = q.to_lowercase();
+        let filtered: Vec<VideoItem> = curated
+            .into_iter()
+            .filter(|v| {
+                v.title.to_lowercase().contains(&ql) || v.channel.to_lowercase().contains(&ql)
+            })
+            .collect();
+        // If no matches at all, return all curated (so search always shows something)
+        if !filtered.is_empty() {
+            items = filtered;
+        } else {
+            items = crate::curated::curated_videos();
+        }
+    }
+
     if let Ok(mut map) = CACHE.lock() {
         map.insert(
             key,

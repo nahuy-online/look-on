@@ -10,6 +10,7 @@
 // bridge is implemented (see `android-plugins/wireguard/src/lib.rs`).
 
 mod auth;
+mod curated;
 mod db;
 mod invidious;
 mod models;
