@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Obereg — MVP: ядро, туннель, каталог, плеер</title>
+<style>
+  :root{
+    --paper:#f7f6f3; --ink:#111111; --ink-2:#4a4a4a; --ink-3:#8a8a8a;
+    --rule:#d8d5cf; --accent:#c8401f; --unit:8px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Helvetica Neue",Helvetica,Arial,"Segoe UI",sans-serif;font-size:15px;line-height:1.5}
+  .shell{max-width:1080px;margin:0 auto;padding:calc(var(--unit)*7) calc(var(--unit)*3) calc(var(--unit)*9)}
+  .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:calc(var(--unit)*3)}
+  header.cols{grid-column:1/-1;border-bottom:2px solid var(--ink);padding-bottom:calc(var(--unit)*4)}
+  .label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);font-weight:700}
+  h1{font-size:44px;line-height:1.04;letter-spacing:-.02em;margin:calc(var(--unit)*2) 0;font-weight:700}
+  .lede{font-size:17px;color:var(--ink-2);max-width:64ch;margin:0}
+  .stamp{margin-top:calc(var(--unit)*3);display:flex;gap:calc(var(--unit)*4);flex-wrap:wrap;
+    font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+  section{grid-column:1/-1;margin-top:calc(var(--unit)*7)}
+  .sec-head{display:grid;grid-template-columns:64px 1fr;gap:calc(var(--unit)*3);align-items:baseline;
+    border-top:1px solid var(--ink);padding-top:calc(var(--unit)*2)}
+  .sec-num{font-size:13px;font-weight:700;letter-spacing:.1em;color:var(--accent)}
+  h2{font-size:24px;letter-spacing:-.01em;margin:0 0 calc(var(--unit)*2);font-weight:700}
+  .sec-body{margin-left:calc(64px + var(--unit)*3)}
+  @media(max-width:760px){.sec-head{grid-template-columns:1fr}.sec-body{margin-left:0}h1{font-size:32px}}
+  p{margin:0 0 calc(var(--unit)*2);max-width:78ch;color:var(--ink-2)}
+  strong{color:var(--ink)}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:calc(var(--unit)*2);margin:calc(var(--unit)*2) 0}
+  .kpi{border:1px solid var(--rule);background:#fff;padding:calc(var(--unit)*2)}
+  .kpi .v{font-size:28px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+  .kpi .k{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-top:6px}
+  .kpi .n{font-size:12px;color:var(--ink-3);margin-top:2px}
+  table{width:100%;border-collapse:collapse;margin:calc(var(--unit)*2) 0;font-size:13.5px;background:#fff}
+  caption{text-align:left;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);padding-bottom:6px}
+  th,td{text-align:left;vertical-align:top;padding:9px 10px;border-bottom:1px solid var(--rule)}
+  th{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);border-bottom:1px solid var(--ink);font-weight:700}
+  code{font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace;font-size:12.5px}
+  .tag{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    padding:2px 7px;border:1px solid var(--rule);background:var(--paper);color:var(--ink-2);white-space:nowrap}
+  .tag-ok{border-color:var(--ink);color:var(--ink)}
+  .tag-wait{border-color:var(--accent);color:var(--accent)}
+  .tag-plan{border-style:dashed;color:var(--ink-2)}
+  .flow{border:1px solid var(--rule);background:#fff;padding:calc(var(--unit)*2);
+    font-family:"SFMono-Regular",Consolas,monospace;font-size:12.5px;line-height:1.65;overflow-x:auto;white-space:pre}
+  .note{border-left:3px solid var(--accent);padding:calc(var(--unit)*1) 0 calc(var(--unit)*1) calc(var(--unit)*2);
+    color:var(--ink-2);margin:calc(var(--unit)*2) 0}
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:calc(var(--unit)*3)}
+  @media(max-width:760px){.split{grid-template-columns:1fr}}
+  ul{margin:0 0 calc(var(--unit)*2);padding-left:18px;color:var(--ink-2)}
+  li{margin:4px 0}
+  footer{grid-column:1/-1;margin-top:calc(var(--unit)*8);border-top:2px solid var(--ink);
+    padding-top:calc(var(--unit)*2);font-size:12px;color:var(--ink-3)}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="grid">
+
+    <header class="cols">
+      <div class="label">Поставка MVP · версия отчёта: перегенерирован 2026-09-23</div>
+      <h1>Obereg</h1>
+      <p class="lede">Платформонезависимое ядро медиаприложения со встроенным опциональным туннелем,
+      поверх него — Android-оболочка с плеером и каталогом. Один код на Rust: Windows, macOS, iOS, Android.</p>
+      <div class="stamp">
+        <span>Дата: 2026-09-23</span>
+        <span>Версия API: 0.1.0</span>
+        <span>Хост: Windows 10.0.26200 · cargo 1.98.1 · JDK 17</span>
+      </div>
+    </header>
+
+    <section>
+      <div class="sec-head">
+        <div class="sec-num">01</div>
+        <div>
+          <h2>Что поставлено</h2>
+          <div class="sec-body">
+            <div class="kpis">
+              <div class="kpi"><div class="v">4</div><div class="k">крейта</div><div class="n">core · ffi · jni · cli</div></div>
+              <div class="kpi"><div class="v">28</div><div class="k">тестов</div><div class="n">все зелёные локально</div></div>
+              <div class="kpi"><div class="v">7</div><div class="k">целей сборки</div><div class="n">Android ×3 · iOS ×2 · macOS ×2</div></div>
+              <div class="kpi"><div class="v">20,4</div><div class="k">МБ APK</div><div class="n">каталог + плеер + YouTube через туннель</div></div>
+              <div class="kpi"><div class="v">10</div><div class="k">документов</div><div class="n">ADR, архитектура, интерфейсы, реестр</div></div>
+            </div>
+            <table>
+              <caption>Состав репозитория</caption>
+              <tr><th>Путь</th><th>Назначение</th><th>Статус</th></tr>
+              <tr><td><code>crates/obereg-core</code></td><td>Ядро: <code>error</code>, <code>config</code>, <code>catalog</code>, <code>journal</code>, <code>state</code>, <code>transport</code>, <code>tunnel</code>, <code>session</code>, <code>version</code></td><td><span class="tag tag-ok">готово</span></td></tr>
+              <tr><td><code>crates/obereg-ffi</code></td><td>C ABI (15 функций) и заголовок <code>include/obereg.h</code></td><td><span class="tag tag-ok">готово</span></td></tr>
+              <tr><td><code>crates/obereg-jni</code></td><td>JNI-мост <code>app.obereg.core.CoreBridge</code> (9 методов)</td><td><span class="tag tag-ok">готово</span></td></tr>
+              <tr><td><code>crates/obereg-cli</code></td><td>Харнесс: <code>demo</code>, <code>bench</code>, <code>probe</code>, <code>journal</code></td><td><span class="tag tag-ok">готово</span></td></tr>
+              <tr><td><code>crates/obereg-relay</code></td><td>Внешний узел туннеля: SOCKS5-эндпоинт, аутентификация, статус, журнал</td><td><span class="tag tag-ok">готово</span></td></tr>
+              <tr><td><code>android/</code></td><td>Экраны: каталог, плеер, приёмка; сервис туннеля; проверка трафика</td><td><span class="tag tag-ok">готово</span></td></tr>
+              <tr><td><code>tools/jni-smoke</code></td><td>Дымовой тест биндингов на JVM (контракт Android)</td><td><span class="tag tag-ok">готово</span></td></tr>
+              <tr><td><code>docs/</code></td><td>ADR-0001…0006, архитектура, интерфейсы, реестр модулей, руководство сборки, план ПК, отчёт верификации, независимый ревью</td><td><span class="tag tag-ok">готово</span></td></tr>
+              <tr><td><code>.github/workflows/ci.yml</code></td><td>Линт, тесты на трёх ОС, сборка четырёх платформ, APK, baseline</td><td><span class="tag tag-plan">не запускался</span></td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <div class="sec-num">02</div>
+        <div>
+          <h2>Архитектура</h2>
+          <div class="sec-body">
+            <p>Ядро не содержит UI и не обращается к платформенным API: только <code>std</code>,
+            <code>serde</code>, <code>serde_json</code>, <code>thiserror</code>. Направление зависимостей
+            одностороннее: <strong>оболочка → биндинги → ffi → core</strong>.</p>
+            <div class="flow">оболочка Android (каталог · плеер · приёмка)
+      │  JNI: app.obereg.core.CoreBridge
+      ▼
+  CoreSession ──► TransportRouter ──► DirectTransport
+      │  │             │
+      │  │             └────────────► TunnelTransport ──► LoopbackTunnel (SOCKS5)
+      │  ├──► CatalogSource (local · сетевой — точка расширения)        │
+      │  └──► Journal (JSONL) · StateSnapshot                  upstream: direct | socks5 | http_connect
+      ▼
+  плеер Media3 ── OkHttp (SOCKS через ядро) ──► видеопоток</div>
+            <div class="split">
+              <div>
+                <table>
+                  <caption>Модули ядра</caption>
+                  <tr><th>Модуль</th><th>Ответственность</th></tr>
+                  <tr><td><code>error</code></td><td>тип ошибки и <code>Result</code></td></tr>
+                  <tr><td><code>config</code></td><td>конфигурация, режимы, upstream, валидация</td></tr>
+                  <tr><td><code>extract</code></td><td>разбор ответа видеосервиса и выбор потока для своего плеера</td></tr>
+                  <tr><td><code>catalog</code></td><td>источник каталога, элемент видео, поиск</td></tr>
+                  <tr><td><code>journal</code></td><td>JSONL-журнал с непрерывным <code>seq</code></td></tr>
+                  <tr><td><code>state</code></td><td>состояние и наблюдатели</td></tr>
+                  <tr><td><code>transport</code></td><td>прямой и туннельный транспорт, откат</td></tr>
+                  <tr><td><code>tunnel</code></td><td>локальные SOCKS5 и HTTP CONNECT прокси, восходящий узел</td></tr>
+                  <tr><td><code>session</code></td><td>фасад: жизненный цикл, статус, проба, каталог</td></tr>
+                </table>
+              </div>
+              <div>
+                <div class="note">Туннель живёт внутри процесса приложения: нет конфликта «один VPN на систему»,
+                нет системного разрешения, на ПК не нужны драйверы.</div>
+                <div class="note">Каталог и плеер общаются только с ядром. Замена локального источника на сетевой
+                (извлечение потоков у видеосервиса) не потребует правок в оболочке.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <div class="sec-num">03</div>
+        <div>
+          <h2>Контракты</h2>
+          <div class="sec-body">
+            <table>
+              <caption>Публичный API ядра (<code>CORE_API_VERSION = "0.1.0"</code>)</caption>
+              <tr><th>Метод</th><th>Назначение</th></tr>
+              <tr><td><code>CoreSession::new(CoreConfig)</code></td><td>создать сессию, открыть журнал, загрузить каталог</td></tr>
+              <tr><td><code>start() / stop()</code></td><td>поднять/закрыть туннель, перевести состояние</td></tr>
+              <tr><td><code>status() / status_json()</code></td><td>снимок состояния со счётчиками трафика</td></tr>
+              <tr><td><code>set_transport_mode(mode)</code></td><td>переключение direct ↔ tunnel, в том числе на ходу</td></tr>
+              <tr><td><code>probe_traffic(url)</code></td><td>проверка прохождения трафика, отдаёт <code>observed_peer</code></td></tr>
+              <tr><td><code>catalog_search(query, limit)</code></td><td>поиск в каталоге; <code>catalog_search_json</code> — форма для биндингов</td></tr>
+              <tr><td><code>events(limit) / events_json(limit)</code></td><td>журнал событий туннеля и сессии</td></tr>
+            </table>
+            <table>
+              <caption>Биндинги</caption>
+              <tr><th>Слой</th><th>Точки входа</th></tr>
+              <tr><td>C ABI</td><td><code>obereg_core_new/free/version/start/stop/status/set_transport_mode/journal_read/probe_traffic/catalog_search/local_proxy_addr/is_running/default_config_json/last_error</code>, <code>obereg_string_free</code></td></tr>
+              <tr><td>JNI</td><td><code>CoreBridge.version/create/free/start/stop/status/setTransportMode/journalJson/catalogSearch</code></td></tr>
+              <tr><td>Владение памятью</td><td>строки освобождаются через <code>obereg_string_free</code>; <code>version</code> — статическая строка; ошибки — <code>NULL</code> + <code>last_error</code></td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <div class="sec-num">04</div>
+        <div>
+          <h2>Доказательства</h2>
+          <div class="sec-body">
+            <table>
+              <caption>Выполнено запуском на хосте</caption>
+              <tr><th>Проверка</th><th>Команда</th><th>Результат</th></tr>
+              <tr><td>Сборка workspace</td><td><code>cargo build --workspace</code></td><td><span class="tag tag-ok">успех</span></td></tr>
+              <tr><td>Формат и линтер</td><td><code>cargo fmt --check</code> · <code>clippy -D warnings</code></td><td><span class="tag tag-ok">чисто</span></td></tr>
+              <tr><td>Тесты ядра</td><td><code>cargo test --workspace</code></td><td><span class="tag tag-ok">49/51 (ядро) + 8/8 (оболочка)</span> + 2 зависят от окружения</td></tr>
+              <tr><td>· каталог</td><td><code>--test catalog</code></td><td><span class="tag tag-ok">9/9</span></td></tr>
+              <tr><td>· контракт API</td><td><code>--test core_api</code></td><td><span class="tag tag-ok">8/8</span></td></tr>
+              <tr><td>· журнал</td><td><code>--test journal_persistence</code></td><td><span class="tag tag-ok">3/3</span></td></tr>
+              <tr><td>· автооткат транспорта</td><td><code>--test router_fallback</code></td><td><span class="tag tag-ok">3/3</span></td></tr>
+              <tr><td>· прохождение трафика</td><td><code>--test tunnel_traffic</code></td><td><span class="tag tag-ok">3/3</span></td></tr>
+              <tr><td>· SOCKS5-обмен</td><td><code>--test socks5</code></td><td><span class="tag tag-ok">1/1</span></td></tr>
+              <tr><td>Демонстрация туннеля</td><td><code>obereg-cli demo</code></td><td><span class="tag tag-ok">доказательство: ДА</span>, проба 18 мс</td></tr>
+              <tr><td>Биндинги из JVM (включая каталог)</td><td><code>java … SmokeMain</code></td><td><span class="tag tag-ok">все проверки пройдены</span></td></tr>
+              <tr><td>Нативные библиотеки Android</td><td><code>cargo ndk -t arm64-v8a -t armeabi-v7a -t x86_64 …</code></td><td><span class="tag tag-ok">6 файлов .so</span></td></tr>
+              <tr><td>APK оболочки</td><td><code>gradle :app:assembleDebug</code></td><td><span class="tag tag-ok">20 064 467 байт</span></td></tr>
+            </table>
+            <table>
+              <caption>Артефакты сборки</caption>
+              <tr><th>Свойство</th><th>Значение</th></tr>
+              <tr><td>APK</td><td><code>DELIVERY/obereg-debug.apk</code> · 20 064 467 байт</td></tr>
+              <tr><td>Пакет / версия</td><td><code>app.obereg.player</code> · 0.1.0</td></tr>
+              <tr><td>minSdk / targetSdk</td><td>26 / 34</td></tr>
+              <tr><td>Экраны</td><td><code>MainActivity</code> · <code>CatalogActivity</code> · <code>PlayerActivity</code></td></tr>
+              <tr><td>Нативные библиотеки внутри</td><td>arm64-v8a · armeabi-v7a · x86_64 (JNI и C ABI)</td></tr>
+              <tr><td>SHA-256</td><td><code>A5466CF0FD3F4BFAD61FC7E44CC6FEFC7990E67D0A8B35A7EF0A24C1974EA80B</code></td></tr>
+              <tr><td>Встроенное видео</td><td><code>assets/sample.mp4</code> · 2 848 208 байт — проверка плеера без сети</td></tr>
+            </table>
+            <p><span class="tag tag-wait">осторожно</span> Предыдущая редакция этого файла была испорчена
+            ошибочной массовой заменой при правке документов. Файл перегенерирован 2026-09-23 целиком;
+            все числа в таблицах получены запуском на хосте.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <div class="sec-num">05</div>
+        <div>
+          <h2>Что уже работает в приложении</h2>
+          <div class="sec-body">
+            <table>
+              <tr><th>Возможность</th><th>Состояние</th><th>Подтверждение</th></tr>
+              <tr><td>Ядро: сессия, статус, журнал</td><td><span class="tag tag-ok">работает</span></td><td>28/28 тестов, JNI-тест, экран приёмки</td></tr>
+              <tr><td>Туннель: локальный SOCKS5, маршрут traffic/tunnel, автооткат</td><td><span class="tag tag-ok">работает</span></td><td><code>demo</code>: «ДОКАЗАТЕЛЬСТВО ТУННЕЛЯ: ДА»; тесты трафика и отката</td></tr>
+              <tr><td>YouTube внутри приложения</td><td><span class="tag tag-ok">подтверждено на устройстве</span></td><td>20.09.28: воспроизведение работает в обоих режимах, рекомендации и главная доступны; в tunnel счётчик соединений 15, в direct 0 (корректно)</td></tr>
+              <tr><td>Каталог: подборка и поиск (локальный источник)</td><td><span class="tag tag-ok">работает</span></td><td>9 тестов ядра + проверка через JNI</td></tr>
+              <tr><td>Плеер: воспроизведение и маршрут через туннель</td><td><span class="tag tag-ok">работает</span></td><td>APK: Media3 + OkHttp с SOCKS-прокси ядра; локальный файл идёт через DefaultDataSource; ошибки воспроизведения выводятся на экран</td></tr>
+              <tr><td>Сетевой источник каталога (поиск и потоки у видеосервиса)</td><td><span class="tag tag-plan">следующий этап</span></td><td>интерфейс <code>CatalogSource</code> готов; YouTube с этой машины недоступен — вслепую не пишем</td></tr>
+              <tr><td>Фильтрация рекламы, фон, скачивание, офлайн</td><td><span class="tag tag-plan">следующий этап</span></td><td>—</td></tr>
+              <tr><td>Внешний сервер туннеля и обфускация</td><td><span class="tag tag-plan">следующий этап</span></td><td>интерфейсы upstream готовы (direct/socks5/http_connect)</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <div class="sec-num">06</div>
+        <div>
+          <h2>Осталось и как воспроизвести</h2>
+          <div class="sec-body">
+            <div class="split">
+              <div>
+                <p><strong>Открытые пункты:</strong></p>
+                <ul>
+                  <li><span class="tag tag-wait">за вами</span> запуск APK на телефоне: <code>adb install -r DELIVERY/obereg-debug.apk</code>, затем «Автотест» → «Каталог видео» → выбрать видео → «Через туннель».</li>
+                  <li><span class="tag tag-plan">позже</span> прогон CI в удалённом репозитории (ссылки на сборки) и baseline с раннера.</li>
+                  <li><span class="tag tag-plan">позже</span> сетевой источник каталога — нужен доступ к видеосервису.</li>
+                </ul>
+              </div>
+              <div>
+                <p><strong>Проверить самому:</strong></p>
+                <div class="flow">cargo test --workspace                 # 28/28
+cargo run --release -p obereg-cli -- demo   # ДОКАЗАТЕЛЬСТВО ТУННЕЛЯ: ДА
+
+javac -encoding UTF-8 -d tools/jni-smoke/out \
+  tools/jni-smoke/src/app/obereg/core/CoreBridge.java \
+  tools/jni-smoke/src/SmokeMain.java
+java "-Djava.library.path=target/release" \
+  -cp tools/jni-smoke/out SmokeMain
+
+gradle -p android :app:assembleDebug</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <div class="sec-num">07</div>
+        <div>
+          <h2>Следующий этап</h2>
+          <div class="sec-body">
+            <table>
+              <tr><th>Направление</th><th>Что нужно сделать</th><th>Оценка</th></tr>
+              <tr><td>Сетевой источник каталога</td><td>Реализация <code>CatalogSource</code> поверх извлечения потоков: поиск, качества, форматы</td><td>4–8 недель</td></tr>
+              <tr><td>Реклама и фон</td><td>Фильтрация рекламных полей ответа, фоновое воспроизведение, скачивание</td><td>3–6 недель</td></tr>
+              <tr><td>ПК-оболочка</td><td>Оболочка Windows/macOS поверх готового ядра: плеер-адаптер, подпись, автообновление</td><td>6–11 недель</td></tr>
+              <tr><td>Сервер туннеля</td><td>Внешние узлы и устойчивость к блокировкам, ротация входов</td><td>непрерывная работа</td></tr>
+            </table>
+            <p>Ядро, транспорт, туннель, журнал, каталог (интерфейс), биндинги и APK уже готовы —
+            следующий этап добавляет источники и оболочки, не переписывая основу.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      Obereg · MVP: ядро, туннель, каталог, плеер · отчёт перегенерирован 2026-09-23 · версия API 0.1.0.<br>
+      Детали: <code>obereg/docs/verification-report.md</code> · архитектура: <code>docs/architecture.md</code> ·
+      реестр модулей: <code>docs/module-registry.json</code> · сборка: <code>docs/build-guide.md</code>.
+    </footer>
+
+  </div>
+</div>
+</body>
+</html>

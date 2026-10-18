@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Obereg · План этапа «аттестация клиента»</title>
+<style>
+  :root { --bg:#0f1115; --panel:#171a21; --panel-2:#1d2129; --line:#2a2f3a; --text:#e8ecf3; --muted:#9aa4b2; --accent:#6ea8fe; --ok:#57c98a; --warn:#e8b45a; --bad:#e07a7a; --mono:ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace; }
+  * { box-sizing: border-box; }
+  body { margin:0; padding:30px 18px 60px; background:linear-gradient(180deg,#0f1115 0%,#12151b 100%); color:var(--text); font:15px/1.65 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; }
+  .wrap { max-width:980px; margin:0 auto; }
+  h1 { font-size:27px; line-height:1.25; margin:0 0 8px; letter-spacing:-.2px; }
+  .lead { color:var(--muted); margin:0 0 26px; max-width:76ch; }
+  h2 { font-size:18px; margin:34px 0 12px; padding-bottom:8px; border-bottom:1px solid var(--line); }
+  h3 { font-size:15px; margin:20px 0 8px; color:var(--accent); }
+  p { margin:10px 0; }
+  code { font-family:var(--mono); font-size:13px; background:var(--panel-2); border:1px solid var(--line); border-radius:5px; padding:1px 6px; }
+  table { width:100%; border-collapse:collapse; margin:14px 0; font-size:14px; }
+  th,td { text-align:left; padding:10px 12px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { color:var(--muted); font-weight:600; background:var(--panel); }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px 18px; margin:14px 0; }
+  .card-title { font-weight:600; margin-bottom:6px; display:flex; align-items:center; gap:8px; }
+  .dot { width:9px; height:9px; border-radius:50%; background:var(--accent); flex:none; }
+  .dot-ok{background:var(--ok)} .dot-warn{background:var(--warn)} .dot-bad{background:var(--bad)}
+  .muted { color:var(--muted); }
+  .kv { font-family:var(--mono); font-size:13px; color:var(--accent); }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:12px; margin:14px 0; }
+  .metric { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:14px 16px; }
+  .metric b { display:block; font-size:20px; margin-bottom:4px; }
+  .metric span { color:var(--muted); font-size:13px; }
+  ul { padding-left:22px; } li { margin:6px 0; }
+  .flow { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin:14px 0; }
+  .step { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:10px 14px; font-size:13px; }
+  .arrow { color:var(--muted); }
+  footer { margin-top:44px; color:var(--muted); font-size:13px; border-top:1px solid var(--line); padding-top:14px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Obereg · этап «аттестация клиента»</h1>
+  <p class="lead">
+    Что именно входит в этап, из каких частей он состоит, как проверяется и какие у него границы.
+    Это план работ, а не обещание: каждая часть заканчивается проверяемым результатом на вашем устройстве.
+  </p>
+
+  <h2>Зачем этот этап</h2>
+  <p>
+    Свой плеер уже написан и умеет всё, кроме главного: сервис не отдаёт ему файл потока. Причина установлена
+    замерами: обычные ссылки на файл закрыты проверкой подлинности клиента (ответ <span class="kv">403</span>),
+    а то, что играет встроенный браузер, приходит в служебном формате <span class="kv">UMP</span>, который
+    открытые плееры не разбирают. Этап добавляет единственное недостающее звено — <b>настоящее подтверждение
+    клиента</b>, полученное честным путём: движок браузера проходит проверку и выдаёт токен, который мы
+    подставляем в свои запросы.
+  </p>
+
+  <div class="card">
+    <div class="card-title"><span class="dot dot-bad"></span>Чего в этапе не будет</div>
+    <p class="muted">
+      Подделки подписи приложения, взлома проверки Google, обхода условий сервиса «в лоб». Мы используем тот же
+      путь, что и обычный браузер: движок проходит проверку и получает настоящий токен.
+    </p>
+  </div>
+
+  <h2>Как это устроено</h2>
+  <div class="flow">
+    <div class="step">1. Скрытый движок браузера<br><span class="muted">страница сервиса, уже пройденные согласие и вход</span></div>
+    <div class="arrow">→</div>
+    <div class="step">2. Запуск проверки сервиса<br><span class="muted">его собственный скрипт в нашей WebView</span></div>
+    <div class="arrow">→</div>
+    <div class="step">3. Токен подтверждения<br><span class="muted">привязан к видео и сеансу</span></div>
+    <div class="arrow">→</div>
+    <div class="step">4. Конвейер извлечения<br><span class="muted">токен уходит вместе с запросом</span></div>
+    <div class="arrow">→</div>
+    <div class="step">5. Свой плеер<br><span class="muted">без рекламы, 3×, фон, PiP</span></div>
+  </div>
+
+  <h2>Части работ</h2>
+  <table>
+    <thead><tr><th>Часть</th><th>Что делаем</th><th>Проверяемый результат</th><th>Оценка</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><b>P1. Движок и разведка</b></td>
+        <td>Скрытый движок в приложении + проверка, что страница сервиса отдаёт нашей WebView всё нужное (конфигурацию, гостевые данные, объекты проверки)</td>
+        <td>Отчёт на экране профиля: что найдено на странице, какие объекты доступны</td>
+        <td>малая,<br>1–2 итерации</td>
+      </tr>
+      <tr>
+        <td><b>P2. Получение токена</b></td>
+        <td>Запуск проверки в движке и вывод токена для конкретного видео; повторное использование токена, пока он жив</td>
+        <td>На устройстве: токен получен, показана его длина и время жизни</td>
+        <td>средняя,<br>ядро этапа</td>
+      </tr>
+      <tr>
+        <td><b>P3. Подстановка в конвейер</b></td>
+        <td>Токен уходит в запрос потока и запрос данных; обновление при истечении; журнал «токен есть/нет»</td>
+        <td>Проба ссылки: <span class="kv">200</span> вместо <span class="kv">403</span> на обычном потоке</td>
+        <td>малая</td>
+      </tr>
+      <tr>
+        <td><b>P4. Свой плеер</b></td>
+        <td>Воспроизведение обычного потока, скорость до 3×, фон, «картинка в картинке», продолжение с места</td>
+        <td>Видео играет без рекламы, скорость и фон работают</td>
+        <td>средняя</td>
+      </tr>
+      <tr>
+        <td><b>P5. Пропуск вставок</b></td>
+        <td>Пропуск заставок и рекламных вставок внутри ролика (открытая база SponsorBlock)</td>
+        <td>Отметки вставок видны в журнале, воспроизведение их пропускает</td>
+        <td>малая</td>
+      </tr>
+      <tr>
+        <td><b>P6. Разбор подписи</b></td>
+        <td>Если ссылки начнут приходить зашифрованными — разбор подписи в движке (заранее заложено)</td>
+        <td>Проба снова даёт <span class="kv">200</span></td>
+        <td>по необходимости</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Что уже готово в помощь</h2>
+  <div class="grid">
+    <div class="metric"><b>Движок в проде</b><span>лента уже берёт данные из скрытой WebView — механика проверена</span></div>
+    <div class="metric"><b>Проба ссылки</b><span>показывает код, тип и первые байты — готовый измеритель результата</span></div>
+    <div class="metric"><b>Ядро и маршруты</b><span>разбор, выбор потока, туннель, cookie, журнал</span></div>
+    <div class="metric"><b>41 коммит</b><span>вся история проверяема, ничего не делается «на глаз»</span></div>
+  </div>
+
+  <h2>Как проверяем</h2>
+  <ul>
+    <li>Каждая часть заканчивается строкой в журнале приложения, которую вы присылаете.</li>
+    <li>Успех P2 — токен получен; успех P3 — проба ссылки даёт <span class="kv">200</span>; успех P4 — видео играет в нашем плеере.</li>
+    <li>Если на каком-то шаге сервис отвечает иначе — это тоже результат: план корректируется по факту, а не по догадкам.</li>
+  </ul>
+
+  <h2>Риски и честные границы</h2>
+  <table>
+    <thead><tr><th>Риск</th><th>Насколько велик</th><th>Что делаем</th></tr></thead>
+    <tbody>
+      <tr><td>Проверка сервиса меняется со временем</td><td>высокий: это живая защита</td><td>изолируем всё в одном модуле — обновлять придётся только его</td></tr>
+      <tr><td>Токен привязан к видео и живёт недолго</td><td>средний</td><td>кэш токенов с обновлением по истечении</td></tr>
+      <tr><td>Ссылки приходят зашифрованными</td><td>средний</td><td>часть P6: разбор подписи в движке</td></tr>
+      <tr><td>Проверить можно только на вашем устройстве</td><td>точно так</td><td>каждая часть — с отчётом в журнале; я не могу проверить это со своей стороны</td></tr>
+    </tbody>
+  </table>
+
+  <footer>
+    Obereg · план этапа «аттестация клиента» · 29.09.2026 · сборка-основа: SHA-256 ADCD6B12…D7CF7
+  </footer>
+
+</div>
+<section style="margin:24px 0;padding:16px 20px;border-left:4px solid #3b82f6;background:#f1f5f9;border-radius:8px;font-family:system-ui,sans-serif">
+  <strong>Обновление сборки:</strong> добавлен шаг 7 в приложении — «прогон проверки»:
+  машина проверки находится по методу a (точный путь по открытому эталонному клиенту),
+  запускается с программой из проверки и делает снимок без привязки — заявку на токен целостности.
+</section><section style="margin:24px 0;padding:16px 20px;border-left:4px solid #22c55e;background:#f0fdf4;border-radius:8px;font-family:system-ui,sans-serif">
+  <strong>Обновление сборки:</strong> шаг 8 в приложении — обмен снимка на токен целостности
+  (GenerateIT) и минт PO-токена прямо в странице; токен сохраняется и подставляется в плеер
+  (запрос игрока и адреса потоков).
+</section><section style="margin:24px 0;padding:16px 20px;border-left:4px solid #22c55e;background:#f0fdf4;border-radius:8px;font-family:system-ui,sans-serif">
+  <strong>Веха:</strong> цепочка аттестации замкнута — пробное видео воспроизводится в своём плеере
+  (поток 360p, 27 форматов в ответе), файл отдаётся сервисом без прежнего отказа. Токен теперь
+  применяется к любому видео и сохраняется между запусками приложения (12 часов).
+</section><section style="margin:24px 0;padding:16px 20px;border-left:4px solid #3b82f6;background:#f1f5f9;border-radius:8px;font-family:system-ui,sans-serif">
+  <strong>Обновление сборки:</strong> шаг 2 стал «обычным путём проверки» — прямой запрос Create
+  (как у эталонного клиента): не зависит от страницы, приносит программу с поддержкой минтера,
+  имя машины и адрес интерпретатора из одного ответа.
+</section><section style="margin:24px 0;padding:16px 20px;border-left:4px solid #22c55e;background:#f0fdf4;border-radius:8px;font-family:system-ui,sans-serif">
+  <strong>Обновление сборки:</strong> обычный путь работает целиком (токен целостности + минтер +
+  PO-токен). Интерпретатор берётся из самой проверки (поле safeScript). Плеер теперь выдаёт
+  собственный PO-токен под каждое видео через скрытую страницу — 403 на «прочих» роликах должен уйти.
+</section><section style="margin:24px 0;padding:16px 20px;border-left:4px solid #3b82f6;background:#f1f5f9;border-radius:8px;font-family:system-ui,sans-serif">
+  <strong>Обновление сборки:</strong> минт теперь выдаёт два токена (под ролик и под гостевые данные),
+  а перед списанием неудачи плеер сам проверяет файл тремя вариантами (токен ролика / гостевой / без)
+  и играет первый, который ответил «200».
+</section></body>
+</html>
