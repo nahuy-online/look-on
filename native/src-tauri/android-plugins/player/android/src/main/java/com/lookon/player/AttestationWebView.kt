@@ -51,8 +51,7 @@ object AttestationWebView {
      */
     @JvmStatic
     fun getToken(videoId: String): String {
-        val ctx = PlayerPlugin.cachedActivity?.applicationContext
-            ?: ExoPlayerManager.applicationContext()
+        val ctx = ExoPlayerManager.applicationContext()
             ?: return errorJson("no Android context available")
         val id = videoId.ifBlank { PROBE_VIDEO_ID }
 
