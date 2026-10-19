@@ -34,27 +34,61 @@ echo "Copying player module → $PLAYER_DST"
 rm -rf "$PLAYER_DST"
 cp -r "$PLAYER_SRC" "$PLAYER_DST"
 
-# 2. Add the player module to settings.gradle
-SETTINGS_FILE="$ANDROID_DIR/settings.gradle"
+# 2. Add the player module to settings.gradle.kts (Tauri uses Kotlin DSL)
+SETTINGS_FILE="$ANDROID_DIR/settings.gradle.kts"
 if [ -f "$SETTINGS_FILE" ]; then
-  if ! grep -q "include ':player'" "$SETTINGS_FILE"; then
+  if ! grep -q "include(\":player\")" "$SETTINGS_FILE"; then
     echo "" >> "$SETTINGS_FILE"
-    echo "include ':player'" >> "$SETTINGS_FILE"
-    echo "Added ':player' to settings.gradle"
+    echo "include(\":player\")" >> "$SETTINGS_FILE"
+    echo "Added ':player' to settings.gradle.kts"
   else
-    echo "':player' already in settings.gradle"
+    echo "':player' already in settings.gradle.kts"
+  fi
+else
+  echo "WARNING: settings.gradle.kts not found at $SETTINGS_FILE"
+  echo "Trying settings.gradle (Groovy DSL)..."
+  SETTINGS_FILE="$ANDROID_DIR/settings.gradle"
+  if [ -f "$SETTINGS_FILE" ]; then
+    if ! grep -q "include ':player'" "$SETTINGS_FILE"; then
+      echo "" >> "$SETTINGS_FILE"
+      echo "include ':player'" >> "$SETTINGS_FILE"
+      echo "Added ':player' to settings.gradle"
+    fi
   fi
 fi
 
-# 3. Add the player dependency to app/build.gradle
-APP_BUILD="$ANDROID_DIR/app/build.gradle"
-if [ -f "$APP_BUILD" ]; then
-  if ! grep -q "implementation project(':player')" "$APP_BUILD"; then
-    sed -i '/^dependencies {/a\    implementation project(":player")' "$APP_BUILD"
-    echo "Added 'implementation project(':player')' to app/build.gradle"
+# 3. Add the player dependency to app/build.gradle.kts (Kotlin DSL)
+APP_BUILD_KTS="$ANDROID_DIR/app/build.gradle.kts"
+APP_BUILD_GROOVY="$ANDROID_DIR/app/build.gradle"
+
+if [ -f "$APP_BUILD_KTS" ]; then
+  # Kotlin DSL: implementation(project(":player"))
+  if ! grep -q 'implementation(project(":player"))' "$APP_BUILD_KTS"; then
+    # Find the dependencies block and add inside it
+    sed -i '/^dependencies {/a\    implementation(project(":player"))' "$APP_BUILD_KTS"
+    echo "Added 'implementation(project(\":player\"))' to app/build.gradle.kts"
+  else
+    echo "':player' dependency already in app/build.gradle.kts"
+  fi
+elif [ -f "$APP_BUILD_GROOVY" ]; then
+  # Groovy DSL: implementation project(":player")
+  if ! grep -q 'implementation project(":player")' "$APP_BUILD_GROOVY"; then
+    sed -i '/^dependencies {/a\    implementation project(":player")' "$APP_BUILD_GROOVY"
+    echo "Added 'implementation project(\":player\")' to app/build.gradle"
   else
     echo "':player' dependency already in app/build.gradle"
   fi
+else
+  echo "ERROR: No build.gradle found in $ANDROID_DIR/app/"
+  exit 1
+fi
+
+# 4. Ensure the player module's build.gradle.kts exists (Kotlin DSL)
+PLAYER_BUILD="$PLAYER_DST/build.gradle.kts"
+if [ ! -f "$PLAYER_BUILD" ]; then
+  echo "ERROR: $PLAYER_BUILD not found"
+  echo "The player module needs a build.gradle.kts file"
+  exit 1
 fi
 
 echo ""
