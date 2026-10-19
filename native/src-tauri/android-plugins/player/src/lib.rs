@@ -28,7 +28,6 @@ pub struct LoadResult {
 
 // ---------- Tauri commands (registered in main invoke_handler) ----------
 
-#[tauri::command]
 pub async fn player_init() -> Result<(), String> {
     #[cfg(target_os = "android")]
     {
@@ -40,7 +39,6 @@ pub async fn player_init() -> Result<(), String> {
     }
 }
 
-#[tauri::command]
 pub async fn player_load(
     url: String,
     headers: HashMap<String, String>,
@@ -61,7 +59,6 @@ pub async fn player_load(
     }
 }
 
-#[tauri::command]
 pub async fn player_play() -> Result<(), String> {
     #[cfg(target_os = "android")]
     {
@@ -73,7 +70,6 @@ pub async fn player_play() -> Result<(), String> {
     }
 }
 
-#[tauri::command]
 pub async fn player_pause() -> Result<(), String> {
     #[cfg(target_os = "android")]
     {
@@ -85,7 +81,6 @@ pub async fn player_pause() -> Result<(), String> {
     }
 }
 
-#[tauri::command]
 pub async fn player_seek_to(position_ms: i64) -> Result<(), String> {
     #[cfg(target_os = "android")]
     {
@@ -98,7 +93,6 @@ pub async fn player_seek_to(position_ms: i64) -> Result<(), String> {
     }
 }
 
-#[tauri::command]
 pub async fn player_set_speed(speed: f64) -> Result<(), String> {
     let s = speed as f32;
     if !s.is_finite() || s <= 0.0 {
@@ -114,7 +108,6 @@ pub async fn player_set_speed(speed: f64) -> Result<(), String> {
     }
 }
 
-#[tauri::command]
 pub async fn player_get_position() -> Result<i64, String> {
     #[cfg(target_os = "android")]
     {
@@ -126,7 +119,6 @@ pub async fn player_get_position() -> Result<i64, String> {
     }
 }
 
-#[tauri::command]
 pub async fn player_get_duration() -> Result<i64, String> {
     #[cfg(target_os = "android")]
     {
@@ -138,7 +130,6 @@ pub async fn player_get_duration() -> Result<i64, String> {
     }
 }
 
-#[tauri::command]
 pub async fn player_set_viewport(
     x: f32,
     y: f32,
@@ -155,7 +146,6 @@ pub async fn player_set_viewport(
     }
 }
 
-#[tauri::command]
 pub async fn player_release() -> Result<(), String> {
     #[cfg(target_os = "android")]
     {
@@ -167,7 +157,6 @@ pub async fn player_release() -> Result<(), String> {
     }
 }
 
-#[tauri::command]
 pub async fn attestation_get_token(video_id: String) -> Result<String, String> {
     if video_id.trim().is_empty() {
         return Err("empty videoId".into());
@@ -327,9 +316,9 @@ fn jni_call_string_blocking(
             .call_static_method(cls, method, sig, &[JValue::Object(&jstr.into())])
             .map_err(|e| format!("call {method}: {e}"))?;
         let jobj = val.l().map_err(|e| format!("cast object: {e}"))?;
-        let jstr = jobj.into_inner();
+        let jstr: jni::objects::JString = jobj.into();
         let rust_string: String = env
-            .get_string(&jni::objects::JString::from(jstr))
+            .get_string(&jstr)
             .map_err(|e| format!("get_string: {e}"))?
             .into();
         Ok(rust_string)
