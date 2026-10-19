@@ -38,7 +38,6 @@ kotlin {
 }
 
 dependencies {
-    implementation("app.tauri:plugin-api:2.0.0")
     implementation("androidx.media3:media3-exoplayer:1.3.1")
     implementation("androidx.media3:media3-exoplayer-dash:1.3.1")
     implementation("androidx.media3:media3-exoplayer-hls:1.3.1")
