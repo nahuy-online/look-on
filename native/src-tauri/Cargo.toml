@@ -35,6 +35,12 @@ sha2 = "0.10"
 # Userspace WireGuard (used by the desktop fallback / future non-Android tunnels).
 # On Android the actual tunnel is established by the Kotlin VpnService plugin.
 boringtun = { version = "0.6", optional = true }
+# Local Tauri plugins (path dependencies). Each plugin is a separate crate
+# under `android-plugins/<name>/`. They compile to a no-op on non-Android (the
+# JNI bridge is `#[cfg(target_os = "android")]`-gated) and are activated by
+# the host app via `.plugin(name_lib::init())` in `src/lib.rs`.
+look-on-wireguard = { path = "android-plugins/wireguard" }
+look-on-player = { path = "android-plugins/player" }
 
 [features]
 default = ["custom-protocol"]

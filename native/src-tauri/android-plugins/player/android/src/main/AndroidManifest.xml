@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- ExoPlayer needs network access to fetch stream segments. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- The hidden attestation WebView needs hardware acceleration to run
+         YouTube's botguard VM (it's a real WebView with JS enabled). -->
+    <application android:hardwareAccelerated="true">
+        <!-- No activities or services of our own — the PlayerPlugin is
+             instantiated by Tauri's plugin loader and the PlayerView overlay
+             is attached to the host Activity's content view at runtime. -->
+    </application>
+</manifest>

@@ -15,6 +15,7 @@ mod db;
 mod invidious;
 mod models;
 mod vpn;
+mod youtube;
 
 use std::sync::Arc;
 
@@ -24,6 +25,7 @@ use models::{
 };
 use tauri::Manager;
 use vpn::VpnHandle;
+use youtube::{ExtractOutcome, FeedItem};
 
 /// Tauri-managed state: SQLite connection + VPN handle.
 struct AppState {
@@ -105,6 +107,52 @@ async fn related(youtube_id: String, category: String) -> Result<Vec<VideoItem>,
 #[tauri::command]
 async fn video_streams(youtube_id: String) -> Result<Option<StreamInfo>, String> {
     Ok(invidious::video_streams(&youtube_id).await)
+}
+
+// ---------- YouTube direct-extraction commands ----------
+//
+// These bypass Invidious and talk to YouTube's InnerTube API directly
+// (see `src/youtube/`). The frontend can use them as a fallback when
+// Invidious is rate-limited or doesn't have a video, or as the primary
+// path for power users.
+//
+// `yt_extract` returns an `ExtractOutcome` (tagged JSON enum) so the
+// frontend can pattern-match on `status`: `success` (muxed stream),
+// `separate_streams` (video + audio pair), `no_muxed_stream`,
+// `refused`, `malformed`.
+//
+// `yt_feed` and `yt_search` return `Vec<FeedItem>` — the same shape
+// Obereg's core produces, with camelCase field names over the FFI.
+
+/// Fetch the YouTube player response for `youtube_id` and extract streams.
+///
+/// `po_token` is optional — the VISIONOS profile (first in the list) works
+/// without one. If supplied, it's attached as `serviceIntegrityDimensions.poToken`
+/// for clients that require it (WEB, MWEB).
+#[tauri::command]
+async fn yt_extract(
+    youtube_id: String,
+    po_token: Option<String>,
+) -> Result<ExtractOutcome, String> {
+    let json = youtube::client::fetch_player_response(&youtube_id, po_token.as_deref()).await?;
+    Ok(youtube::extract::analyze_player_response(&json))
+}
+
+/// Fetch the YouTube feed (trending, music, ...) and parse it.
+///
+/// `feed_type` accepts `"trending"` (default), `"music"`, `"movies"`, or a
+/// raw browse ID like `"FEtrending"`.
+#[tauri::command]
+async fn yt_feed(feed_type: String) -> Result<Vec<FeedItem>, String> {
+    let json = youtube::client::fetch_feed(&feed_type).await?;
+    youtube::feed::parse_feed(&json)
+}
+
+/// Search YouTube and parse the results into feed items.
+#[tauri::command]
+async fn yt_search(query: String) -> Result<Vec<FeedItem>, String> {
+    let json = youtube::client::search(&query).await?;
+    youtube::feed::parse_feed(&json)
 }
 
 // ---------- DB: history ----------
@@ -301,6 +349,16 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_http::init())
         .plugin(tauri_plugin_sql::Builder::new().build())
+        // Native ExoPlayer + YouTube attestation plugin (Android-only).
+        // On non-Android the commands are no-ops / return empty results so
+        // the frontend can fall back to a HTML5 `<video>` element.
+        // Play/pause goes through `setPlayWhenReady` — THE FIX for the
+        // Obereg JavaScript-bridge play/pause bug.
+        //
+        // The crate's `[lib] name` is `look_on_player_lib` (see
+        // `android-plugins/player/Cargo.toml`), so the extern crate name is
+        // `look_on_player_lib`, not `look_on_player`.
+        .plugin(look_on_player_lib::init())
         .setup(|app| {
             // Resolve the app data dir and open the SQLite DB there.
             let app_data = app
@@ -333,6 +391,10 @@ pub fn run() {
             search,
             related,
             video_streams,
+            // YouTube direct extraction (InnerTube)
+            yt_extract,
+            yt_feed,
+            yt_search,
             // History
             db_get_history,
             db_add_history,

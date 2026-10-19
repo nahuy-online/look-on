@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import {
   ArrowLeft, ThumbsUp, ThumbsDown, Download, ListVideo, Share2, Gauge,
-  Loader2, Shield, Eye, Clock, Hash, Check,
+  Loader2, Shield, Eye, Clock, Hash, Check, Play, Pause,
 } from "lucide-react";
 import { useAppStore } from "@/store/use-app-store";
 import { useLibraryStore } from "@/store/use-library-store";
@@ -12,8 +12,47 @@ import { formatDuration, formatViews, timeAgo } from "@/lib/format";
 import type { VideoItem } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { PlayerView } from "@/components/PlayerView";
 
-const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
+// Speed control — ExoPlayer supports up to 3.0× via `setPlaybackParameters`.
+// (The Obereg IFrame path capped at 2.0× because YouTube's IFrame API
+// doesn't allow higher; ExoPlayer has no such limit.)
+const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3];
+
+// Tauri command prefix for the player plugin. All ExoPlayer commands are
+// dispatched through this prefix; the attestation command lives in the same
+// plugin. The `yt_extract` command lives at the app level (no prefix) — see
+// `src-tauri/src/lib.rs`.
+const PLAYER = "plugin:player|";
+
+// Stream HTTP headers — YouTube's googlevideo URLs are bound to the client
+// that requested them. Sending a browser-like UA + the YouTube Referer/Origin
+// keeps the CDN from returning 403.
+const STREAM_HEADERS: Record<string, string> = {
+  "User-Agent":
+    "Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36",
+  Referer: "https://www.youtube.com/",
+  Origin: "https://www.youtube.com",
+  "Accept-Language": "en-US,en;q=0.9",
+};
+
+// Tagged-union shape of the `yt_extract` response (see
+// `src-tauri/src/youtube/extract.rs` for the Rust definition).
+interface StreamFormat {
+  itag: number;
+  mimeType: string;
+  url: string;
+  qualityLabel?: string;
+  bitrate: number;
+  hasAudio: boolean;
+  hasVideo: boolean;
+}
+type ExtractOutcome =
+  | { status: "success"; format: StreamFormat; total: number }
+  | { status: "separate_streams"; video: StreamFormat; audio: StreamFormat; total: number }
+  | { status: "no_muxed_stream"; adaptive: number }
+  | { status: "refused"; reason: string }
+  | { status: "malformed"; reason: string };
 
 // Deterministic comment generator
 const COMMENT_AUTHORS = [
@@ -93,9 +132,20 @@ export function WatchView() {
   const [relatedLoading, setRelatedLoading] = useState(true);
   const [speed, setSpeed] = useState(1);
   const [descOpen, setDescOpen] = useState(false);
-  const playerContainerRef = useRef<HTMLDivElement>(null);
-  const playerRef = useRef<any>(null);
+
+  // Player state
   const [playerReady, setPlayerReady] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [playerError, setPlayerError] = useState<string | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [positionMs, setPositionMs] = useState(0);
+  const [durationMs, setDurationMs] = useState(0);
+
+  // Refs to keep the polling interval + current speed in sync without
+  // re-running the load effect.
+  const pollTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const speedRef = useRef(speed);
+  useEffect(() => { speedRef.current = speed; }, [speed]);
 
   // Record history on video change
   useEffect(() => {
@@ -123,80 +173,155 @@ export function WatchView() {
     return () => { cancelled = true; };
   }, [video]);
 
-  // Load YouTube IFrame API once
-  useEffect(() => {
-    if (!(window as any).YT) {
-      const tag = document.createElement("script");
-      tag.src = "https://www.youtube.com/iframe_api";
-      document.head.appendChild(tag);
+  // ---------- ExoPlayer load path (replaces the YouTube IFrame API) ----------
+  //
+  // On video change:
+  //   1. attestation_get_token(videoId) — hidden WebView extracts the YouTube
+  //      INNERTUBE_API_KEY + VISITOR_DATA (+ optional PO token).
+  //   2. yt_extract(youtubeId, poToken) — Rust core fetches the YouTube player
+  //      response and extracts a muxed stream URL (or separate video+audio).
+  //   3. player_load(url, headers, audioUrl?) — hands the URL(s) to ExoPlayer.
+  //   4. player_play() — **THE FIX**: calls `setPlayWhenReady(true)` directly
+  //      via JNI. No JavaScript in the play/pause path.
+  //
+  // The `attestation_get_token` call is best-effort — if it fails (e.g. on
+  // desktop), we pass `poToken: null` and the Rust `yt_extract` falls back to
+  // the VISIONOS client profile which works without a PO token.
+
+  const loadVideoIntoExo = useCallback(async (youtubeId: string) => {
+    setLoading(true);
+    setPlayerError(null);
+    setPositionMs(0);
+    setDurationMs(0);
+    try {
+      // 1. Attestation (best-effort — non-Android returns empty strings)
+      let poToken: string | null = null;
+      try {
+        const attJson = await invoke<string>(`${PLAYER}attestation_get_token`, { videoId: youtubeId });
+        try {
+          const att = JSON.parse(attJson);
+          poToken = att.poToken || null;
+        } catch { /* ignore parse errors — poToken stays null */ }
+      } catch (e) {
+        console.warn("attestation_get_token failed (non-fatal):", e);
+      }
+
+      // 2. Extract stream URLs via the Rust core
+      const outcome = await invoke<ExtractOutcome>("yt_extract", {
+        youtubeId,
+        poToken,
+      });
+
+      let url: string | null = null;
+      let audioUrl: string | null = null;
+      if (outcome.status === "success") {
+        url = outcome.format.url;
+      } else if (outcome.status === "separate_streams") {
+        url = outcome.video.url;
+        audioUrl = outcome.audio.url;
+      } else if (outcome.status === "no_muxed_stream") {
+        throw new Error(`No muxed stream available (${outcome.adaptive} adaptive only)`);
+      } else if (outcome.status === "refused") {
+        throw new Error(`YouTube refused: ${outcome.reason}`);
+      } else {
+        throw new Error(`Malformed response: ${(outcome as { reason: string }).reason}`);
+      }
+      if (!url) throw new Error("no stream URL resolved");
+
+      // 3. Load into ExoPlayer (THE FIX path — setPlayWhenReady, not JS)
+      await invoke(`${PLAYER}player_load`, {
+        url,
+        headers: STREAM_HEADERS,
+        audioUrl: audioUrl ?? null,
+      });
+
+      // 4. Start playback + restore the user's chosen speed
+      await invoke(`${PLAYER}player_set_speed`, { speed: speedRef.current });
+      await invoke(`${PLAYER}player_play`);
+      setIsPlaying(true);
+      setPlayerReady(true);
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : String(e);
+      console.error("ExoPlayer load failed:", msg);
+      setPlayerError(msg);
+      setPlayerReady(false);
+    } finally {
+      setLoading(false);
     }
   }, []);
 
-  // Create/destroy player when video changes
+  // Reload when the active video changes
   useEffect(() => {
     if (!video) return;
     let cancelled = false;
-    Promise.resolve().then(() => { if (!cancelled) setPlayerReady(false); });
+    setPlayerReady(false);
+    (async () => {
+      if (!cancelled) await loadVideoIntoExo(video.youtubeId);
+    })();
+    return () => { cancelled = true; };
+  }, [video?.youtubeId, loadVideoIntoExo]);
 
-    const createPlayer = () => {
-      if (!video || !(window as any).YT?.Player || !playerContainerRef.current) return;
-      // Clear previous player
-      playerContainerRef.current.innerHTML = "";
-      const div = document.createElement("div");
-      playerContainerRef.current.appendChild(div);
+  // ---------- position polling ----------
+  //
+  // Every 500 ms we ask ExoPlayer for its current position + duration so the
+  // seek bar tracks playback. This is a single round-trip JNI call → very
+  // cheap. The interval is cleared when the component unmounts.
 
-      playerRef.current = new (window as any).YT.Player(div, {
-        videoId: video.youtubeId,
-        width: "100%",
-        height: "100%",
-        playerVars: {
-          autoplay: 1,
-          modestbranding: 1,
-          rel: 0,
-          playsinline: 1,
-          iv_load_policy: 3,
-        },
-        events: {
-          onReady: (e: any) => {
-            setPlayerReady(true);
-            try {
-              e.target.setPlaybackRate(speed);
-              e.target.playVideo();
-            } catch {}
-          },
-          onStateChange: (e: any) => {
-            if (e.data === 0) {
-              // Video ended — could auto-play next from queue
-            }
-          },
-        },
-      });
-    };
-
-    // If YT API is ready, create immediately; otherwise wait
-    if ((window as any).YT?.Player) {
-      createPlayer();
-    } else {
-      const check = setInterval(() => {
-        if ((window as any).YT?.Player) {
-          clearInterval(check);
-          createPlayer();
-        }
-      }, 200);
-      return () => clearInterval(check);
-    }
-
+  useEffect(() => {
+    if (!playerReady) return;
+    if (pollTimer.current) clearInterval(pollTimer.current);
+    pollTimer.current = setInterval(async () => {
+      try {
+        const [pos, dur] = await Promise.all([
+          invoke<number>(`${PLAYER}player_get_position`),
+          invoke<number>(`${PLAYER}player_get_duration`),
+        ]);
+        setPositionMs(pos);
+        setDurationMs(dur);
+      } catch {
+        /* player may have been released during a video swap */
+      }
+    }, 500);
     return () => {
-      try { playerRef.current?.destroy?.(); } catch {}
-      playerRef.current = null;
+      if (pollTimer.current) clearInterval(pollTimer.current);
+      pollTimer.current = null;
     };
-  }, [video?.youtubeId]);
+  }, [playerReady]);
 
-  const applySpeed = (s: number) => {
+  // ---------- controls ----------
+
+  const applySpeed = async (s: number) => {
     setSpeed(s);
-    try { playerRef.current?.setPlaybackRate?.(s); } catch {}
+    try { await invoke(`${PLAYER}player_set_speed`, { speed: s }); } catch {}
     toast.success(`Speed: ${s}×`, { duration: 1000 });
   };
+
+  const togglePlay = async () => {
+    try {
+      if (isPlaying) {
+        await invoke(`${PLAYER}player_pause`); // THE FIX: setPlayWhenReady(false)
+        setIsPlaying(false);
+      } else {
+        await invoke(`${PLAYER}player_play`); // THE FIX: setPlayWhenReady(true)
+        setIsPlaying(true);
+      }
+    } catch (e) {
+      toast.error(`Playback control failed: ${String(e)}`);
+    }
+  };
+
+  const onSeek = async (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!durationMs) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const ratio = (e.clientX - rect.left) / rect.width;
+    const target = Math.max(0, Math.min(1, ratio)) * durationMs;
+    try {
+      await invoke(`${PLAYER}player_seek_to`, { positionMs: Math.round(target) });
+      setPositionMs(target);
+    } catch {}
+  };
+
+  // ---------- early returns ----------
 
   if (!video) {
     return (
@@ -227,6 +352,8 @@ export function WatchView() {
     toast.success("Added to queue");
   };
 
+  const progressPct = durationMs > 0 ? (positionMs / durationMs) * 100 : 0;
+
   return (
     <div className="p-3 md:p-6 max-w-7xl mx-auto">
       <button onClick={goHome} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-3">
@@ -235,44 +362,93 @@ export function WatchView() {
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6">
         <div>
-          {/* Player — YouTube IFrame with explicit 100% sizing */}
+          {/* Player — native ExoPlayer overlay (THE FIX) */}
           <div className="relative w-full aspect-video bg-black rounded-xl overflow-hidden">
-            <div ref={playerContainerRef} className="absolute inset-0 w-full h-full">
-              {/* YT.Player will insert iframe here with width=100% height=100% */}
-            </div>
-            {!playerReady && (
-              <div className="absolute inset-0 flex items-center justify-center text-muted-foreground pointer-events-none bg-black">
-                <Loader2 className="h-6 w-6 animate-spin mr-2" /> Loading…
+            <PlayerView
+              className="absolute inset-0 w-full h-full"
+              onReady={() => setPlayerReady(true)}
+              onError={(e) => setPlayerError(e)}
+            />
+            {/* Loading spinner */}
+            {(loading || !playerReady) && !playerError && (
+              <div className="absolute inset-0 flex items-center justify-center text-muted-foreground pointer-events-none bg-black/60">
+                <Loader2 className="h-6 w-6 animate-spin mr-2" />
+                {loading ? "Fetching stream…" : "Loading player…"}
               </div>
+            )}
+            {/* Error overlay */}
+            {playerError && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4 bg-black/80 pointer-events-auto">
+                <p className="text-sm text-red-400 mb-2">Playback failed</p>
+                <p className="text-xs text-muted-foreground mb-3 max-w-md">{playerError}</p>
+                <button
+                  onClick={() => void loadVideoIntoExo(video.youtubeId)}
+                  className="px-3 py-1.5 rounded-md bg-emerald-600 text-white text-xs font-medium hover:bg-emerald-500"
+                >
+                  Retry
+                </button>
+              </div>
+            )}
+            {/* Play/pause button (centered) — THE FIX: drives setPlayWhenReady directly */}
+            {playerReady && !loading && !playerError && (
+              <button
+                onClick={togglePlay}
+                className="absolute inset-0 flex items-center justify-center group"
+                aria-label={isPlaying ? "Pause" : "Play"}
+              >
+                <span className={cn(
+                  "h-14 w-14 rounded-full bg-black/60 flex items-center justify-center transition-opacity",
+                  isPlaying ? "opacity-0 group-hover:opacity-100" : "opacity-100"
+                )}>
+                  {isPlaying ? <Pause className="h-6 w-6 text-white" /> : <Play className="h-6 w-6 text-white ml-0.5" />}
+                </span>
+              </button>
             )}
             {/* Ad-free badge */}
             <div className="absolute top-2 left-2 flex items-center gap-1 bg-emerald-600 text-white text-[10px] font-semibold px-2 py-1 rounded-md pointer-events-none z-10">
-              <Shield className="h-3 w-3" /> Ad-free
+              <Shield className="h-3 w-3" /> Ad-free · ExoPlayer
             </div>
             {speed !== 1 && (
               <div className="absolute top-2 right-2 flex items-center gap-1 bg-purple-600 text-white text-[10px] font-semibold px-2 py-1 rounded-md pointer-events-none z-10">
                 <Gauge className="h-3 w-3" /> {speed}×
               </div>
             )}
+            {/* Seek bar */}
+            {playerReady && durationMs > 0 && (
+              <div
+                onClick={onSeek}
+                className="absolute bottom-0 left-0 right-0 h-1.5 bg-white/20 cursor-pointer z-10"
+              >
+                <div
+                  className="h-full bg-emerald-500"
+                  style={{ width: `${progressPct}%` }}
+                />
+              </div>
+            )}
           </div>
 
-          {/* Speed bar */}
-          <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground overflow-x-auto scrollbar-thin">
-            <Gauge className="h-4 w-4 shrink-0" />
-            <span className="shrink-0">Speed</span>
-            <div className="flex gap-1">
-              {SPEEDS.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => applySpeed(s)}
-                  className={cn(
-                    "px-2.5 py-1 rounded-md text-xs font-medium shrink-0",
-                    s === speed ? "bg-emerald-600 text-white" : "bg-[rgb(var(--secondary))] hover:bg-accent"
-                  )}
-                >
-                  {s}×
-                </button>
-              ))}
+          {/* Time + speed bar */}
+          <div className="mt-2 flex items-center gap-3 text-xs text-muted-foreground">
+            <span className="font-mono shrink-0">
+              {formatDuration(Math.floor(positionMs / 1000))} / {formatDuration(Math.floor(durationMs / 1000))}
+            </span>
+            <div className="flex items-center gap-2 overflow-x-auto scrollbar-thin flex-1">
+              <Gauge className="h-4 w-4 shrink-0" />
+              <span className="shrink-0">Speed</span>
+              <div className="flex gap-1">
+                {SPEEDS.map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => void applySpeed(s)}
+                    className={cn(
+                      "px-2.5 py-1 rounded-md text-xs font-medium shrink-0",
+                      s === speed ? "bg-emerald-600 text-white" : "bg-[rgb(var(--secondary))] hover:bg-accent"
+                    )}
+                  >
+                    {s}×
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
