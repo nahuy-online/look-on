@@ -87,14 +87,12 @@ object ExoPlayerManager {
             Log.d(TAG, "init: already initialised — skipping")
             return
         }
-        val context = PlayerPlugin.cachedAppContext
-            ?: PlayerPlugin.cachedActivity?.applicationContext
-            ?: run {
-                Log.e(TAG, "init: no cached Android context — PlayerPlugin not constructed yet")
-                return
-            }
-        hostActivity = PlayerPlugin.cachedActivity ?: resolveActivity(context)
-        appContext = context.applicationContext
+        val context = appContext ?: resolveAppContext()
+        if (context == null) {
+            Log.e(TAG, "init: no Android context available")
+            return
+        }
+        hostActivity = resolveActivity(context)
         Log.i(TAG, "init: hostActivity=${hostActivity?.javaClass?.name}")
 
         val app = context.applicationContext
@@ -327,7 +325,23 @@ object ExoPlayerManager {
             if (c is Activity) return c
             c = if (c is android.content.ContextWrapper) c.baseContext else null
         }
-        return PlayerPlugin.cachedActivity
+        return null
+    }
+
+    /**
+     * Resolve the application context from the current Activity thread.
+     * Uses Android's static ActivityThread API as a fallback.
+     */
+    private fun resolveAppContext(): Context? {
+        return try {
+            val activityThread = Class.forName("android.app.ActivityThread")
+            val method = activityThread.getDeclaredMethod("currentApplication")
+            method.isAccessible = true
+            method.invoke(null) as? Context
+        } catch (e: Exception) {
+            Log.e(TAG, "resolveAppContext failed: ${e.message}")
+            null
+        }
     }
 
     private fun ok(): String = """{"ok":true,"error":null}"""
