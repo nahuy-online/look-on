@@ -212,7 +212,8 @@ object AttestationWebView {
         // TODO: port Obereg's `challengeScript` + `step7Script` + `mintScript`.
         // The VISIONOS profile works without a PO token, so this is only
         // needed for age-restricted or region-locked content.
-        val _ = listOf(view, videoId, apiKey, visitorData)
+        @Suppress("UNUSED_PARAMETER")
+        // view, videoId, apiKey, visitorData will be used when the full botguard flow is ported
         return null
     }
 
