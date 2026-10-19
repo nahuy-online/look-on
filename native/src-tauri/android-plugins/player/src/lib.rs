@@ -198,7 +198,7 @@ where
 /// Find a class using the app's ClassLoader instead of the system one.
 /// This is THE FIX for ClassNotFoundException on Android JNI.
 #[cfg(target_os = "android")]
-fn find_app_class(env: &mut jni::JNIEnv, class_name: &str) -> Result<jni::objects::JClass, String> {
+fn find_app_class<'a>(env: &mut jni::JNIEnv<'a>, class_name: &str) -> Result<jni::objects::JClass<'a>, String> {
     use jni::objects::JValue;
 
     // Try regular find_class first (works if called on main thread)
@@ -213,7 +213,7 @@ fn find_app_class(env: &mut jni::JNIEnv, class_name: &str) -> Result<jni::object
         return Err(format!("find_class {class_name}: no app context"));
     }
 
-    let context = unsafe { jni::objects::JObject::from_raw(context_ptr as *mut jni::sys::jobject) };
+    let context = unsafe { jni::objects::JObject::from_raw(context_ptr as jni::sys::jobject) };
 
     // context.getClassLoader()
     let class_loader = env
