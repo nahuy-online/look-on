@@ -87,11 +87,12 @@ object ExoPlayerManager {
             Log.d(TAG, "init: already initialised — skipping")
             return
         }
-        val context = appContext ?: resolveAppContext()
+        val context = resolveAppContext()
         if (context == null) {
             Log.e(TAG, "init: no Android context available")
             return
         }
+        appContext = context.applicationContext
         hostActivity = resolveActivity(context)
         Log.i(TAG, "init: hostActivity=${hostActivity?.javaClass?.name}")
 
