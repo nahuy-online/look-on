@@ -22,3 +22,4 @@ log = "0.4"
 [target.'cfg(target_os = "android")'.dependencies]
 jni = "0.21"
 ndk-context = "0.1"
+once_cell = "1"
