@@ -1,0 +1,563 @@
+cUBhyrIoonKQ==/com.lookon.app-UQHTj96vbnxlurmnrhgjdQ==/base.apk (offset f664000) (_RNvCs1k1pNVifRtS_11look_on_lib3run+700)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #13 pc 0000000000b61d60  /data/app/~~v5sPKwQGEEcUBhyrIoonKQ==/com.lookon.app-UQHTj96vbnxlurmnrhgjdQ==/base.apk (offset f664000) (_RNvYNvCs1k1pNVifRtS_11look_on_lib3runINtNtNtCs4v14Jjzmfdf_4core3ops8function6FnOnceuE9call_onceB4_+12)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #14 pc 00000000008bf848  /data/app/~~v5sPKwQGEEcUBhyrIoonKQ==/com.lookon.app-UQHTj96vbnxlurmnrhgjdQ==/base.apk (offset f664000) (_RNvXsn_NtNtCs4v14Jjzmfdf_4core5panic11unwind_safeINtB5_16AssertUnwindSafeNvCs1k1pNVifRtS_11look_on_lib3runEINtNtNtB9_3ops8function6FnOnceuE9call_onceB1b_+12)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #15 pc 0000000000a22944  /data/app/~~v5sPKwQGEEcUBhyrIoonKQ==/com.lookon.app-UQHTj96vbnxlurmnrhgjdQ==/base.apk (offset f664000) (_RINvNvNtCs64eBbmH5UIo_3std9panicking12catch_unwind7do_callINtNtNtCs4v14Jjzmfdf_4core5panic11unwind_safe16AssertUnwindSafeNvCs1k1pNVifRtS_11look_on_lib3runEuEB1X_+16)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #16 pc 00000000009a0eb8  /data/app/~~v5sPKwQGEEcUBhyrIoonKQ==/com.lookon.app-UQHTj96vbnxlurmnrhgjdQ==/base.apk (offset f664000) (__rust_try+28)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #17 pc 00000000009a0e50  /data/app/~~v5sPKwQGEEcUBhyrIoonKQ==/com.lookon.app-UQHTj96vbnxlurmnrhgjdQ==/base.apk (offset f664000) (_RINvNtCs64eBbmH5UIo_3std5panic12catch_unwindINtNtNtCs4v14Jjzmfdf_4core5panic11unwind_safe16AssertUnwindSafeNvCs1k1pNVifRtS_11look_on_lib3runEuEB1J_+32)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #18 pc 0000000000b84adc  /data/app/~~v5sPKwQGEEcUBhyrIoonKQ==/com.lookon.app-UQHTj96vbnxlurmnrhgjdQ==/base.apk (offset f664000) (_RINvCs1k1pNVifRtS_11look_on_lib11stop_unwindNvB2_3runuEB2_+12)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #19 pc 0000000000a4c52c  /data/app/~~v5sPKwQGEEcUBhyrIoonKQ==/com.lookon.app-UQHTj96vbnxlurmnrhgjdQ==/base.apk (offset f664000) (_RNvCs1k1pNVifRtS_11look_on_lib10__start_app+8)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #20 pc 00000000010f0ef4  /data/app/~~v5sPKwQGEEcUBhyrIoonKQ==/com.lookon.app-UQHTj96vbnxlurmnrhgjdQ==/base.apk (offset f664000) (_RNCNvNtNtNtCshlxqpkKAPN_3tao13platform_impl8platform8ndk_glue21onFirstActivityCreates0_0B9_+720)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #21 pc 0000000001145f98  /data/app/~~v5sPKwQGEEcUBhyrIoonKQ==/com.lookon.app-UQHTj96vbnxlurmnrhgjdQ==/base.apk (offset f664000) (_RINvNtNtCs64eBbmH5UIo_3std3sys9backtrace28___rust_begin_short_backtraceNCNvNtNtNtCshlxqpkKAPN_3tao13platform_impl8platform8ndk_glue21onFirstActivityCreates0_0uEB1h_+28)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #22 pc 0000000001131eb0  /data/app/~~v5sPKwQGEEcUBhyrIoonKQ==/com.lookon.app-UQHTj96vbnxlurmnrhgjdQ==/base.apk (offset f664000) (_RNCNCINvNtNtCs64eBbmH5UIo_3std6thread9lifecycle15spawn_uncheckedNCNvNtNtNtCshlxqpkKAPN_3tao13platform_impl8platform8ndk_glue21onFirstActivityCreates0_0uEs_00B1a_+100)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #23 pc 0000000001111cf4  /data/app/~~v5sPKwQGEEcUBhyrIoonKQ==/com.lookon.app-UQHTj96vbnxlurmnrhgjdQ==/base.apk (offset f664000) (_RNvXsn_NtNtCs4v14Jjzmfdf_4core5panic11unwind_safeINtB5_16AssertUnwindSafeNCNCINvNtNtCs64eBbmH5UIo_3std6thread9lifecycle15spawn_uncheckedNCNvNtNtNtCshlxqpkKAPN_3tao13platform_impl8platform8ndk_glue21onFirstActivityCreates0_0uEs_00EINtNtNtB9_3ops8function6FnOnceuE9call_onceB2k_+40)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #24 pc 000000000112d574  /data/app/~~v5sPKwQGEEcUBhyrIoonKQ==/com.lookon.app-UQHTj96vbnxlurmnrhgjdQ==/base.apk (offset f664000) (_RINvNvNtCs64eBbmH5UIo_3std9panicking12catch_unwind7do_callINtNtNtCs4v14Jjzmfdf_4core5panic11unwind_safe16AssertUnwindSafeNCNCINvNtNtB6_6thread9lifecycle15spawn_uncheckedNCNvNtNtNtCshlxqpkKAPN_3tao13platform_impl8platform8ndk_glue21onFirstActivityCreates0_0uEs_00EuEB2R_+44)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #25 pc 00000000011344b8  /data/app/~~v5sPKwQGEEcUBhyrIoonKQ==/com.lookon.app-UQHTj96vbnxlurmnrhgjdQ==/base.apk (offset f664000) (__rust_try+28)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #26 pc 0000000001131928  /data/app/~~v5sPKwQGEEcUBhyrIoonKQ==/com.lookon.app-UQHTj96vbnxlurmnrhgjdQ==/base.apk (offset f664000) (_RNCINvNtNtCs64eBbmH5UIo_3std6thread9lifecycle15spawn_uncheckedNCNvNtNtNtCshlxqpkKAPN_3tao13platform_impl8platform8ndk_glue21onFirstActivityCreates0_0uEs_0B18_+176)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #27 pc 0000000001110d08  /data/app/~~v5sPKwQGEEcUBhyrIoonKQ==/com.lookon.app-UQHTj96vbnxlurmnrhgjdQ==/base.apk (offset f664000) (_RNSNvYNCINvNtNtCs64eBbmH5UIo_3std6thread9lifecycle15spawn_uncheckedNCNvNtNtNtCshlxqpkKAPN_3tao13platform_impl8platform8ndk_glue21onFirstActivityCreates0_0uEs_0INtNtNtCs4v14Jjzmfdf_4core3ops8function6FnOnceuE9call_once6vtableB1d_+20)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #28 pc 0000000001c1ffc0  /data/app/~~v5sPKwQGEEcUBhyrIoonKQ==/com.lookon.app-UQHTj96vbnxlurmnrhgjdQ==/base.apk (offset f664000) (_RNvNvMs0_NtNtNtCs64eBbmH5UIo_3std3sys6thread4unixNtB7_6Thread3new12thread_start+304)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #29 pc 00000000000b6bd4  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+264)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #30 pc 00000000000533bc  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   (no managed stack frames)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] 
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] "queued-work-looper" prio=6 tid=20 Native
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | group="" sCount=1 ucsCount=0 flags=1 obj=0x13600808 self=0xb400006f97295950
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | sysTid=15665 nice=-2 cgrp=system sched=0/0 handle=0x6d9da40cb0
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | state=S schedstat=( 14815468 638801 13 ) utm=1 stm=0core=1 HZ=100
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | stack=0x6d9d93d000-0x6d9d93f000 stackSize=1039KB
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | held mutexes=
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #00 pc 00000000000a2dfc  /apex/com.android.runtime/lib64/bionic/libc.so (__epoll_pwait+12)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #01 pc 0000000000017ea8  /system/lib64/libutils.so (android::Looper::pollInner(int)+184)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #02 pc 0000000000017d84  /system/lib64/libutils.so (android::Looper::pollOnce(int, int*, int*, void**)+116)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #03 pc 0000000000155ff8  /system/lib64/libandroid_runtime.so (android::android_os_MessageQueue_nativePollOnce(_JNIEnv*, _jobject*, long, int)+48)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #04 pc 0000000000222244  /apex/com.android.art/lib64/libart.so (art_quick_generic_jni_trampoline+148)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #05 pc 0000000000212b80  /apex/com.android.art/lib64/libart.so (nterp_helper+5648)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #06 pc 0000000000698f7e  [anon:dalvik-classes2.dex extracted in memory from /system/framework/framework.jar!classes2.dex] (android.os.MessageQueue.next+34)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #07 pc 00000000002124c4  /apex/com.android.art/lib64/libart.so (nterp_helper+3924)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #08 pc 0000000000696d68  [anon:dalvik-classes2.dex extracted in memory from /system/framework/framework.jar!classes2.dex] (android.os.Looper.loopOnce+12)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #09 pc 00000000002115a4  /apex/com.android.art/lib64/libart.so (nterp_helper+52)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #10 pc 0000000000696d2c  [anon:dalvik-classes2.dex extracted in memory from /system/framework/framework.jar!classes2.dex] (android.os.Looper.loop+152)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #11 pc 00000000002115a4  /apex/com.android.art/lib64/libart.so (nterp_helper+52)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #12 pc 000000000066bf54  [anon:dalvik-classes2.dex extracted in memory from /system/framework/framework.jar!classes2.dex] (android.os.HandlerThread.run+56)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #13 pc 0000000000218964  /apex/com.android.art/lib64/libart.so (art_quick_invoke_stub+548)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #14 pc 0000000000285ff0  /apex/com.android.art/lib64/libart.so (art::ArtMethod::Invoke(art::Thread*, unsigned int*, unsigned int, art::JValue*, char const*)+192)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #15 pc 000000000062e018  /apex/com.android.art/lib64/libart.so (art::JValue art::InvokeVirtualOrInterfaceWithJValues<art::ArtMethod*>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, art::ArtMethod*, jvalue const*)+464)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #16 pc 000000000067def4  /apex/com.android.art/lib64/libart.so (art::Thread::CreateCallback(void*)+1188)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #17 pc 00000000000b6bd4  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+264)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #18 pc 00000000000533bc  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.MessageQueue.nativePollOnce(Native method)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.MessageQueue.next(MessageQueue.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.Looper.loopOnce(Looper.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.Looper.loop(Looper.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.HandlerThread.run(HandlerThread.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] 
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] "CleanupReference" prio=5 tid=25 Waiting
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | group="" sCount=1 ucsCount=0 flags=1 obj=0x13600ca8 self=0xb400006f972a0030
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | sysTid=15671 nice=0 cgrp=system sched=0/0 handle=0x6d96f9acb0
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | state=S schedstat=( 332187 1029375 2 ) utm=0 stm=0 core=1 HZ=100
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | stack=0x6d96e97000-0x6d96e99000 stackSize=1039KB
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | held mutexes=
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #00 pc 000000000004dff0  /apex/com.android.runtime/lib64/bionic/libc.so (syscall+32)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #01 pc 000000000028dc74  /apex/com.android.art/lib64/libart.so (art::ConditionVariable::WaitHoldingLocks(art::Thread*)+152)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #02 pc 00000000005658c4  /apex/com.android.art/lib64/libart.so (art::Monitor::Wait(art::Thread*, long, int, bool, art::ThreadState)+544)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #03 pc 00000000005670f0  /apex/com.android.art/lib64/libart.so (art::Monitor::Wait(art::Thread*, art::ObjPtr<art::mirror::Object>, long, int, bool, art::ThreadState)+300)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at java.lang.Object.wait(Native method)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   - waiting on <0x04a037d1> (a java.lang.Object)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at java.lang.Object.wait(Object.java:442)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:190)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   - locked <0x04a037d1> (a java.lang.Object)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:211)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at WV.wv.run(chromium-SystemWebViewGoogle6432.aab-stable-805904303:3)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] 
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] "Chrome_ProcessLauncherThread" prio=5 tid=26 Native
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | group="" sCount=1 ucsCount=0 flags=1 obj=0x13600d40 self=0xb400006f972a37d0
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | sysTid=15672 nice=0 cgrp=system sched=0/0 handle=0x6d955b6cb0
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | state=S schedstat=( 48110825 158516302 38 ) utm=3 stm=1 core=4 HZ=100
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | stack=0x6d954b3000-0x6d954b5000 stackSize=1039KB
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | held mutexes=
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #00 pc 00000000000a2dfc  /apex/com.android.runtime/lib64/bionic/libc.so (__epoll_pwait+12)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #01 pc 0000000000017ea8  /system/lib64/libutils.so (android::Looper::pollInner(int)+184)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #02 pc 0000000000017d84  /system/lib64/libutils.so (android::Looper::pollOnce(int, int*, int*, void**)+116)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #03 pc 0000000000155ff8  /system/lib64/libandroid_runtime.so (android::android_os_MessageQueue_nativePollOnce(_JNIEnv*, _jobject*, long, int)+48)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #04 pc 0000000000222244  /apex/com.android.art/lib64/libart.so (art_quick_generic_jni_trampoline+148)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #05 pc 0000000000212b80  /apex/com.android.art/lib64/libart.so (nterp_helper+5648)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #06 pc 0000000000698f7e  [anon:dalvik-classes2.dex extracted in memory from /system/framework/framework.jar!classes2.dex] (android.os.MessageQueue.next+34)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #07 pc 00000000002124c4  /apex/com.android.art/lib64/libart.so (nterp_helper+3924)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #08 pc 0000000000696d68  [anon:dalvik-classes2.dex extracted in memory from /system/framework/framework.jar!classes2.dex] (android.os.Looper.loopOnce+12)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #09 pc 00000000002115a4  /apex/com.android.art/lib64/libart.so (nterp_helper+52)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #10 pc 0000000000696d2c  [anon:dalvik-classes2.dex extracted in memory from /system/framework/framework.jar!classes2.dex] (android.os.Looper.loop+152)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #11 pc 00000000002115a4  /apex/com.android.art/lib64/libart.so (nterp_helper+52)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #12 pc 000000000066bf54  [anon:dalvik-classes2.dex extracted in memory from /system/framework/framework.jar!classes2.dex] (android.os.HandlerThread.run+56)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #13 pc 0000000000218964  /apex/com.android.art/lib64/libart.so (art_quick_invoke_stub+548)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #14 pc 0000000000285ff0  /apex/com.android.art/lib64/libart.so (art::ArtMethod::Invoke(art::Thread*, unsigned int*, unsigned int, art::JValue*, char const*)+192)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #15 pc 000000000062e018  /apex/com.android.art/lib64/libart.so (art::JValue art::InvokeVirtualOrInterfaceWithJValues<art::ArtMethod*>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, art::ArtMethod*, jvalue const*)+464)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #16 pc 000000000067def4  /apex/com.android.art/lib64/libart.so (art::Thread::CreateCallback(void*)+1188)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #17 pc 00000000000b6bd4  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+264)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #18 pc 00000000000533bc  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.MessageQueue.nativePollOnce(Native method)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.MessageQueue.next(MessageQueue.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.Looper.loopOnce(Looper.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.Looper.loop(Looper.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.HandlerThread.run(HandlerThread.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] 
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] "ThreadPoolForeg" prio=5 tid=27 Runnable
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | group="" sCount=0 ucsCount=0 flags=0 obj=0x13600e70 self=0xb400006f972a53a0
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | sysTid=15691 nice=0 cgrp=system sched=0/0 handle=0x6d92eb0cb0
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | state=R schedstat=( 461577767 464067818 552 ) utm=38stm=7 core=2 HZ=100
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | stack=0x6d92db9000-0x6d92dbb000 stackSize=991KB
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | held mutexes= "mutator lock"(shared held)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #00 pc 000000000056a8f4  /apex/com.android.art/lib64/libart.so (art::DumpNativeStack(std::__1::basic_ostream<char, std::__1::char_traits<char> >&, int, BacktraceMap*, char const*, art::ArtMethod*, void*, bool)+144)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #01 pc 0000000000685ba0  /apex/com.android.art/lib64/libart.so (art::Thread::DumpStack(std::__1::basic_ostream<char, std::__1::char_traits<char> >&, bool, BacktraceMap*, bool) const+368)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #02 pc 00000000006a3fd4  /apex/com.android.art/lib64/libart.so (art::DumpCheckpoint::Run(art::Thread*)+924)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #03 pc 0000000000686b38  /apex/com.android.art/lib64/libart.so (art::Thread::RunCheckpointFunction()+180)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #04 pc 000000000074d804  /apex/com.android.art/lib64/libart.so (artTestSuspendFromCode+72)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #05 pc 0000000000221d1c  /apex/com.android.art/lib64/libart.so (art_quick_test_suspend+156)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #06 pc 0000000002002078  /memfd:jit-cache (deleted) (offset 2000000) (java.util.HashMap.hash+152)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #07 pc 0000000000218be8  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+568)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #08 pc 000000000028600c  /apex/com.android.art/lib64/libart.so (art::ArtMethod::Invoke(art::Thread*, unsigned int*, unsigned int, art::JValue*, char const*)+220)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #09 pc 00000000003ea3e8  /apex/com.android.art/lib64/libart.so (art::interpreter::ArtInterpreterToCompiledCodeBridge(art::Thread*, art::ArtMethod*, art::ShadowFrame*, unsigned short, art::JValue*)+404)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #10 pc 00000000003e4f84  /apex/com.android.art/lib64/libart.so (bool art::interpreter::DoCall<false, false>(art::ArtMethod*, art::Thread*, art::ShadowFrame&, art::Instruction const*, unsigned short, art::JValue*)+828)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #11 pc 000000000076b08c  /apex/com.android.art/lib64/libart.so (MterpInvokeStatic+984)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #12 pc 0000000000203994  /apex/com.android.art/lib64/libart.so (mterp_op_invoke_static+20)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #13 pc 00000000001c4438  /apex/com.android.art/javalib/core-oj.jar (java.util.LinkedHashMap.get)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #14 pc 00000000007605d8  /apex/com.android.art/lib64/libart.so (MterpInvokeVirtual+3080)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #15 pc 0000000000203814  /apex/com.android.art/lib64/libart.so (mterp_op_invoke_virtual+20)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #16 pc 000000000003bc46  /apex/com.android.art/javalib/core-libart.jar (libcore.util.BasicLruCache.get+10)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #17 pc 00000000007605d8  /apex/com.android.art/lib64/libart.so (MterpInvokeVirtual+3080)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #18 pc 0000000000203814  /apex/com.android.art/lib64/libart.so (mterp_op_invoke_virtual+20)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #19 pc 00000000000de444  /apex/com.android.art/javalib/core-oj.jar (java.lang.Enum.getSharedConstants+4)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #20 pc 000000000076b548  /apex/com.android.art/lib64/libart.so (MterpInvokeStatic+2196)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #21 pc 0000000000203994  /apex/com.android.art/lib64/libart.so (mterp_op_invoke_static+20)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #22 pc 00000000000dcd5c  /apex/com.android.art/javalib/core-oj.jar (java.lang.Class.getEnumConstantsShared+16)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #23 pc 00000000007605d8  /apex/com.android.art/lib64/libart.so (MterpInvokeVirtual+3080)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #24 pc 0000000000203814  /apex/com.android.art/lib64/libart.so (mterp_op_invoke_virtual+20)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #25 pc 00000000001aedc8  /apex/com.android.art/javalib/core-oj.jar (java.util.EnumSet.getUniverse)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #26 pc 000000000076b548  /apex/com.android.art/lib64/libart.so (MterpInvokeStatic+2196)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #27 pc 0000000000203994  /apex/com.android.art/lib64/libart.so (mterp_op_invoke_static+20)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #28 pc 00000000001aef3c  /apex/com.android.art/javalib/core-oj.jar (java.util.EnumSet.noneOf)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #29 pc 000000000076b548  /apex/com.android.art/lib64/libart.so (MterpInvokeStatic+2196)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #30 pc 0000000000203994  /apex/com.android.art/lib64/libart.so (mterp_op_invoke_static+20)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #31 pc 000000000029b816  /apex/com.android.art/javalib/core-oj.jar (sun.security.provider.certpath.AlgorithmChecker.check+98)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #32 pc 00000000007605d8  /apex/com.android.art/lib64/libart.so (MterpInvokeVirtual+3080)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #33 pc 0000000000203814  /apex/com.android.art/lib64/libart.so (mterp_op_invoke_virtual+20)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #34 pc 00000000002a2d44  /apex/com.android.art/javalib/core-oj.jar (sun.security.provider.certpath.PKIXMasterCertPathValidator.validate+428)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #35 pc 000000000076b548  /apex/com.android.art/lib64/libart.so (MterpInvokeStatic+2196)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #36 pc 0000000000203994  /apex/com.android.art/lib64/libart.so (mterp_op_invoke_static+20)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #37 pc 00000000002a296e  /apex/com.android.art/javalib/core-oj.jar (sun.security.provider.certpath.PKIXCertPathValidator.validate+366)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #38 pc 000000000076b548  /apex/com.android.art/lib64/libart.so (MterpInvokeStatic+2196)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #39 pc 0000000000203994  /apex/com.android.art/lib64/libart.so (mterp_op_invoke_static+20)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #40 pc 00000000002a2abc  /apex/com.android.art/javalib/core-oj.jar (sun.security.provider.certpath.PKIXCertPathValidator.validate+284)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #41 pc 000000000076b548  /apex/com.android.art/lib64/libart.so (MterpInvokeStatic+2196)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #42 pc 0000000000203994  /apex/com.android.art/lib64/libart.so (mterp_op_invoke_static+20)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #43 pc 00000000002a27e4  /apex/com.android.art/javalib/core-oj.jar (sun.security.provider.certpath.PKIXCertPathValidator.engineValidate+8)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #44 pc 00000000007605d8  /apex/com.android.art/lib64/libart.so (MterpInvokeVirtual+3080)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #45 pc 0000000000203814  /apex/com.android.art/lib64/libart.so (mterp_op_invoke_virtual+20)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #46 pc 0000000000147480  /apex/com.android.art/javalib/core-oj.jar (java.security.cert.CertPathValidator.validate+4)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #47 pc 00000000003dcd2c  /apex/com.android.art/lib64/libart.so (art::interpreter::Execute(art::Thread*, art::CodeItemDataAccessor const&, art::ShadowFrame&, art::JValue, bool, bool)+312)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #48 pc 000000000074e6b4  /apex/com.android.art/lib64/libart.so (artQuickToInterpreterBridge+780)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #49 pc 0000000000222378  /apex/com.android.art/lib64/libart.so (art_quick_to_interpreter_bridge+88)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #50 pc 0000000000212520  /apex/com.android.art/lib64/libart.so (nterp_helper+4016)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #51 pc 00000000000391a0  /apex/com.android.conscrypt/javalib/conscrypt.jar (com.android.org.conscrypt.TrustManagerImpl.verifyChain+288)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #52 pc 0000000000212bc8  /apex/com.android.art/lib64/libart.so (nterp_helper+5720)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #53 pc 0000000000038d66  /apex/com.android.conscrypt/javalib/conscrypt.jar (com.android.org.conscrypt.TrustManagerImpl.checkTrustedRecursive+158)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #54 pc 0000000000212bc8  /apex/com.android.art/lib64/libart.so (nterp_helper+5720)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #55 pc 0000000000038dd0  /apex/com.android.conscrypt/javalib/conscrypt.jar (com.android.org.conscrypt.TrustManagerImpl.checkTrustedRecursive+264)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #56 pc 0000000000212bc8  /apex/com.android.art/lib64/libart.so (nterp_helper+5720)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #57 pc 0000000000038e86  /apex/com.android.conscrypt/javalib/conscrypt.jar (com.android.org.conscrypt.TrustManagerImpl.checkTrustedRecursive+446)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #58 pc 0000000000212bc8  /apex/com.android.art/lib64/libart.so (nterp_helper+5720)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #59 pc 0000000000038bfc  /apex/com.android.conscrypt/javalib/conscrypt.jar (com.android.org.conscrypt.TrustManagerImpl.checkTrusted+160)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #60 pc 0000000000212bc8  /apex/com.android.art/lib64/libart.so (nterp_helper+5720)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #61 pc 0000000000038b1a  /apex/com.android.conscrypt/javalib/conscrypt.jar (com.android.org.conscrypt.TrustManagerImpl.checkServerTrusted+14)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #62 pc 00000000002124c4  /apex/com.android.art/lib64/libart.so (nterp_helper+3924)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #63 pc 0000000000765580  [anon:dalvik-classes2.dex extracted in memory from /system/framework/framework.jar!classes2.dex] (android.security.net.config.NetworkSecurityTrustManager.checkServerTrusted+4)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #64 pc 00000000002124c4  /apex/com.android.art/lib64/libart.so (nterp_helper+3924)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #65 pc 0000000000765c36  [anon:dalvik-classes2.dex extracted in memory from /system/framework/framework.jar!classes2.dex] (android.security.net.config.RootTrustManager.checkServerTrusted+58)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #66 pc 0000000000218964  /apex/com.android.art/lib64/libart.so (art_quick_invoke_stub+548)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #67 pc 0000000000285ff0  /apex/com.android.art/lib64/libart.so (art::ArtMethod::Invoke(art::Thread*, unsigned int*, unsigned int, art::JValue*, char const*)+192)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #68 pc 000000000062ccd8  /apex/com.android.art/lib64/libart.so (_jobject* art::InvokeMethod<(art::PointerSize)8>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, _jobject*, _jobject*, unsigned long)+1388)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #69 pc 000000000059b43c  /apex/com.android.art/lib64/libart.so (art::Method_invoke(_JNIEnv*, _jobject*, _jobject*, _jobjectArray*)+56)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at java.util.HashMap.hash(HashMap.java:338)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at java.util.LinkedHashMap.get(LinkedHashMap.java:464)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at libcore.util.BasicLruCache.get(BasicLruCache.java:56)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   - locked <0x05dfa236> (a java.lang.Enum$1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at java.lang.Enum.getSharedConstants(Enum.java:289)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at java.lang.Class.getEnumConstantsShared(Class.java:2459)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at java.util.EnumSet.getUniverse(EnumSet.java:407)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at java.util.EnumSet.noneOf(EnumSet.java:109)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at sun.security.provider.certpath.AlgorithmChecker.check(AlgorithmChecker.java:224)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at sun.security.provider.certpath.PKIXMasterCertPathValidator.validate(PKIXMasterCertPathValidator.java:125)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at sun.security.provider.certpath.PKIXCertPathValidator.validate(PKIXCertPathValidator.java:222)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at sun.security.provider.certpath.PKIXCertPathValidator.validate(PKIXCertPathValidator.java:140)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at sun.security.provider.certpath.PKIXCertPathValidator.engineValidate(PKIXCertPathValidator.java:79)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at java.security.cert.CertPathValidator.validate(CertPathValidator.java:301)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at com.android.org.conscrypt.TrustManagerImpl.verifyChain(TrustManagerImpl.java:715)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at com.android.org.conscrypt.TrustManagerImpl.checkTrustedRecursive(TrustManagerImpl.java:549)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at com.android.org.conscrypt.TrustManagerImpl.checkTrustedRecursive(TrustManagerImpl.java:570)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at com.android.org.conscrypt.TrustManagerImpl.checkTrustedRecursive(TrustManagerImpl.java:615)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at com.android.org.conscrypt.TrustManagerImpl.checkTrusted(TrustManagerImpl.java:505)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at com.android.org.conscrypt.TrustManagerImpl.checkServerTrusted(TrustManagerImpl.java:334)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.security.net.config.NetworkSecurityTrustManager.checkServerTrusted(NetworkSecurityTrustManager.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.security.net.config.RootTrustManager.checkServerTrusted(RootTrustManager.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at java.lang.reflect.Method.invoke(Native method)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.net.http.X509TrustManagerExtensions.checkServerTrusted(X509TrustManagerExtensions.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at WV.e33.a(chromium-SystemWebViewGoogle6432.aab-stable-805904303:144)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at WV.i33.d(chromium-SystemWebViewGoogle6432.aab-stable-805904303:43)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at org.chromium.net.AndroidNetworkLibrary.verifyServerCertificates(chromium-SystemWebViewGoogle6432.aab-stable-805904303:1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] 
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] "Chrome_IOThread" prio=10 tid=28 Native
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | group="" sCount=1 ucsCount=0 flags=1 obj=0x13600ee8 self=0xb400006f972a8b40
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | sysTid=15697 nice=-8 cgrp=system sched=0/0 handle=0x6d8d9bacb0
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | state=S schedstat=( 397847837 204207347 1344 ) utm=28 stm=11 core=6 HZ=100
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | stack=0x6d8d8c3000-0x6d8d8c5000 stackSize=991KB
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | held mutexes=
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #00 pc 000000000004dff0  /apex/com.android.runtime/lib64/bionic/libc.so (syscall+32)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #01 pc 000000000028dc74  /apex/com.android.art/lib64/libart.so (art::ConditionVariable::WaitHoldingLocks(art::Thread*)+152)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #02 pc 000000000044c594  /apex/com.android.art/lib64/libart.so (art::(anonymous namespace)::CheckJNI::CallMethodV(char const*, _JNIEnv*, _jobject*, _jclass*, _jmethodID*, std::__va_list, art::Primitive::Type, art::InvokeType)+528)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #03 pc 000000000043a1c0  /apex/com.android.art/lib64/libart.so (art::(anonymous namespace)::CheckJNI::CallBooleanMethodV(_JNIEnv*, _jobject*, _jmethodID*, std::__va_list) (.llvm.3094671572786334925)+76)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #04 pc 0000000002e7dea4  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #05 pc 000000000311ec10  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #06 pc 000000000311e7b0  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #07 pc 000000000311e73c  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #08 pc 000000000311e6a0  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #09 pc 0000000003569848  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #10 pc 0000000001c11464  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #11 pc 0000000001c103c8  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #12 pc 0000000001c0ff24  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #13 pc 0000000001c0fe78  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #14 pc 0000000002e7d880  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #15 pc 0000000001c0ef88  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #16 pc 0000000001bde008  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #17 pc 00000000000b6bd4  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+264)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #18 pc 00000000000533bc  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   (no managed stack frames)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] 
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] "GoogleApiHandler" prio=5 tid=30 Native
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | group="" sCount=1 ucsCount=0 flags=1 obj=0x13600fd8 self=0xb400006f972afa80
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | sysTid=15710 nice=9 cgrp=system sched=0/0 handle=0x6d83ed0cb0
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | state=S schedstat=( 93775163 475881146 58 ) utm=7 stm=2 core=1 HZ=100
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | stack=0x6d83dcd000-0x6d83dcf000 stackSize=1039KB
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | held mutexes=
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #00 pc 00000000000a2dfc  /apex/com.android.runtime/lib64/bionic/libc.so (__epoll_pwait+12)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #01 pc 0000000000017ea8  /system/lib64/libutils.so (android::Looper::pollInner(int)+184)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #02 pc 0000000000017d84  /system/lib64/libutils.so (android::Looper::pollOnce(int, int*, int*, void**)+116)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #03 pc 0000000000155ff8  /system/lib64/libandroid_runtime.so (android::android_os_MessageQueue_nativePollOnce(_JNIEnv*, _jobject*, long, int)+48)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #04 pc 0000000000222244  /apex/com.android.art/lib64/libart.so (art_quick_generic_jni_trampoline+148)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #05 pc 0000000000212b80  /apex/com.android.art/lib64/libart.so (nterp_helper+5648)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #06 pc 0000000000698f7e  [anon:dalvik-classes2.dex extracted in memory from /system/framework/framework.jar!classes2.dex] (android.os.MessageQueue.next+34)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #07 pc 00000000002124c4  /apex/com.android.art/lib64/libart.so (nterp_helper+3924)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #08 pc 0000000000696d68  [anon:dalvik-classes2.dex extracted in memory from /system/framework/framework.jar!classes2.dex] (android.os.Looper.loopOnce+12)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #09 pc 00000000002115a4  /apex/com.android.art/lib64/libart.so (nterp_helper+52)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #10 pc 0000000000696d2c  [anon:dalvik-classes2.dex extracted in memory from /system/framework/framework.jar!classes2.dex] (android.os.Looper.loop+152)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #11 pc 00000000002115a4  /apex/com.android.art/lib64/libart.so (nterp_helper+52)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #12 pc 000000000066bf54  [anon:dalvik-classes2.dex extracted in memory from /system/framework/framework.jar!classes2.dex] (android.os.HandlerThread.run+56)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #13 pc 0000000000218964  /apex/com.android.art/lib64/libart.so (art_quick_invoke_stub+548)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #14 pc 0000000000285ff0  /apex/com.android.art/lib64/libart.so (art::ArtMethod::Invoke(art::Thread*, unsigned int*, unsigned int, art::JValue*, char const*)+192)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #15 pc 000000000062e018  /apex/com.android.art/lib64/libart.so (art::JValue art::InvokeVirtualOrInterfaceWithJValues<art::ArtMethod*>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, art::ArtMethod*, jvalue const*)+464)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #16 pc 000000000067def4  /apex/com.android.art/lib64/libart.so (art::Thread::CreateCallback(void*)+1188)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #17 pc 00000000000b6bd4  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+264)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #18 pc 00000000000533bc  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.MessageQueue.nativePollOnce(Native method)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.MessageQueue.next(MessageQueue.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.Looper.loopOnce(Looper.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.Looper.loop(Looper.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.HandlerThread.run(HandlerThread.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] 
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] "ThreadPoolSingl" prio=5 tid=31 Native
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | group="" sCount=1 ucsCount=0 flags=1 obj=0x13601108 self=0xb400006f972ac2e0
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | sysTid=15711 nice=0 cgrp=system sched=0/0 handle=0x6d81dc6cb0
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | state=S schedstat=( 208014099 119954172 408 ) utm=15stm=5 core=2 HZ=100
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | stack=0x6d81ccf000-0x6d81cd1000 stackSize=991KB
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | held mutexes=
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #00 pc 000000000004dff4  /apex/com.android.runtime/lib64/bionic/libc.so (syscall+36)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #01 pc 00000000000528bc  /apex/com.android.runtime/lib64/bionic/libc.so (__futex_wait_ex(void volatile*, bool, int, bool, timespec const*)+148)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #02 pc 00000000000b5ed0  /apex/com.android.runtime/lib64/bionic/libc.so (pthread_cond_timedwait+144)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #03 pc 0000000001c6f764  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #04 pc 0000000001c54dbc  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #05 pc 0000000001e465e8  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #06 pc 0000000001c532bc  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #07 pc 0000000001bde008  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #08 pc 00000000000b6bd4  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+264)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #09 pc 00000000000533bc  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   (no managed stack frames)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] 
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] "ThreadPoolSingl" prio=5 tid=32 Native
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | group="" sCount=1 ucsCount=0 flags=1 obj=0x13601180 self=0xb400006f972aa710
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | sysTid=15715 nice=0 cgrp=system sched=0/0 handle=0x6d7dbcacb0
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | state=S schedstat=( 13817398 14831458 13 ) utm=0 stm=1 core=2 HZ=100
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | stack=0x6d7dad3000-0x6d7dad5000 stackSize=991KB
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | held mutexes=
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #00 pc 000000000004dff0  /apex/com.android.runtime/lib64/bionic/libc.so (syscall+32)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #01 pc 00000000000528bc  /apex/com.android.runtime/lib64/bionic/libc.so (__futex_wait_ex(void volatile*, bool, int, bool, timespec const*)+148)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #02 pc 00000000000b5e00  /apex/com.android.runtime/lib64/bionic/libc.so (pthread_cond_wait+84)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #03 pc 0000000001c6f970  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #04 pc 0000000001f4a130  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #05 pc 0000000003512e60  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #06 pc 0000000001c54eac  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #07 pc 0000000002fd94d8  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #08 pc 0000000001c53338  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #09 pc 0000000001bde008  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #10 pc 00000000000b6bd4  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+264)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #11 pc 00000000000533bc  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   (no managed stack frames)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] 
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] "CameraAvailabilityObserver_ObservationThread" prio=5 tid=33 Native
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | group="" sCount=1 ucsCount=0 flags=1 obj=0x13601218 self=0xb400006f972b3220
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | sysTid=15716 nice=0 cgrp=system sched=0/0 handle=0x6d7cacccb0
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | state=S schedstat=( 3545416 9588282 10 ) utm=0 stm=0core=3 HZ=100
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | stack=0x6d7c9c9000-0x6d7c9cb000 stackSize=1039KB
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | held mutexes=
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #00 pc 00000000000a2dfc  /apex/com.android.runtime/lib64/bionic/libc.so (__epoll_pwait+12)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #01 pc 0000000000017ea8  /system/lib64/libutils.so (android::Looper::pollInner(int)+184)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #02 pc 0000000000017d84  /system/lib64/libutils.so (android::Looper::pollOnce(int, int*, int*, void**)+116)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #03 pc 0000000000155ff8  /system/lib64/libandroid_runtime.so (android::android_os_MessageQueue_nativePollOnce(_JNIEnv*, _jobject*, long, int)+48)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #04 pc 0000000000222244  /apex/com.android.art/lib64/libart.so (art_quick_generic_jni_trampoline+148)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #05 pc 0000000000212b80  /apex/com.android.art/lib64/libart.so (nterp_helper+5648)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #06 pc 0000000000698f7e  [anon:dalvik-classes2.dex extracted in memory from /system/framework/framework.jar!classes2.dex] (android.os.MessageQueue.next+34)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #07 pc 00000000002124c4  /apex/com.android.art/lib64/libart.so (nterp_helper+3924)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #08 pc 0000000000696d68  [anon:dalvik-classes2.dex extracted in memory from /system/framework/framework.jar!classes2.dex] (android.os.Looper.loopOnce+12)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #09 pc 00000000002115a4  /apex/com.android.art/lib64/libart.so (nterp_helper+52)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #10 pc 0000000000696d2c  [anon:dalvik-classes2.dex extracted in memory from /system/framework/framework.jar!classes2.dex] (android.os.Looper.loop+152)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #11 pc 00000000002115a4  /apex/com.android.art/lib64/libart.so (nterp_helper+52)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #12 pc 000000000066bf54  [anon:dalvik-classes2.dex extracted in memory from /system/framework/framework.jar!classes2.dex] (android.os.HandlerThread.run+56)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #13 pc 0000000000218964  /apex/com.android.art/lib64/libart.so (art_quick_invoke_stub+548)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #14 pc 0000000000285ff0  /apex/com.android.art/lib64/libart.so (art::ArtMethod::Invoke(art::Thread*, unsigned int*, unsigned int, art::JValue*, char const*)+192)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #15 pc 000000000062e018  /apex/com.android.art/lib64/libart.so (art::JValue art::InvokeVirtualOrInterfaceWithJValues<art::ArtMethod*>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, art::ArtMethod*, jvalue const*)+464)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #16 pc 000000000067def4  /apex/com.android.art/lib64/libart.so (art::Thread::CreateCallback(void*)+1188)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #17 pc 00000000000b6bd4  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+264)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #18 pc 00000000000533bc  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.MessageQueue.nativePollOnce(Native method)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.MessageQueue.next(MessageQueue.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.Looper.loopOnce(Looper.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.Looper.loop(Looper.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.HandlerThread.run(HandlerThread.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] 
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] "Binder:15524_4" prio=5 tid=34 Native
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | group="" sCount=1 ucsCount=0 flags=1 obj=0x13601300 self=0xb400006f972b4df0
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | sysTid=15717 nice=0 cgrp=system sched=0/0 handle=0x6d7b9c2cb0
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | state=S schedstat=( 9806457 11842708 13 ) utm=0 stm=0 core=2 HZ=100
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | stack=0x6d7b8cb000-0x6d7b8cd000 stackSize=991KB
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | held mutexes=
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #00 pc 00000000000a1e38  /apex/com.android.runtime/lib64/bionic/libc.so (__ioctl+8)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #01 pc 000000000005ba6c  /apex/com.android.runtime/lib64/bionic/libc.so (ioctl+156)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #02 pc 0000000000053044  /system/lib64/libbinder.so (android::IPCThreadState::talkWithDriver(bool)+292)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #03 pc 0000000000053334  /system/lib64/libbinder.so (android::IPCThreadState::getAndExecuteCommand()+28)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #04 pc 0000000000053c6c  /system/lib64/libbinder.so (android::IPCThreadState::joinThreadPool(bool)+72)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #05 pc 00000000000803a8  /system/lib64/libbinder.so (android::PoolThread::threadLoop()+28)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #06 pc 000000000001358c  /system/lib64/libutils.so (android::Thread::_threadLoop(void*)+264)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #07 pc 00000000000bf4b8  /system/lib64/libandroid_runtime.so (android::AndroidRuntime::javaThreadShell(void*)+148)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #08 pc 0000000000012de8  /system/lib64/libutils.so (thread_data_t::trampoline(thread_data_t const*)+408)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #09 pc 00000000000b6bd4  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+264)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #10 pc 00000000000533bc  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   (no managed stack frames)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] 
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] "AudioThread" prio=5 tid=36 Native
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | group="" sCount=1 ucsCount=0 flags=1 obj=0x13601378 self=0xb400006f972bd900
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | sysTid=15701 nice=0 cgrp=system sched=0/0 handle=0x6d8a5c2cb0
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | state=S schedstat=( 35279378 108774425 35 ) utm=2 stm=1 core=0 HZ=100
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | stack=0x6d8a4cb000-0x6d8a4cd000 stackSize=991KB
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | held mutexes=
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #00 pc 000000000004dff0  /apex/com.android.runtime/lib64/bionic/libc.so (syscall+32)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #01 pc 00000000000528bc  /apex/com.android.runtime/lib64/bionic/libc.so (__futex_wait_ex(void volatile*, bool, int, bool, timespec const*)+148)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #02 pc 00000000000b5e00  /apex/com.android.runtime/lib64/bionic/libc.so (pthread_cond_wait+84)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #03 pc 0000000001c6f970  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #04 pc 0000000001f4a130  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #05 pc 0000000001e33a88  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #06 pc 0000000001c103c8  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #07 pc 0000000001c0ff24  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #08 pc 0000000001c0fe78  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #09 pc 0000000001c0ef88  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #10 pc 0000000001bde008  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #11 pc 00000000000b6bd4  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+264)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #12 pc 00000000000533bc  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   (no managed stack frames)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] 
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] "Chrome_InProcGpuThread" prio=10 tid=37 Native
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | group="" sCount=1 ucsCount=0 flags=1 obj=0x136013f0 self=0xb400006f972bbd30
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | sysTid=15719 nice=-8 cgrp=system sched=0/0 handle=0x6d797bacb0
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | state=S schedstat=( 481340044 161786094 244 ) utm=33stm=14 core=6 HZ=100
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | stack=0x6d796c3000-0x6d796c5000 stackSize=991KB
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | held mutexes=
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #00 pc 000000000004dff4  /apex/com.android.runtime/lib64/bionic/libc.so (syscall+36)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #01 pc 00000000000528bc  /apex/com.android.runtime/lib64/bionic/libc.so (__futex_wait_ex(void volatile*, bool, int, bool, timespec const*)+148)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #02 pc 00000000000b5ed0  /apex/com.android.runtime/lib64/bionic/libc.so (pthread_cond_timedwait+144)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #03 pc 0000000001c6f764  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #04 pc 0000000001f4a130  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #05 pc 0000000001e33a88  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #06 pc 0000000001c103c8  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #07 pc 0000000001c0ff24  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #08 pc 0000000001c0fe78  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #09 pc 0000000001c0ef88  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #10 pc 0000000001bde008  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #11 pc 00000000000b6bd4  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+264)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #12 pc 00000000000533bc  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   (no managed stack frames)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] 
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] "JavaBridge" prio=5 tid=38 Native
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | group="" sCount=1 ucsCount=0 flags=1 obj=0x13601468 self=0xb400006f972b8590
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | sysTid=15721 nice=0 cgrp=system sched=0/0 handle=0x6d76721cb0
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | state=S schedstat=( 54174940 28104012 70 ) utm=5 stm=0 core=7 HZ=100
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | stack=0x6d7661e000-0x6d76620000 stackSize=1039KB
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | held mutexes=
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #00 pc 000000000004dff0  /apex/com.android.runtime/lib64/bionic/libc.so (syscall+32)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #01 pc 000000000028dc74  /apex/com.android.art/lib64/libart.so (art::ConditionVariable::WaitHoldingLocks(art::Thread*)+152)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #02 pc 00000000004455f8  /apex/com.android.art/lib64/libart.so (art::(anonymous namespace)::CheckJNI::ExceptionCheck(_JNIEnv*) (.llvm.3094671572786334925)+508)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #03 pc 0000000002facd74  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #04 pc 0000000002faccc4  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #05 pc 0000000005d2d43c  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #06 pc 0000000000018184  /system/lib64/libutils.so (android::Looper::pollInner(int)+916)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #07 pc 0000000000017d84  /system/lib64/libutils.so (android::Looper::pollOnce(int, int*, int*, void**)+116)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #08 pc 0000000000155ff8  /system/lib64/libandroid_runtime.so (android::android_os_MessageQueue_nativePollOnce(_JNIEnv*, _jobject*, long, int)+48)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #09 pc 0000000000222244  /apex/com.android.art/lib64/libart.so (art_quick_generic_jni_trampoline+148)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #10 pc 0000000000212b80  /apex/com.android.art/lib64/libart.so (nterp_helper+5648)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #11 pc 0000000000698f7e  [anon:dalvik-classes2.dex extracted in memory from /system/framework/framework.jar!classes2.dex] (android.os.MessageQueue.next+34)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #12 pc 00000000002124c4  /apex/com.android.art/lib64/libart.so (nterp_helper+3924)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #13 pc 0000000000696d68  [anon:dalvik-classes2.dex extracted in memory from /system/framework/framework.jar!classes2.dex] (android.os.Looper.loopOnce+12)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #14 pc 00000000002115a4  /apex/com.android.art/lib64/libart.so (nterp_helper+52)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #15 pc 0000000000696d2c  [anon:dalvik-classes2.dex extracted in memory from /system/framework/framework.jar!classes2.dex] (android.os.Looper.loop+152)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #16 pc 00000000002115a4  /apex/com.android.art/lib64/libart.so (nterp_helper+52)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #17 pc 000000000066bf54  [anon:dalvik-classes2.dex extracted in memory from /system/framework/framework.jar!classes2.dex] (android.os.HandlerThread.run+56)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #18 pc 0000000000218964  /apex/com.android.art/lib64/libart.so (art_quick_invoke_stub+548)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #19 pc 0000000000285ff0  /apex/com.android.art/lib64/libart.so (art::ArtMethod::Invoke(art::Thread*, unsigned int*, unsigned int, art::JValue*, char const*)+192)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #20 pc 000000000062e018  /apex/com.android.art/lib64/libart.so (art::JValue art::InvokeVirtualOrInterfaceWithJValues<art::ArtMethod*>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, art::ArtMethod*, jvalue const*)+464)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #21 pc 000000000067def4  /apex/com.android.art/lib64/libart.so (art::Thread::CreateCallback(void*)+1188)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #22 pc 00000000000b6bd4  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+264)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #23 pc 00000000000533bc  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.MessageQueue.nativePollOnce(Native method)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.MessageQueue.next(MessageQueue.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.Looper.loopOnce(Looper.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.Looper.loop(Looper.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.HandlerThread.run(HandlerThread.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] 
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] "SAFE_BROWSING_API_HANDLER_THREAD" prio=5 tid=39 Native
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | group="" sCount=1 ucsCount=0 flags=1 obj=0x13601550 self=0xb400006f972c4840
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | sysTid=15723 nice=0 cgrp=system sched=0/0 handle=0x6d73abbcb0
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | state=S schedstat=( 8615052 78786041 12 ) utm=0 stm=0 core=0 HZ=100
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | stack=0x6d739b8000-0x6d739ba000 stackSize=1039KB
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | held mutexes=
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #00 pc 00000000000a2dfc  /apex/com.android.runtime/lib64/bionic/libc.so (__epoll_pwait+12)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #01 pc 0000000000017ea8  /system/lib64/libutils.so (android::Looper::pollInner(int)+184)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #02 pc 0000000000017d84  /system/lib64/libutils.so (android::Looper::pollOnce(int, int*, int*, void**)+116)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #03 pc 0000000000155ff8  /system/lib64/libandroid_runtime.so (android::android_os_MessageQueue_nativePollOnce(_JNIEnv*, _jobject*, long, int)+48)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #04 pc 0000000000222244  /apex/com.android.art/lib64/libart.so (art_quick_generic_jni_trampoline+148)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #05 pc 0000000000212b80  /apex/com.android.art/lib64/libart.so (nterp_helper+5648)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #06 pc 0000000000698f7e  [anon:dalvik-classes2.dex extracted in memory from /system/framework/framework.jar!classes2.dex] (android.os.MessageQueue.next+34)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #07 pc 00000000002124c4  /apex/com.android.art/lib64/libart.so (nterp_helper+3924)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #08 pc 0000000000696d68  [anon:dalvik-classes2.dex extracted in memory from /system/framework/framework.jar!classes2.dex] (android.os.Looper.loopOnce+12)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #09 pc 00000000002115a4  /apex/com.android.art/lib64/libart.so (nterp_helper+52)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #10 pc 0000000000696d2c  [anon:dalvik-classes2.dex extracted in memory from /system/framework/framework.jar!classes2.dex] (android.os.Looper.loop+152)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #11 pc 00000000002115a4  /apex/com.android.art/lib64/libart.so (nterp_helper+52)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #12 pc 000000000066bf54  [anon:dalvik-classes2.dex extracted in memory from /system/framework/framework.jar!classes2.dex] (android.os.HandlerThread.run+56)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #13 pc 0000000000218964  /apex/com.android.art/lib64/libart.so (art_quick_invoke_stub+548)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #14 pc 0000000000285ff0  /apex/com.android.art/lib64/libart.so (art::ArtMethod::Invoke(art::Thread*, unsigned int*, unsigned int, art::JValue*, char const*)+192)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #15 pc 000000000062e018  /apex/com.android.art/lib64/libart.so (art::JValue art::InvokeVirtualOrInterfaceWithJValues<art::ArtMethod*>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, art::ArtMethod*, jvalue const*)+464)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #16 pc 000000000067def4  /apex/com.android.art/lib64/libart.so (art::Thread::CreateCallback(void*)+1188)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #17 pc 00000000000b6bd4  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+264)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #18 pc 00000000000533bc  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.MessageQueue.nativePollOnce(Native method)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.MessageQueue.next(MessageQueue.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.Looper.loopOnce(Looper.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.Looper.loop(Looper.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.HandlerThread.run(HandlerThread.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] 
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] "ThreadPoolForeg" prio=5 tid=40 Native
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | group="" sCount=1 ucsCount=0 flags=1 obj=0x13601680 self=0xb400006f972c2c70
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | sysTid=15696 nice=0 cgrp=system sched=0/0 handle=0x6d8eab8cb0
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | state=S schedstat=( 270648237 403962494 333 ) utm=19stm=7 core=6 HZ=100
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | stack=0x6d8e9c1000-0x6d8e9c3000 stackSize=991KB
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | held mutexes=
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #00 pc 000000000004dff4  /apex/com.android.runtime/lib64/bionic/libc.so (syscall+36)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #01 pc 00000000000528bc  /apex/com.android.runtime/lib64/bionic/libc.so (__futex_wait_ex(void volatile*, bool, int, bool, timespec const*)+148)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #02 pc 00000000000b5ed0  /apex/com.android.runtime/lib64/bionic/libc.so (pthread_cond_timedwait+144)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #03 pc 0000000001c6f764  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #04 pc 0000000001c54dbc  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #05 pc 0000000001c54688  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #06 pc 0000000001c53290  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #07 pc 0000000001bde008  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #08 pc 00000000000b6bd4  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+264)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #09 pc 00000000000533bc  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   (no managed stack frames)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] 
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] "AudioPortEventHandler" prio=5 tid=41 Native
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | group="" sCount=1 ucsCount=0 flags=1 obj=0x136016f8 self=0xb400006f972bf4d0
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | sysTid=15730 nice=0 cgrp=system sched=0/0 handle=0x6d72949cb0
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | state=S schedstat=( 1992967 156378647 10 ) utm=0 stm=0 core=2 HZ=100
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | stack=0x6d72846000-0x6d72848000 stackSize=1039KB
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | held mutexes=
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #00 pc 00000000000a2dfc  /apex/com.android.runtime/lib64/bionic/libc.so (__epoll_pwait+12)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #01 pc 0000000000017ea8  /system/lib64/libutils.so (android::Looper::pollInner(int)+184)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #02 pc 0000000000017d84  /system/lib64/libutils.so (android::Looper::pollOnce(int, int*, int*, void**)+116)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #03 pc 0000000000155ff8  /system/lib64/libandroid_runtime.so (android::android_os_MessageQueue_nativePollOnce(_JNIEnv*, _jobject*, long, int)+48)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #04 pc 0000000000222244  /apex/com.android.art/lib64/libart.so (art_quick_generic_jni_trampoline+148)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #05 pc 0000000000212b80  /apex/com.android.art/lib64/libart.so (nterp_helper+5648)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #06 pc 0000000000698f7e  [anon:dalvik-classes2.dex extracted in memory from /system/framework/framework.jar!classes2.dex] (android.os.MessageQueue.next+34)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #07 pc 00000000002124c4  /apex/com.android.art/lib64/libart.so (nterp_helper+3924)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #08 pc 0000000000696d68  [anon:dalvik-classes2.dex extracted in memory from /system/framework/framework.jar!classes2.dex] (android.os.Looper.loopOnce+12)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #09 pc 00000000002115a4  /apex/com.android.art/lib64/libart.so (nterp_helper+52)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #10 pc 0000000000696d2c  [anon:dalvik-classes2.dex extracted in memory from /system/framework/framework.jar!classes2.dex] (android.os.Looper.loop+152)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #11 pc 00000000002115a4  /apex/com.android.art/lib64/libart.so (nterp_helper+52)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #12 pc 000000000066bf54  [anon:dalvik-classes2.dex extracted in memory from /system/framework/framework.jar!classes2.dex] (android.os.HandlerThread.run+56)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #13 pc 0000000000218964  /apex/com.android.art/lib64/libart.so (art_quick_invoke_stub+548)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #14 pc 0000000000285ff0  /apex/com.android.art/lib64/libart.so (art::ArtMethod::Invoke(art::Thread*, unsigned int*, unsigned int, art::JValue*, char const*)+192)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #15 pc 000000000062e018  /apex/com.android.art/lib64/libart.so (art::JValue art::InvokeVirtualOrInterfaceWithJValues<art::ArtMethod*>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, art::ArtMethod*, jvalue const*)+464)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #16 pc 000000000067def4  /apex/com.android.art/lib64/libart.so (art::Thread::CreateCallback(void*)+1188)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #17 pc 00000000000b6bd4  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+264)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #18 pc 00000000000533bc  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.MessageQueue.nativePollOnce(Native method)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.MessageQueue.next(MessageQueue.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.Looper.loopOnce(Looper.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.Looper.loop(Looper.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.HandlerThread.run(HandlerThread.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] 
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] "ThreadPoolForeg" prio=5 tid=42 Native
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | group="" sCount=1 ucsCount=0 flags=1 obj=0x136017e0 self=0xb400006f972c10a0
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | sysTid=15699 nice=0 cgrp=system sched=0/0 handle=0x6d8a7becb0
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | state=S schedstat=( 79031421 91993384 156 ) utm=5 stm=2 core=7 HZ=100
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | stack=0x6d8a6c7000-0x6d8a6c9000 stackSize=991KB
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | held mutexes=
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #00 pc 000000000004dff4  /apex/com.android.runtime/lib64/bionic/libc.so (syscall+36)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #01 pc 00000000000528bc  /apex/com.android.runtime/lib64/bionic/libc.so (__futex_wait_ex(void volatile*, bool, int, bool, timespec const*)+148)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #02 pc 00000000000b5ed0  /apex/com.android.runtime/lib64/bionic/libc.so (pthread_cond_timedwait+144)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #03 pc 0000000001c6f764  /data/app/~~Vszo-X6C3n_OSYAlNrbnHA==/com.google.android.webview-583tOjX7ojxWXHBDp2PyZA==/base.apk!libwebviewchromium.so (offset dc0000) (???)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.Looper.loopOnce(Looper.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.Looper.loop(Looper.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   at android.os.HandlerThread.run(HandlerThread.java:-1)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] 
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] "hwuiTask1" prio=6 tid=6 Native
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | group="" sCount=1 ucsCount=0 flags=1 obj=0x12fc0020 self=0xb400006f97293d80
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | sysTid=15930 nice=-2 cgrp=system sched=0/0 handle=0x6e0f20ccb0
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | state=S schedstat=( 495260 0 1 ) utm=0 stm=0 core=0 HZ=100
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | stack=0x6e0f115000-0x6e0f117000 stackSize=991KB
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | held mutexes=
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #00 pc 000000000004dff0  /apex/com.android.runtime/lib64/bionic/libc.so (syscall+32)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #01 pc 00000000000528bc  /apex/com.android.runtime/lib64/bionic/libc.so (__futex_wait_ex(void volatile*, bool, int, bool, timespec const*)+148)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #02 pc 00000000000b5e00  /apex/com.android.runtime/lib64/bionic/libc.so (pthread_cond_wait+84)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #03 pc 0000000000056ca0  /system/lib64/libc++.so (std::__1::condition_variable::wait(std::__1::unique_lock<std::__1::mutex>&)+24)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #04 pc 000000000047d36c  /system/lib64/libhwui.so (android::uirenderer::CommonPool::workerLoop()+96)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #05 pc 000000000047d240  /system/lib64/libhwui.so (void* std::__1::__thread_proxy<std::__1::tuple<std::__1::unique_ptr<std::__1::__thread_struct, std::__1::default_delete<std::__1::__thread_struct> >, android::uirenderer::CommonPool::CommonPool()::$_0> >(void*)+196)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #06 pc 00000000000b6bd4  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+264)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #07 pc 00000000000533bc  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   (no managed stack frames)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] 
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] "hwuiTask0" prio=6 tid=21 Native
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | group="" sCount=1 ucsCount=0 flags=1 obj=0x13000020 self=0xb400006f972d0af0
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | sysTid=15929 nice=-2 cgrp=system sched=0/0 handle=0x6e0f30acb0
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | state=S schedstat=( 608488 10441978 2 ) utm=0 stm=0 core=6 HZ=100
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | stack=0x6e0f213000-0x6e0f215000 stackSize=991KB
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | held mutexes=
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #00 pc 000000000004dff0  /apex/com.android.runtime/lib64/bionic/libc.so (syscall+32)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #01 pc 00000000000528bc  /apex/com.android.runtime/lib64/bionic/libc.so (__futex_wait_ex(void volatile*, bool, int, bool, timespec const*)+148)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #02 pc 00000000000b5e00  /apex/com.android.runtime/lib64/bionic/libc.so (pthread_cond_wait+84)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #03 pc 0000000000056ca0  /system/lib64/libc++.so (std::__1::condition_variable::wait(std::__1::unique_lock<std::__1::mutex>&)+24)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #04 pc 000000000047d36c  /system/lib64/libhwui.so (android::uirenderer::CommonPool::workerLoop()+96)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #05 pc 000000000047d240  /system/lib64/libhwui.so (void* std::__1::__thread_proxy<std::__1::tuple<std::__1::unique_ptr<std::__1::__thread_struct, std::__1::default_delete<std::__1::__thread_struct> >, android::uirenderer::CommonPool::CommonPool()::$_0> >(void*)+196)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #06 pc 00000000000b6bd4  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+264)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   native: #07 pc 00000000000533bc  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   (no managed stack frames)
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] 
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669] "ThreadPoolForeg" prio=5 tid=22 Native
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | group="" sCount=1 ucsCount=0 flags=1 obj=0x13080020 self=0xb400006f972a1c00
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | sysTid=15704 nice=0 cgrp=system sched=0/0 handle=0x6d8a4c4cb0
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | state=S schedstat=( 11814842 46128750 44 ) utm=1 stm=0 core=0 HZ=100
+10-20 05:24:02.943 15524 16004 F com.lookon.app: runtime.cc:669]   | stack=0x6d8a3cd000-0x6d8a3cf000 stackSize=991KB
+10-20 05:24:03.883 15524 15657 I RustStdoutStderr: [1020/052403.882103:ERROR:third_party/crashpad/crashpad/snapshot/elf/elf_dynamic_array_reader.h:64] tag not found
+--------- beginning of crash
+10-20 05:24:03.962 15524 16004 F libc    : Fatal signal 6 (SIGABRT), code -1 (SI_QUEUE) in tid 16004 (Thread-4), pid 15524 (com.lookon.app)

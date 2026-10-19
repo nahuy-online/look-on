@@ -195,39 +195,70 @@ where
     f(&mut env)
 }
 
+/// Cached global reference to the app's ClassLoader.
+/// Set once on the first successful call, then reused.
+#[cfg(target_os = "android")]
+static APP_CLASS_LOADER: once_cell::sync::Lazy<std::sync::Mutex<Option<jni::objects::GlobalRef>>> =
+    once_cell::sync::Lazy::new(|| std::sync::Mutex::new(None));
+
 /// Find a class using the app's ClassLoader instead of the system one.
-/// This is THE FIX for ClassNotFoundException on Android JNI.
 #[cfg(target_os = "android")]
 fn find_app_class<'a>(env: &mut jni::JNIEnv<'a>, class_name: &str) -> Result<jni::objects::JClass<'a>, String> {
     use jni::objects::JValue;
 
-    // Try regular find_class first (works if called on main thread)
+    // Try regular find_class first (works on main thread)
     if let Ok(cls) = env.find_class(class_name) {
         return Ok(cls);
     }
 
-    // Fallback: use the app context's ClassLoader
+    // Try cached ClassLoader
+    {
+        let loader_lock = APP_CLASS_LOADER.lock().unwrap();
+        if let Some(ref loader) = *loader_lock {
+            let java_name = class_name.replace('/', ".");
+            let name_jstr = env.new_string(&java_name)
+                .map_err(|e| format!("new_string: {e}"))?;
+            let class_obj = env
+                .call_method(
+                    loader,
+                    "loadClass",
+                    "(Ljava/lang/String;)Ljava/lang/Class;",
+                    &[JValue::Object(&name_jstr)],
+                )
+                .map_err(|e| format!("loadClass {java_name}: {e}"))?
+                .l()
+                .map_err(|e| format!("cast Class: {e}"))?;
+            return Ok(unsafe { jni::objects::JClass::from_raw(class_obj.into_raw()) });
+        }
+    }
+
+    // No cached ClassLoader — get it from the app context
     let ctx = ndk_context::android_context();
     let context_ptr = ctx.context();
     if context_ptr.is_null() {
-        return Err(format!("find_class {class_name}: no app context"));
+        return Err(format!("find_class {class_name}: no app context and no cached ClassLoader"));
     }
 
     let context = unsafe { jni::objects::JObject::from_raw(context_ptr as jni::sys::jobject) };
 
-    // context.getClassLoader()
     let class_loader = env
         .call_method(&context, "getClassLoader", "()Ljava/lang/ClassLoader;", &[])
         .map_err(|e| format!("getClassLoader: {e}"))?
         .l()
         .map_err(|e| format!("cast ClassLoader: {e}"))?;
 
-    // classLoader.loadClass("com.lookon.player.ExoPlayerManager")
-    let java_name = class_name.replace('/', ".");
-    let name_jstr = env
-        .new_string(&java_name)
-        .map_err(|e| format!("new_string: {e}"))?;
+    // Cache the ClassLoader as a GlobalRef
+    let global_loader = env.new_global_ref(class_loader)
+        .map_err(|e| format!("new_global_ref: {e}"))?;
+    {
+        let mut loader_lock = APP_CLASS_LOADER.lock().unwrap();
+        *loader_lock = Some(global_loader);
+    }
 
+    // Now use it to load the class
+    let java_name = class_name.replace('/', ".");
+    let name_jstr = env.new_string(&java_name)
+        .map_err(|e| format!("new_string: {e}"))?;
     let class_obj = env
         .call_method(
             &class_loader,
