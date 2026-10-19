@@ -1,11 +1,4 @@
 // Look On Player — Tauri 2.0 commands for native ExoPlayer playback.
-//
-// Exposes native ExoPlayer playback (ad-free, 3× speed, reliable play/pause via
-// `setPlayWhenReady`) and a hidden-WebView YouTube attestation path.
-//
-// THE FIX for the Obereg bug: play/pause is controlled via ExoPlayer's
-// `setPlayWhenReady(true/false)` directly from Rust → JNI → Kotlin — NOT via
-// JavaScript evaluation in a WebView.
 
 use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
@@ -54,7 +47,6 @@ pub async fn player_load(
     #[cfg(not(target_os = "android"))]
     {
         let _ = (headers, audio_url);
-        log::warn!("player_load is a no-op on non-Android (url={})", url);
         Ok(LoadResult { ok: true, error: None })
     }
 }
@@ -88,7 +80,6 @@ pub async fn player_seek_to(position_ms: i64) -> Result<(), String> {
     }
     #[cfg(not(target_os = "android"))]
     {
-        let _ = position_ms;
         Ok(())
     }
 }
@@ -165,7 +156,12 @@ pub async fn attestation_get_token(video_id: String) -> Result<String, String> {
     {
         let vid = video_id.clone();
         return tauri::async_runtime::spawn_blocking(move || {
-            jni_call_attestation_blocking(&vid)
+            jni_call_string_blocking(
+                "com/lookon/player/AttestationWebView",
+                "getToken",
+                "(Ljava/lang/String;)Ljava/lang/String;",
+                &vid,
+            )
         })
         .await
         .map_err(|e| format!("join error: {e}"))?;
@@ -178,6 +174,73 @@ pub async fn attestation_get_token(video_id: String) -> Result<String, String> {
 }
 
 // ---------- Android JNI bridge ----------
+// THE KEY FIX: use the app's ClassLoader (from ndk_context) to find classes,
+// not the system ClassLoader that env.find_class() defaults to.
+
+#[cfg(target_os = "android")]
+fn with_env<F, R>(f: F) -> Result<R, String>
+where
+    F: FnOnce(&mut jni::JNIEnv) -> Result<R, String>,
+{
+    let ctx = ndk_context::android_context();
+    let vm_ptr = ctx.vm();
+    if vm_ptr.is_null() {
+        return Err("no JVM in ndk_context".to_string());
+    }
+    let vm = unsafe { jni::JavaVM::from_raw(vm_ptr as *mut jni::sys::JavaVM) }
+        .map_err(|e| format!("JavaVM::from_raw: {e}"))?;
+    let mut env = vm
+        .attach_current_thread()
+        .map_err(|e| format!("attach_current_thread: {e}"))?;
+    f(&mut env)
+}
+
+/// Find a class using the app's ClassLoader instead of the system one.
+/// This is THE FIX for ClassNotFoundException on Android JNI.
+#[cfg(target_os = "android")]
+fn find_app_class(env: &mut jni::JNIEnv, class_name: &str) -> Result<jni::objects::JClass, String> {
+    use jni::objects::JValue;
+
+    // Try regular find_class first (works if called on main thread)
+    if let Ok(cls) = env.find_class(class_name) {
+        return Ok(cls);
+    }
+
+    // Fallback: use the app context's ClassLoader
+    let ctx = ndk_context::android_context();
+    let context_ptr = ctx.context();
+    if context_ptr.is_null() {
+        return Err(format!("find_class {class_name}: no app context"));
+    }
+
+    let context = unsafe { jni::objects::JObject::from_raw(context_ptr as *mut jni::sys::jobject) };
+
+    // context.getClassLoader()
+    let class_loader = env
+        .call_method(&context, "getClassLoader", "()Ljava/lang/ClassLoader;", &[])
+        .map_err(|e| format!("getClassLoader: {e}"))?
+        .l()
+        .map_err(|e| format!("cast ClassLoader: {e}"))?;
+
+    // classLoader.loadClass("com.lookon.player.ExoPlayerManager")
+    let java_name = class_name.replace('/', ".");
+    let name_jstr = env
+        .new_string(&java_name)
+        .map_err(|e| format!("new_string: {e}"))?;
+
+    let class_obj = env
+        .call_method(
+            &class_loader,
+            "loadClass",
+            "(Ljava/lang/String;)Ljava/lang/Class;",
+            &[JValue::Object(&name_jstr)],
+        )
+        .map_err(|e| format!("loadClass {java_name}: {e}"))?
+        .l()
+        .map_err(|e| format!("cast Class: {e}"))?;
+
+    Ok(unsafe { jni::objects::JClass::from_raw(class_obj.into_raw()) })
+}
 
 #[cfg(target_os = "android")]
 async fn jni_call_void(class: &str, method: &str, sig: &str) -> Result<(), String> {
@@ -186,7 +249,7 @@ async fn jni_call_void(class: &str, method: &str, sig: &str) -> Result<(), Strin
     let sig = sig.to_string();
     tauri::async_runtime::spawn_blocking(move || -> Result<(), String> {
         with_env(|env| {
-            let cls = env.find_class(&class).map_err(|e| format!("find_class {class}: {e}"))?;
+            let cls = find_app_class(env, &class)?;
             env.call_static_method(cls, &method, &sig, &[])
                 .map_err(|e| format!("call {method}: {e}"))?;
             Ok(())
@@ -203,7 +266,7 @@ async fn jni_call_long(class: &str, method: &str, sig: &str) -> Result<i64, Stri
     let sig = sig.to_string();
     tauri::async_runtime::spawn_blocking(move || -> Result<i64, String> {
         with_env(|env| {
-            let cls = env.find_class(&class).map_err(|e| format!("find_class {class}: {e}"))?;
+            let cls = find_app_class(env, &class)?;
             let v = env
                 .call_static_method(cls, &method, &sig, &[])
                 .map_err(|e| format!("call {method}: {e}"))?;
@@ -246,8 +309,7 @@ async fn jni_call_load(
 async fn jni_call_seek(position_ms: i64) -> Result<(), String> {
     tauri::async_runtime::spawn_blocking(move || -> Result<(), String> {
         with_env(|env| {
-            let cls = env.find_class("com/lookon/player/ExoPlayerManager")
-                .map_err(|e| format!("find_class: {e}"))?;
+            let cls = find_app_class(env, "com/lookon/player/ExoPlayerManager")?;
             env.call_static_method(cls, "seekTo", "(J)V", &[jni::objects::JValue::Long(position_ms)])
                 .map_err(|e| format!("call seekTo: {e}"))?;
             Ok(())
@@ -261,8 +323,7 @@ async fn jni_call_seek(position_ms: i64) -> Result<(), String> {
 async fn jni_call_speed(speed: f32) -> Result<(), String> {
     tauri::async_runtime::spawn_blocking(move || -> Result<(), String> {
         with_env(|env| {
-            let cls = env.find_class("com/lookon/player/ExoPlayerManager")
-                .map_err(|e| format!("find_class: {e}"))?;
+            let cls = find_app_class(env, "com/lookon/player/ExoPlayerManager")?;
             env.call_static_method(cls, "setSpeed", "(F)V", &[jni::objects::JValue::Float(speed)])
                 .map_err(|e| format!("call setSpeed: {e}"))?;
             Ok(())
@@ -276,8 +337,7 @@ async fn jni_call_speed(speed: f32) -> Result<(), String> {
 async fn jni_call_viewport(x: f32, y: f32, w: f32, h: f32) -> Result<(), String> {
     tauri::async_runtime::spawn_blocking(move || -> Result<(), String> {
         with_env(|env| {
-            let cls = env.find_class("com/lookon/player/ExoPlayerManager")
-                .map_err(|e| format!("find_class: {e}"))?;
+            let cls = find_app_class(env, "com/lookon/player/ExoPlayerManager")?;
             env.call_static_method(
                 cls,
                 "setViewport",
@@ -306,9 +366,7 @@ fn jni_call_string_blocking(
 ) -> Result<String, String> {
     use jni::objects::JValue;
     with_env(|env| {
-        let cls = env
-            .find_class(class)
-            .map_err(|e| format!("find_class {class}: {e}"))?;
+        let cls = find_app_class(env, class)?;
         let jstr = env
             .new_string(arg)
             .map_err(|e| format!("new_string: {e}"))?;
@@ -325,35 +383,7 @@ fn jni_call_string_blocking(
     })
 }
 
-#[cfg(target_os = "android")]
-fn jni_call_attestation_blocking(video_id: &str) -> Result<String, String> {
-    jni_call_string_blocking(
-        "com/lookon/player/AttestationWebView",
-        "getToken",
-        "(Ljava/lang/String;)Ljava/lang/String;",
-        video_id,
-    )
-}
-
-#[cfg(target_os = "android")]
-fn with_env<F, R>(f: F) -> Result<R, String>
-where
-    F: FnOnce(&mut jni::JNIEnv) -> Result<R, String>,
-{
-    let ctx = ndk_context::android_context();
-    let vm_ptr = ctx.vm();
-    if vm_ptr.is_null() {
-        return Err("no JVM in ndk_context".to_string());
-    }
-    let vm = unsafe { jni::JavaVM::from_raw(vm_ptr as *mut jni::sys::JavaVM) }
-        .map_err(|e| format!("JavaVM::from_raw: {e}"))?;
-    let mut env = vm
-        .attach_current_thread()
-        .map_err(|e| format!("attach_current_thread: {e}"))?;
-    f(&mut env)
-}
-
-/// Build and return the Player Tauri plugin (setup-only, no commands registered here).
+/// Build and return the Player Tauri plugin (setup-only).
 pub fn init<R: tauri::Runtime>() -> tauri::plugin::TauriPlugin<R> {
     tauri::plugin::Builder::new("player")
         .setup(|_app, _api| {
