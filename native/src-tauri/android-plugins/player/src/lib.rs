@@ -443,8 +443,11 @@ where
     F: FnOnce(&mut jni::JNIEnv) -> Result<R, String>,
 {
     let ctx = ndk_context::android_context();
-    let vm_ptr = ctx.vm().ok_or_else(|| "no JVM in ndk_context".to_string())?;
-    let vm = unsafe { jni::JavaVM::from_raw(vm_ptr) }
+    let vm_ptr = ctx.vm();
+    if vm_ptr.is_null() {
+        return Err("no JVM in ndk_context".to_string());
+    }
+    let vm = unsafe { jni::JavaVM::from_raw(vm_ptr as *mut jni::sys::JavaVM) }
         .map_err(|e| format!("JavaVM::from_raw: {e}"))?;
     let mut env = vm
         .attach_current_thread()
