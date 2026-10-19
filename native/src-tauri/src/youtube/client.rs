@@ -281,7 +281,8 @@ pub async fn fetch_player_response(
 /// (`"trending"`, `"music"`, `"movies"`) or a raw browse ID (e.g.
 /// `"FEtrending"`, `"FEmusic_trending"`).
 pub async fn fetch_feed(feed_type: &str) -> Result<String, String> {
-    let browse_id = match feed_type.to_lowercase().as_str() {
+    let lower = feed_type.to_lowercase();
+    let browse_id = match lower.as_str() {
         "trending" | "trend" | "default" | "" => "FEtrending",
         "music" => "FEmusic_trending",
         "movies" => "FEmovies",
