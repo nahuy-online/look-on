@@ -32,6 +32,16 @@ android {
     buildFeatures {
         buildConfig = false
     }
+
+    // Publish all variants so the app module can consume them
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+        singleVariant("debug") {
+            withSourcesJar()
+        }
+    }
 }
 
 dependencies {
@@ -39,20 +49,13 @@ dependencies {
     implementation("app.tauri:plugin-api:2.0.0")
 
     // AndroidX Media3 (ExoPlayer) 1.3.1 — THE playback engine.
-    // - media3-exoplayer: core player + setPlayWhenReady / PlaybackParameters
-    // - media3-exoplayer-dash: DASH manifests (some YouTube streams)
-    // - media3-exoplayer-hls: HLS manifests (.m3u8)
-    // - media3-datasource-okhttp: HTTP stack that respects custom headers
-    //   (DefaultHttpDataSource.Factory().setDefaultRequestProperties(headers))
-    // - media3-ui: PlayerView (the View that renders the Surface)
     implementation("androidx.media3:media3-exoplayer:1.3.1")
     implementation("androidx.media3:media3-exoplayer-dash:1.3.1")
     implementation("androidx.media3:media3-exoplayer-hls:1.3.1")
     implementation("androidx.media3:media3-datasource-okhttp:1.3.1")
     implementation("androidx.media3:media3-ui:1.3.1")
 
-    // OkHttp (used by media3-datasource-okhttp + the attestation WebView's
-    // companion HTTP client for the WAA att/get challenge).
+    // OkHttp (used by media3-datasource-okhttp).
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
     // Coroutines for the attestation WebView async wait.
