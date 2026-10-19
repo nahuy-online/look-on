@@ -248,7 +248,7 @@ fn find_app_class<'a>(env: &mut jni::JNIEnv<'a>, class_name: &str) -> Result<jni
         .map_err(|e| format!("cast ClassLoader: {e}"))?;
 
     // Cache the ClassLoader as a GlobalRef
-    let global_loader = env.new_global_ref(class_loader)
+    let global_loader = env.new_global_ref(&class_loader)
         .map_err(|e| format!("new_global_ref: {e}"))?;
     {
         let mut loader_lock = APP_CLASS_LOADER.lock().unwrap();
