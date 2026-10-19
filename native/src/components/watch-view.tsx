@@ -23,7 +23,7 @@ const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3];
 // dispatched through this prefix; the attestation command lives in the same
 // plugin. The `yt_extract` command lives at the app level (no prefix) — see
 // `src-tauri/src/lib.rs`.
-const PLAYER = "plugin:player|";
+const PLAYER = "";
 
 // Stream HTTP headers — YouTube's googlevideo URLs are bound to the client
 // that requested them. Sending a browser-like UA + the YouTube Referer/Origin

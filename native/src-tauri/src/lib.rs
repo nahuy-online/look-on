@@ -429,6 +429,18 @@ pub fn run() {
             auth::oauth_get_session,
             auth::oauth_get_youtube_liked,
             auth::oauth_get_youtube_subscriptions,
+            // ExoPlayer + attestation (from look-on-player crate)
+            look_on_player_lib::player_init,
+            look_on_player_lib::player_load,
+            look_on_player_lib::player_play,
+            look_on_player_lib::player_pause,
+            look_on_player_lib::player_seek_to,
+            look_on_player_lib::player_set_speed,
+            look_on_player_lib::player_get_position,
+            look_on_player_lib::player_get_duration,
+            look_on_player_lib::player_set_viewport,
+            look_on_player_lib::player_release,
+            look_on_player_lib::attestation_get_token,
         ])
         .run(tauri::generate_context!())
         .expect("error while running Look On");

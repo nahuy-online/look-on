@@ -1,0 +1,15 @@
+[default]
+description = "Default permissions for Look On player plugin"
+permissions = [
+  "allow-player-init",
+  "allow-player-load",
+  "allow-player-play",
+  "allow-player-pause",
+  "allow-player-seek-to",
+  "allow-player-set-speed",
+  "allow-player-get-position",
+  "allow-player-get-duration",
+  "allow-player-set-viewport",
+  "allow-player-release",
+  "allow-attestation-get-token",
+]

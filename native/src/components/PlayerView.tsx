@@ -8,7 +8,7 @@ import { Loader2 } from "lucide-react";
  * Renders a placeholder `<div>` whose bounding rect is reported to the native
  * plugin so the ExoPlayer `PlayerView` overlay can be positioned on top of it.
  * All playback control (play / pause / seek / speed / load) is delegated to
- * the `plugin:player|*` Tauri commands, which call ExoPlayer's
+ * the `*` Tauri commands, which call ExoPlayer's
  * `setPlayWhenReady` / `setPlaybackParameters` directly via JNI.
  *
  * **THE FIX for the Obereg play/pause bug**: play/pause never touches
@@ -40,7 +40,7 @@ interface PlayerViewProps {
   onError?: (err: string) => void;
 }
 
-const PLAYER_PREFIX = "plugin:player|";
+const PLAYER_PREFIX = "";
 
 /** True when we're running inside Tauri on Android (ExoPlayer available). */
 function isAndroidPlayerAvailable(): boolean {
@@ -150,7 +150,7 @@ export function PlayerView({
  * Hook that exposes the imperative player API. Pass a ref to a `<PlayerView>`
  * and call `load()`, `play()`, `pause()`, `seekTo()`, `setSpeed()`.
  *
- * All methods are thin wrappers around `invoke("plugin:player|*")`. The
+ * All methods are thin wrappers around `invoke("*")`. The
  * commands are no-ops on non-Android, so callers can call them unconditionally
  * and fall back to an HTML5 `<video>` element when `isAndroidPlayerAvailable()`
  * returns false.
