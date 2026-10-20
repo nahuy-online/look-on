@@ -7,6 +7,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackParameters
 import androidx.media3.common.Player
 import androidx.media3.datasource.DefaultDataSource
+import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.datasource.okhttp.OkHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.MergingMediaSource
@@ -143,6 +144,12 @@ class PlayerBridge(private val context: Context) {
     }
 
     @JavascriptInterface
+    fun getToken(videoId: String): String {
+        // Stub — attestation not implemented yet. VISIONOS profile works without PO token.
+        return """{"apiKey":"","visitorData":"","poToken":null}"""
+    }
+
+    @JavascriptInterface
     fun release() {
         val latch = CountDownLatch(1)
         mainHandler.post {
@@ -166,9 +173,10 @@ class PlayerBridge(private val context: Context) {
 
     // ---------- internals ----------
 
-    private fun buildMediaSourceFactory(context: Context): DefaultDataSource.Factory {
+    private fun buildMediaSourceFactory(context: Context): DefaultMediaSourceFactory {
         val http = OkHttpDataSource.Factory(okHttpClient).setUserAgent("LookOn/1.0")
-        return DefaultDataSource.Factory(context, http)
+        val dataSource = DefaultDataSource.Factory(context, http)
+        return DefaultMediaSourceFactory(dataSource)
     }
 
     private fun buildMediaSource(url: String, audioUrl: String, headers: Map<String, String>): androidx.media3.exoplayer.source.MediaSource {
