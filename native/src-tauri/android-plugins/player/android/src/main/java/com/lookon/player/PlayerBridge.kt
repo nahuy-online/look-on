@@ -171,6 +171,27 @@ class PlayerBridge(private val context: Context) {
         latch.await(2, TimeUnit.SECONDS)
     }
 
+    @JavascriptInterface
+    fun hideOverlay() {
+        val latch = CountDownLatch(1)
+        mainHandler.post {
+            try {
+                playerView?.let { pv ->
+                    pv.player = null
+                    (pv.parent as? ViewGroup)?.removeView(pv)
+                    pv.removeAllViews()
+                }
+                playerView = null
+                // Don't release the player — just hide the view
+            } catch (t: Throwable) {
+                Log.e(TAG, "hideOverlay failed", t)
+            } finally {
+                latch.countDown()
+            }
+        }
+        latch.await(1, TimeUnit.SECONDS)
+    }
+
     // ---------- internals ----------
 
     private fun buildMediaSourceFactory(context: Context): DefaultMediaSourceFactory {

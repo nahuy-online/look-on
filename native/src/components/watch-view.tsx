@@ -121,6 +121,13 @@ const CURATED_RELATED: VideoItem[] = [
 export function WatchView() {
   const video = useAppStore((s) => s.activeVideo);
   const goHome = useAppStore((s) => s.goHome);
+
+  // Hide player overlay when leaving watch view
+  useEffect(() => {
+    return () => {
+      try { (window as any).lookonPlayer?.hideOverlay(); } catch {}
+    };
+  }, []);
   const watch = useAppStore((s) => s.watch);
   const liked = useLibraryStore((s) => s.liked);
   const toggleLike = useLibraryStore((s) => s.toggleLike);
