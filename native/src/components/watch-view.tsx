@@ -122,10 +122,16 @@ export function WatchView() {
   const video = useAppStore((s) => s.activeVideo);
   const goHome = useAppStore((s) => s.goHome);
 
-  // Hide player overlay when leaving watch view
+  // Hide player overlay + pause when leaving watch view
   useEffect(() => {
     return () => {
-      try { (window as any).lookonPlayer?.hideOverlay(); } catch {}
+      try {
+        const bridge = (window as any).lookonPlayer;
+        if (bridge) {
+          bridge.pause();
+          bridge.hideOverlay();
+        }
+      } catch {}
     };
   }, []);
   const watch = useAppStore((s) => s.watch);
@@ -408,12 +414,12 @@ export function WatchView() {
             {playerReady && !loading && !playerError && (
               <button
                 onClick={togglePlay}
-                className="absolute inset-0 flex items-center justify-center group"
+                className="absolute inset-0 flex items-center justify-center"
                 aria-label={isPlaying ? "Pause" : "Play"}
               >
                 <span className={cn(
-                  "h-14 w-14 rounded-full bg-black/60 flex items-center justify-center transition-opacity",
-                  isPlaying ? "opacity-0 group-hover:opacity-100" : "opacity-100"
+                  "h-14 w-14 rounded-full bg-black/60 flex items-center justify-center",
+                  isPlaying ? "opacity-40" : "opacity-100"
                 )}>
                   {isPlaying ? <Pause className="h-6 w-6 text-white" /> : <Play className="h-6 w-6 text-white ml-0.5" />}
                 </span>
