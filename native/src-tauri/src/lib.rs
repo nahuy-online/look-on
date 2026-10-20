@@ -338,67 +338,6 @@ fn vpn_servers() -> Vec<VpnServer> {
     vpn::VPN_SERVERS.clone()
 }
 
-// ---------- Player commands (delegate to look-on-player crate) ----------
-
-#[tauri::command]
-async fn player_init() -> Result<(), String> {
-    look_on_player_lib::player_init().await
-}
-
-#[tauri::command]
-async fn player_load(
-    url: String,
-    headers: std::collections::HashMap<String, String>,
-    audio_url: Option<String>,
-) -> Result<look_on_player_lib::LoadResult, String> {
-    look_on_player_lib::player_load(url, headers, audio_url).await
-}
-
-#[tauri::command]
-async fn player_play() -> Result<(), String> {
-    look_on_player_lib::player_play().await
-}
-
-#[tauri::command]
-async fn player_pause() -> Result<(), String> {
-    look_on_player_lib::player_pause().await
-}
-
-#[tauri::command]
-async fn player_seek_to(position_ms: i64) -> Result<(), String> {
-    look_on_player_lib::player_seek_to(position_ms).await
-}
-
-#[tauri::command]
-async fn player_set_speed(speed: f64) -> Result<(), String> {
-    look_on_player_lib::player_set_speed(speed).await
-}
-
-#[tauri::command]
-async fn player_get_position() -> Result<i64, String> {
-    look_on_player_lib::player_get_position().await
-}
-
-#[tauri::command]
-async fn player_get_duration() -> Result<i64, String> {
-    look_on_player_lib::player_get_duration().await
-}
-
-#[tauri::command]
-async fn player_set_viewport(x: f32, y: f32, width: f32, height: f32) -> Result<(), String> {
-    look_on_player_lib::player_set_viewport(x, y, width, height).await
-}
-
-#[tauri::command]
-async fn player_release() -> Result<(), String> {
-    look_on_player_lib::player_release().await
-}
-
-#[tauri::command]
-async fn attestation_get_token(video_id: String) -> Result<String, String> {
-    look_on_player_lib::attestation_get_token(video_id).await
-}
-
 // ---------- App entry ----------
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -490,18 +429,6 @@ pub fn run() {
             auth::oauth_get_session,
             auth::oauth_get_youtube_liked,
             auth::oauth_get_youtube_subscriptions,
-            // ExoPlayer + attestation (from look-on-player crate)
-            player_init,
-            player_load,
-            player_play,
-            player_pause,
-            player_seek_to,
-            player_set_speed,
-            player_get_position,
-            player_get_duration,
-            player_set_viewport,
-            player_release,
-            attestation_get_token,
         ])
         .run(tauri::generate_context!())
         .expect("error while running Look On");

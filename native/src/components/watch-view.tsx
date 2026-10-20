@@ -23,7 +23,7 @@ const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3];
 // dispatched through this prefix; the attestation command lives in the same
 // plugin. The `yt_extract` command lives at the app level (no prefix) — see
 // `src-tauri/src/lib.rs`.
-const PLAYER = "";
+// Player bridge is accessed via window.lookonPlayer (registered by MainActivity)
 
 // Stream HTTP headers — YouTube's googlevideo URLs are bound to the client
 // that requested them. Sending a browser-like UA + the YouTube Referer/Origin
@@ -194,16 +194,21 @@ export function WatchView() {
     setPositionMs(0);
     setDurationMs(0);
     try {
-      // 1. Attestation (best-effort — non-Android returns empty strings)
+      // 0. Init ExoPlayer via JS bridge (window.lookonPlayer registered by MainActivity)
+      const bridge = (window as any).lookonPlayer;
+      if (!bridge) {
+        throw new Error("Player bridge not available (window.lookonPlayer not found)");
+      }
+      bridge.init();
+
+      // 1. Attestation (best-effort)
       let poToken: string | null = null;
       try {
-        const attJson = await invoke<string>(`${PLAYER}attestation_get_token`, { videoId: youtubeId });
-        try {
-          const att = JSON.parse(attJson);
-          poToken = att.poToken || null;
-        } catch { /* ignore parse errors — poToken stays null */ }
+        const attJson = bridge.getToken(youtubeId);
+        const att = JSON.parse(attJson);
+        poToken = att.poToken || null;
       } catch (e) {
-        console.warn("attestation_get_token failed (non-fatal):", e);
+        console.warn("attestation failed (non-fatal):", e);
       }
 
       // 2. Extract stream URLs via the Rust core
@@ -228,16 +233,17 @@ export function WatchView() {
       }
       if (!url) throw new Error("no stream URL resolved");
 
-      // 3. Load into ExoPlayer (THE FIX path — setPlayWhenReady, not JS)
-      await invoke(`${PLAYER}player_load`, {
+      // 3. Load into ExoPlayer via JS bridge
+      const loadResult = JSON.parse(bridge.load(JSON.stringify({
         url,
         headers: STREAM_HEADERS,
         audioUrl: audioUrl ?? null,
-      });
+      })));
+      if (!loadResult.ok) throw new Error(loadResult.error || "load failed");
 
-      // 4. Start playback + restore the user's chosen speed
-      await invoke(`${PLAYER}player_set_speed`, { speed: speedRef.current });
-      await invoke(`${PLAYER}player_play`);
+      // 4. Start playback + restore speed
+      bridge.setSpeed(speedRef.current);
+      bridge.play();
       setIsPlaying(true);
       setPlayerReady(true);
     } catch (e: unknown) {
@@ -270,16 +276,16 @@ export function WatchView() {
   useEffect(() => {
     if (!playerReady) return;
     if (pollTimer.current) clearInterval(pollTimer.current);
-    pollTimer.current = setInterval(async () => {
+    pollTimer.current = setInterval(() => {
       try {
-        const [pos, dur] = await Promise.all([
-          invoke<number>(`${PLAYER}player_get_position`),
-          invoke<number>(`${PLAYER}player_get_duration`),
-        ]);
+        const bridge = (window as any).lookonPlayer;
+        if (!bridge) return;
+        const pos = bridge.getPosition();
+        const dur = bridge.getDuration();
         setPositionMs(pos);
         setDurationMs(dur);
       } catch {
-        /* player may have been released during a video swap */
+        /* player may have been released */
       }
     }, 500);
     return () => {
@@ -290,19 +296,21 @@ export function WatchView() {
 
   // ---------- controls ----------
 
-  const applySpeed = async (s: number) => {
+  const applySpeed = (s: number) => {
     setSpeed(s);
-    try { await invoke(`${PLAYER}player_set_speed`, { speed: s }); } catch {}
+    try { (window as any).lookonPlayer?.setSpeed(s); } catch {}
     toast.success(`Speed: ${s}×`, { duration: 1000 });
   };
 
-  const togglePlay = async () => {
+  const togglePlay = () => {
     try {
+      const bridge = (window as any).lookonPlayer;
+      if (!bridge) return;
       if (isPlaying) {
-        await invoke(`${PLAYER}player_pause`); // THE FIX: setPlayWhenReady(false)
+        bridge.pause(); // THE FIX: setPlayWhenReady(false) — synchronous, reliable
         setIsPlaying(false);
       } else {
-        await invoke(`${PLAYER}player_play`); // THE FIX: setPlayWhenReady(true)
+        bridge.play(); // THE FIX: setPlayWhenReady(true)
         setIsPlaying(true);
       }
     } catch (e) {
@@ -310,13 +318,13 @@ export function WatchView() {
     }
   };
 
-  const onSeek = async (e: React.MouseEvent<HTMLDivElement>) => {
+  const onSeek = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!durationMs) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const ratio = (e.clientX - rect.left) / rect.width;
     const target = Math.max(0, Math.min(1, ratio)) * durationMs;
     try {
-      await invoke(`${PLAYER}player_seek_to`, { positionMs: Math.round(target) });
+      (window as any).lookonPlayer?.seekTo(Math.round(target));
       setPositionMs(target);
     } catch {}
   };
